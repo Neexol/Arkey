@@ -1,4 +1,4 @@
-package com.neexol.arkey
+package com.neexol.arkey.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.neexol.arkey.R
 import kotlinx.android.synthetic.main.item_account.view.*
 
 class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolder>() {

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.neexol.arkey.AccountsListAdapter
+import com.neexol.arkey.adapters.AccountsListAdapter
 import com.neexol.arkey.R
 import kotlinx.android.synthetic.main.fragment_accounts_list.*
 import kotlinx.android.synthetic.main.view_toolbar.*
