@@ -12,15 +12,32 @@ import kotlinx.android.synthetic.main.item_account.view.*
 
 class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolder>() {
 
+    companion object {
+        const val WITHOUT_CATEGORY = -1
+    }
+
     private val dataList = mutableListOf<Account>()
+    private val displayList = mutableListOf<Account>()
+
+    private var selectedCategoryId: Int? = WITHOUT_CATEGORY
 
     fun updateDataList(newDataList: List<Account>) {
         dataList.clear()
         dataList.addAll(newDataList)
+        selectCategory(selectedCategoryId)
         notifyDataSetChanged()
     }
 
-    override fun getItemCount() = dataList.size
+    fun selectCategory(categoryId: Int?) {
+        selectedCategoryId = categoryId
+        displayList.clear()
+        displayList.addAll(when(selectedCategoryId) {
+            WITHOUT_CATEGORY -> dataList
+            else -> dataList.filter { it.categoryId == selectedCategoryId }
+        })
+    }
+
+    override fun getItemCount() = displayList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         AccountHolder(
@@ -36,7 +53,7 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         private val accountName: TextView = view.accountName
 
         fun bind(position: Int) {
-            accountName.text = dataList[position].name
+            accountName.text = displayList[position].name
         }
     }
 }
