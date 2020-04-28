@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import com.neexol.arkey.adapters.AccountsListAdapter
 import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Account
+import com.neexol.arkey.mainActivity
+import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_accounts_list.*
 import kotlinx.android.synthetic.main.view_toolbar.*
@@ -25,15 +27,22 @@ class AccountsListFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_accounts_list, container, false)
-    }
+    ): View? = inflater.inflate(R.layout.fragment_accounts_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.title = getString(R.string.all_accounts)
+
+        mainActivity().setSupportActionBar(toolbar)
+        mainActivity().title = getString(R.string.all_accounts)
 
         initRecyclerView()
+
+        setListeners()
+        setObservers()
+    }
+
+    private fun setListeners() {
+        bottomAppBar.setNavigationOnClickListener { showMenu() }
 
         addAccountBtn.setOnClickListener {
             viewModel.insertAccount(
@@ -41,13 +50,33 @@ class AccountsListFragment: Fragment() {
                     null, "Name", "Login", "Password", "www", "desc", null, System.currentTimeMillis().toString()
                 ))
         }
+    }
 
+    private fun setObservers() {
         viewModel.allAccounts.observe(viewLifecycleOwner, Observer {
             accountsListAdapter.updateDataList(it.toList())
+        })
+
+        viewModel.selectedCategoryId.observe(viewLifecycleOwner, Observer { categoryId ->
+            mainActivity().title =
+                viewModel.allCategories.value?.find { it.id == categoryId }?.name ?:
+                        getString(R.string.all_categories)
+            accountsListAdapter.selectCategory(categoryId)
         })
     }
 
     private fun initRecyclerView() {
         recyclerView.adapter = accountsListAdapter
+    }
+
+    private val navigationMenuCallback = object : NavigationMenuBottomDialog.OnCategoryListener {
+        override fun onNewCategory(categoryName: String) {
+            TODO("Not yet implemented")
+        }
+    }
+
+    private fun showMenu() {
+        val dialog = NavigationMenuBottomDialog.newInstance(navigationMenuCallback)
+        dialog.show(childFragmentManager, null)
     }
 }
