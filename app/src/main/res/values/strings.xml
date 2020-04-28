@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Arkey</string>
+    <string name="app_name" translatable="false">Arkey</string>
+    <string name="all_accounts">All accounts</string>
 </resources>
