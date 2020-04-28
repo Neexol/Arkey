@@ -9,18 +9,43 @@ import androidx.recyclerview.widget.RecyclerView
 import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Account
 import kotlinx.android.synthetic.main.item_account.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolder>() {
 
+    companion object {
+        const val WITHOUT_CATEGORY = -1
+    }
+
     private val dataList = mutableListOf<Account>()
+    private val displayList = mutableListOf<Account>()
+
+    private var selectedCategoryId: Int? = WITHOUT_CATEGORY
 
     fun updateDataList(newDataList: List<Account>) {
         dataList.clear()
         dataList.addAll(newDataList)
-        notifyDataSetChanged()
+        selectCategory(selectedCategoryId)
     }
 
-    override fun getItemCount() = dataList.size
+    fun selectCategory(categoryId: Int?) {
+        GlobalScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
+                selectedCategoryId = categoryId
+                displayList.clear()
+                displayList.addAll(when(selectedCategoryId) {
+                    WITHOUT_CATEGORY -> dataList
+                    else -> dataList.filter { it.categoryId == selectedCategoryId }
+                })
+            }
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun getItemCount() = displayList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         AccountHolder(
@@ -36,7 +61,7 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         private val accountName: TextView = view.accountName
 
         fun bind(position: Int) {
-            accountName.text = dataList[position].name
+            accountName.text = displayList[position].name
         }
     }
 }
