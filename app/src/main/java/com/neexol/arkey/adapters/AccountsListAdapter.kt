@@ -7,13 +7,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.neexol.arkey.R
+import com.neexol.arkey.db.entities.Account
 import kotlinx.android.synthetic.main.item_account.view.*
 
 class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolder>() {
 
-    private val dataList = mutableListOf<String>()
+    private val dataList = mutableListOf<Account>()
 
-    fun updateDataList(newDataList: List<String>) {
+    fun updateDataList(newDataList: List<Account>) {
         dataList.clear()
         dataList.addAll(newDataList)
         notifyDataSetChanged()
@@ -35,7 +36,7 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         private val accountName: TextView = view.accountName
 
         fun bind(position: Int) {
-            accountName.text = dataList[position]
+            accountName.text = dataList[position].name
         }
     }
 }

@@ -1,10 +1,13 @@
 package com.neexol.arkey.di
 
 import androidx.room.Room
+import com.neexol.arkey.adapters.AccountsListAdapter
 import com.neexol.arkey.db.Database
 import com.neexol.arkey.repositories.AccountsRepository
 import com.neexol.arkey.repositories.CategoriesRepository
+import com.neexol.arkey.viewmodels.MainViewModel
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -16,4 +19,12 @@ val databaseModule = module {
 val repositoriesModule = module {
     single { AccountsRepository(get()) }
     single { CategoriesRepository(get()) }
+}
+
+val viewModelsModule = module {
+    viewModel { MainViewModel(get(), get()) }
+}
+
+val adaptersModule = module {
+    single { AccountsListAdapter() }
 }
