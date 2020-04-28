@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Account
 import kotlinx.android.synthetic.main.item_account.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolder>() {
 
@@ -25,16 +29,20 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         dataList.clear()
         dataList.addAll(newDataList)
         selectCategory(selectedCategoryId)
-        notifyDataSetChanged()
     }
 
     fun selectCategory(categoryId: Int?) {
-        selectedCategoryId = categoryId
-        displayList.clear()
-        displayList.addAll(when(selectedCategoryId) {
-            WITHOUT_CATEGORY -> dataList
-            else -> dataList.filter { it.categoryId == selectedCategoryId }
-        })
+        GlobalScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
+                selectedCategoryId = categoryId
+                displayList.clear()
+                displayList.addAll(when(selectedCategoryId) {
+                    WITHOUT_CATEGORY -> dataList
+                    else -> dataList.filter { it.categoryId == selectedCategoryId }
+                })
+            }
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount() = displayList.size
