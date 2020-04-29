@@ -9,9 +9,11 @@ import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CreateEditAccountViewModel(
+class ModifyAccountViewModel(
     private val accountsRepo: AccountsRepository
 ): ViewModel() {
+
+    private var accountId: Int? = null
 
     val isValid = ObservableBoolean(false)
 
@@ -32,6 +34,32 @@ class CreateEditAccountViewModel(
         accountsRepo.insert(
             Account(
                 null,
+                name.trim(),
+                login.trim(),
+                password.trim(),
+                site.trim(),
+                desc.trim(),
+                if (categoryId == WITHOUT_CATEGORY_ID) null else categoryId,
+                System.currentTimeMillis().toString()
+            )
+        )
+    }
+
+    fun fillAccountData(account: Account) {
+        accountId = account.id
+        name = account.name
+        login = account.login
+        password = account.password
+        site = account.site
+        desc = account.description
+        categoryId = account.categoryId ?: WITHOUT_CATEGORY_ID
+        checkData()
+    }
+
+    fun editAccount() = viewModelScope.launch(Dispatchers.IO) {
+        accountsRepo.update(
+            Account(
+                accountId,
                 name.trim(),
                 login.trim(),
                 password.trim(),

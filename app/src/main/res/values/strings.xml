@@ -15,4 +15,5 @@
     <string-array name="array_categories_spinner">
         <item>@string/without_category</item>
     </string-array>
+    <string name="editing_account">Editing account</string>
 </resources>

@@ -12,4 +12,5 @@
     <string name="account_creating">Создание аккаунта</string>
     <string name="save">Сохранить</string>
     <string name="category_choose">Категория:</string>
+    <string name="editing_account">Изменение аккаунта</string>
 </resources>
