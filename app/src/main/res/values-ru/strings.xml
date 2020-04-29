@@ -17,4 +17,5 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="delete_account_confirmation">Мы действительно хотите удалить этот аккаунт?</string>
+    <string name="search">Поиск</string>
 </resources>

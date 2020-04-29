@@ -4,21 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.neexol.arkey.adapters.AccountsListAdapter
 import com.neexol.arkey.R
+import com.neexol.arkey.adapters.accounts.AccountsListAdapter
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog
 import com.neexol.arkey.ui.fragments.ModifyAccountFragment.Companion.MODIFY_ACCOUNT_TYPE_KEY
 import com.neexol.arkey.utils.ALL_CATEGORIES_ID
+import com.neexol.arkey.utils.DebouncingQueryTextListener
 import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_accounts_list.*
 import kotlinx.android.synthetic.main.view_toolbar.*
 import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+
 
 class AccountsListFragment: Fragment() {
 
@@ -38,6 +43,7 @@ class AccountsListFragment: Fragment() {
         toolbar.title = getString(R.string.all_accounts)
 
         initRecyclerView()
+        initBottomAppBar()
 
         setListeners()
         setObservers()
@@ -45,6 +51,10 @@ class AccountsListFragment: Fragment() {
 
     private fun setListeners() {
         bottomAppBar.setNavigationOnClickListener { showMenu() }
+        bottomAppBar.setOnMenuItemClickListener {
+            initAndShowSearchView()
+            true
+        }
 
         addAccountBtn.setOnClickListener {
             navigateModifyAccount()
@@ -57,11 +67,7 @@ class AccountsListFragment: Fragment() {
         })
 
         viewModel.selectedCategoryId.observe(viewLifecycleOwner, Observer { categoryId ->
-            toolbar.title = when(categoryId) {
-                ALL_CATEGORIES_ID -> getString(R.string.all_categories)
-                WITHOUT_CATEGORY_ID -> getString(R.string.without_category)
-                else -> viewModel.allCategories.value?.find { it.id == categoryId }?.name
-            }
+            setToolbarTitle()
             accountsListAdapter.selectCategory(categoryId)
         })
     }
@@ -79,6 +85,10 @@ class AccountsListFragment: Fragment() {
         }
     }
 
+    private fun initBottomAppBar() {
+        bottomAppBar.inflateMenu(R.menu.main_bottom)
+    }
+
     private val navigationMenuCallback = object : NavigationMenuBottomDialog.OnCategoryListener {
         override fun onNewCategory(categoryName: String) {
             TODO("Not yet implemented")
@@ -88,6 +98,48 @@ class AccountsListFragment: Fragment() {
     private fun showMenu() {
         val dialog = NavigationMenuBottomDialog.newInstance(navigationMenuCallback)
         dialog.show(childFragmentManager, null)
+    }
+
+    private fun initAndShowSearchView() {
+        if (toolbar.menu.isEmpty()) {
+            toolbar.inflateMenu(R.menu.main_top)
+        }
+
+        val menuItem = toolbar.menu.findItem(R.id.action_search_top)
+        toolbar.title = ""
+        val searchView = (menuItem.actionView as SearchView)
+        searchView.maxWidth = Int.MAX_VALUE
+        searchView.isIconified = false
+
+        searchView.setOnCloseListener {
+            val imm = requireContext().getSystemService(InputMethodManager::class.java)
+            imm.hideSoftInputFromWindow(searchView.windowToken, 0)
+            searchView.setQuery("", true)
+            toolbar.menu.clear()
+            setToolbarTitle()
+            true
+        }
+
+        searchView.setOnQueryTextListener(
+            DebouncingQueryTextListener(this.lifecycle) { newText ->
+                newText?.let {
+                    if (it.isEmpty()) {
+                        accountsListAdapter.searchReset()
+                    } else {
+                        accountsListAdapter.searchQuery(it)
+                    }
+                }
+            }
+        )
+    }
+
+    private fun setToolbarTitle() {
+        val categoryId = viewModel.selectedCategoryId.value
+        toolbar.title = when(categoryId) {
+            ALL_CATEGORIES_ID -> getString(R.string.all_categories)
+            WITHOUT_CATEGORY_ID -> getString(R.string.without_category)
+            else -> viewModel.allCategories.value?.find { it.id == categoryId }?.name
+        }
     }
 
     private fun navigateModifyAccount(bundle: Bundle? = null) {

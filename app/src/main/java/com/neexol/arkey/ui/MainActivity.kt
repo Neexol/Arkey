@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener {
             onBackPressed()
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.hideSoftInputFromWindow(it.windowToken, 0)
+            val imm = getSystemService(InputMethodManager::class.java)
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
 }
