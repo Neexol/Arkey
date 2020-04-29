@@ -14,4 +14,6 @@ class AccountsRepository(
     suspend fun update(account: Account) = accountDao.update(account)
 
     suspend fun delete(account: Account) = accountDao.delete(account)
+
+    suspend fun deleteById(accountId: Int) = accountDao.deleteById(accountId)
 }

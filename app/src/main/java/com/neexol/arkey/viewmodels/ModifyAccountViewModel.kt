@@ -13,7 +13,8 @@ class ModifyAccountViewModel(
     private val accountsRepo: AccountsRepository
 ): ViewModel() {
 
-    private var accountId: Int? = null
+    var accountId: Int? = null
+        private set
 
     val isValid = ObservableBoolean(false)
 
@@ -69,5 +70,9 @@ class ModifyAccountViewModel(
                 System.currentTimeMillis().toString()
             )
         )
+    }
+
+    fun deleteAccount() = viewModelScope.launch(Dispatchers.IO) {
+        accountsRepo.deleteById(accountId!!)
     }
 }

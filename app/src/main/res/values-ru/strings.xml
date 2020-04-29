@@ -13,4 +13,8 @@
     <string name="save">Сохранить</string>
     <string name="category_choose">Категория:</string>
     <string name="editing_account">Изменение аккаунта</string>
+    <string name="delete">Удалить</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="delete_account_confirmation">Мы действительно хотите удалить этот аккаунт?</string>
 </resources>

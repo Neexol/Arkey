@@ -13,6 +13,7 @@ import com.neexol.arkey.R
 import com.neexol.arkey.databinding.FragmentModifyAccountBinding
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.db.entities.Category
+import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.utils.mainActivity
 import com.neexol.arkey.utils.setOnItemSelectedListener
@@ -75,6 +76,8 @@ class ModifyAccountFragment: Fragment() {
             }
         }
 
+        deleteBtn.setOnClickListener { showDeleteConfirmationDialog() }
+
         mainViewModel.allCategories.observe(viewLifecycleOwner, Observer {
             initCategorySpinner(it)
         })
@@ -110,6 +113,17 @@ class ModifyAccountFragment: Fragment() {
         }
     }
 
+    private fun showDeleteConfirmationDialog() {
+        YesNoDialog.newInstance(
+            getString(R.string.delete_account_confirmation),
+            object : YesNoDialog.OnYesClickListener {
+                override fun onYesClick() {
+                    deleteAccount()
+                }
+            }
+        ).show(childFragmentManager, null)
+    }
+
     private fun createAccount() {
         viewModel.createAccount()
         requireActivity().onBackPressed()
@@ -117,6 +131,11 @@ class ModifyAccountFragment: Fragment() {
 
     private fun editAccount() {
         viewModel.editAccount()
+        requireActivity().onBackPressed()
+    }
+
+    private fun deleteAccount() {
+        viewModel.deleteAccount()
         requireActivity().onBackPressed()
     }
 }
