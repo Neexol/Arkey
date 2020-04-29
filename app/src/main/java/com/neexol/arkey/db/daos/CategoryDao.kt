@@ -6,6 +6,6 @@ import com.neexol.arkey.db.entities.Category
 
 @Dao
 abstract class CategoryDao: BaseDao<Category> {
-    @Query("SELECT * FROM categories")
+    @Query("SELECT * FROM categories ORDER BY name")
     abstract fun getAll(): LiveData<List<Category>>
 }

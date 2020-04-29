@@ -9,5 +9,13 @@
         android:id="@+id/accountsListFragment"
         android:name="com.neexol.arkey.ui.fragments.AccountsListFragment"
         android:label="AccountsListFragment"
-        tools:layout="@layout/fragment_accounts_list"/>
+        tools:layout="@layout/fragment_accounts_list">
+        <action
+            android:id="@+id/action_accountsListFragment_to_createEditAccountFragment"
+            app:destination="@id/createEditAccountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createEditAccountFragment"
+        android:name="com.neexol.arkey.ui.fragments.CreateEditAccountFragment"
+        android:label="CreateEditAccountFragment" />
 </navigation>

@@ -4,4 +4,15 @@
     <string name="all_categories">All categories</string>
     <string name="new_category">New category</string>
     <string name="without_category">Without category</string>
+    <string name="account_name">Name</string>
+    <string name="account_login">Login</string>
+    <string name="account_password">Password</string>
+    <string name="account_site">Site</string>
+    <string name="account_desc">Description</string>
+    <string name="account_creating">Creating account</string>
+    <string name="save">Save</string>
+    <string name="category_choose">Category:</string>
+    <string-array name="array_categories_spinner">
+        <item>@string/without_category</item>
+    </string-array>
 </resources>

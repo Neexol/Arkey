@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.neexol.arkey.adapters.AccountsListAdapter
 import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Account
@@ -34,8 +35,7 @@ class AccountsListFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mainActivity().setSupportActionBar(toolbar)
-        mainActivity().title = getString(R.string.all_accounts)
+        toolbar.title = getString(R.string.all_accounts)
 
         initRecyclerView()
 
@@ -47,10 +47,7 @@ class AccountsListFragment: Fragment() {
         bottomAppBar.setNavigationOnClickListener { showMenu() }
 
         addAccountBtn.setOnClickListener {
-            viewModel.insertAccount(
-                Account(
-                    null, "Name", "Login", "Password", "www", "desc", null, System.currentTimeMillis().toString()
-                ))
+            findNavController().navigate(R.id.action_accountsListFragment_to_createEditAccountFragment)
         }
     }
 
@@ -60,7 +57,7 @@ class AccountsListFragment: Fragment() {
         })
 
         viewModel.selectedCategoryId.observe(viewLifecycleOwner, Observer { categoryId ->
-            mainActivity().title = when(categoryId) {
+            toolbar.title = when(categoryId) {
                 ALL_CATEGORIES_ID -> getString(R.string.all_categories)
                 WITHOUT_CATEGORY_ID -> getString(R.string.without_category)
                 else -> viewModel.allCategories.value?.find { it.id == categoryId }?.name
