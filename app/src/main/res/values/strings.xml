@@ -20,4 +20,5 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_account_confirmation">Are you really want to delete this account?</string>
+    <string name="search">Search</string>
 </resources>

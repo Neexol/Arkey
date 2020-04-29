@@ -33,9 +33,13 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         updateDisplayList()
     }
 
-    private fun updateDisplayList() {
+    fun searchQuery(query: String) = updateDisplayList(query)
+
+    fun searchReset() = updateDisplayList()
+
+    private fun updateDisplayList(searchQuery: String = "") {
         GlobalScope.launch(Dispatchers.Main) {
-            val newDisplayList = generateNewDisplayList()
+            val newDisplayList = generateNewDisplayList(searchQuery)
             val accountsDiffResult = withContext(Dispatchers.Default) {
                 val diffUtilCallback =
                     AccountsListDiffUtilCallback(
@@ -49,11 +53,16 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         }
     }
 
-    private fun generateNewDisplayList(): List<Account> {
-        return when(selectedCategoryId) {
+    private fun generateNewDisplayList(searchQuery: String): List<Account> {
+        val newDisplayList = when(selectedCategoryId) {
             ALL_CATEGORIES_ID -> dataList
             WITHOUT_CATEGORY_ID -> dataList.filter { it.categoryId == null }
             else -> dataList.filter { it.categoryId == selectedCategoryId }
+        }
+        return newDisplayList.filter {
+            it.name.toLowerCase().contains(
+                searchQuery.toLowerCase().trim()
+            )
         }
     }
 
