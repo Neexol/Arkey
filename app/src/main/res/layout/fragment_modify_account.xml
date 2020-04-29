@@ -4,9 +4,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="com.neexol.arkey.viewmodels.CreateEditAccountViewModel" />
+            type="com.neexol.arkey.viewmodels.ModifyAccountViewModel" />
     </data>
 
     <LinearLayout
@@ -162,18 +163,32 @@
 
                     <Button
                         android:id="@+id/saveBtn"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/save"
-                        android:enabled="@{viewModel.isValid()d}"
-                        android:layout_marginTop="8dp"
                         android:layout_marginBottom="16dp"
+                        android:enabled="@{viewModel.isValid()d}"
+                        android:text="@string/save"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@id/descInput"
                         app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="@id/descInput"
-                        app:layout_constraintTop_toBottomOf="@id/categorySpinner"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+                        app:layout_constraintTop_toBottomOf="@id/categorySpinner" />
+
+                    <Button
+                        android:id="@+id/deleteBtn"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:visibility="@{viewModel.accountId == null ? View.GONE : View.VISIBLE}"
+                        android:text="@string/delete"
+                        android:textColor="@color/destructiveColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/descInput"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@id/descInput"
+                        app:layout_constraintTop_toBottomOf="@id/categorySpinner" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

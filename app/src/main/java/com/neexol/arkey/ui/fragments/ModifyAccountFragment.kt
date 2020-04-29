@@ -10,34 +10,49 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.neexol.arkey.R
-import com.neexol.arkey.databinding.FragmentCreateEditAccountBinding
+import com.neexol.arkey.databinding.FragmentModifyAccountBinding
+import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.db.entities.Category
+import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.utils.mainActivity
 import com.neexol.arkey.utils.setOnItemSelectedListener
-import com.neexol.arkey.viewmodels.CreateEditAccountViewModel
+import com.neexol.arkey.viewmodels.ModifyAccountViewModel
 import com.neexol.arkey.viewmodels.MainViewModel
-import kotlinx.android.synthetic.main.fragment_create_edit_account.*
+import kotlinx.android.synthetic.main.fragment_modify_account.*
 import kotlinx.android.synthetic.main.view_toolbar.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.Serializable
 
-class CreateEditAccountFragment: Fragment() {
+sealed class ModifyAccountType: Serializable
+    object CreateAccount: ModifyAccountType()
+    data class EditAccount(val account: Account): ModifyAccountType()
+
+class ModifyAccountFragment: Fragment() {
+
+    companion object {
+        const val MODIFY_ACCOUNT_TYPE_KEY = "MODIFY_ACCOUNT_TYPE"
+    }
+
+    private val modifyAccountType by lazy {
+        (arguments?.getSerializable(MODIFY_ACCOUNT_TYPE_KEY) as? EditAccount) ?: CreateAccount
+    }
 
     private val mainViewModel: MainViewModel by sharedViewModel()
-    private val viewModel: CreateEditAccountViewModel by viewModel()
+    private val viewModel: ModifyAccountViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = DataBindingUtil.inflate<FragmentCreateEditAccountBinding>(
+        val binding = DataBindingUtil.inflate<FragmentModifyAccountBinding>(
             inflater,
-            R.layout.fragment_create_edit_account,
+            R.layout.fragment_modify_account,
             container,
             false
         )
@@ -47,11 +62,21 @@ class CreateEditAccountFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         mainActivity().enableNavigateButton(toolbar)
-        toolbar.title = getString(R.string.account_creating)
 
-        saveBtn.setOnClickListener { createAccount() }
+        when(modifyAccountType) {
+            CreateAccount -> {
+                toolbar.title = getString(R.string.account_creating)
+                saveBtn.setOnClickListener { createAccount() }
+            }
+            is EditAccount -> {
+                toolbar.title = getString(R.string.editing_account)
+                viewModel.fillAccountData((modifyAccountType as EditAccount).account)
+                saveBtn.setOnClickListener { editAccount() }
+            }
+        }
+
+        deleteBtn.setOnClickListener { showDeleteConfirmationDialog() }
 
         mainViewModel.allCategories.observe(viewLifecycleOwner, Observer {
             initCategorySpinner(it)
@@ -79,15 +104,38 @@ class CreateEditAccountFragment: Fragment() {
                     setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 }
             }
-            categorySpinner.adapter = adapter
             categorySpinner.setOnItemSelectedListener { viewModel.selectCategory(it) }
+            categorySpinner.adapter = adapter
 
-            categoryTV.visibility = View.VISIBLE
+            (modifyAccountType as? EditAccount)?.account?.categoryId?.let {
+                categorySpinner.setSelection(viewModel.categoryIdsList.indexOf(it))
+            }
         }
+    }
+
+    private fun showDeleteConfirmationDialog() {
+        YesNoDialog.newInstance(
+            getString(R.string.delete_account_confirmation),
+            object : YesNoDialog.OnYesClickListener {
+                override fun onYesClick() {
+                    deleteAccount()
+                }
+            }
+        ).show(childFragmentManager, null)
     }
 
     private fun createAccount() {
         viewModel.createAccount()
+        requireActivity().onBackPressed()
+    }
+
+    private fun editAccount() {
+        viewModel.editAccount()
+        requireActivity().onBackPressed()
+    }
+
+    private fun deleteAccount() {
+        viewModel.deleteAccount()
         requireActivity().onBackPressed()
     }
 }

@@ -18,6 +18,8 @@ import kotlinx.coroutines.withContext
 
 class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolder>() {
 
+    private var clickListener: OnAccountsListClickListener? = null
+
     private val dataList = mutableListOf<Account>()
     private val displayList = mutableListOf<Account>()
 
@@ -59,8 +61,22 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         private val accountIcon: ImageView = view.accountIcon
         private val accountName: TextView = view.accountName
 
+        init {
+            view.setOnClickListener {
+                clickListener?.onAccountClick(displayList[adapterPosition])
+            }
+        }
+
         fun bind(position: Int) {
             accountName.text = displayList[position].name
         }
+    }
+
+    fun setOnAccountClickListener(clickListener: OnAccountsListClickListener) {
+        this.clickListener = clickListener
+    }
+
+    interface OnAccountsListClickListener {
+        fun onAccountClick(account: Account)
     }
 }

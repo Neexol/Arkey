@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(
     tableName = "accounts",
@@ -22,4 +23,4 @@ data class Account(
     val description: String,
     @ColumnInfo(name = "category_id") val categoryId: Int?,
     @ColumnInfo(name = "last_modified") val lastModified: String
-)
+): Serializable

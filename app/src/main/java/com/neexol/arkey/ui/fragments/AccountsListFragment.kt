@@ -10,8 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.neexol.arkey.adapters.AccountsListAdapter
 import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Account
-import com.neexol.arkey.utils.mainActivity
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog
+import com.neexol.arkey.ui.fragments.ModifyAccountFragment.Companion.MODIFY_ACCOUNT_TYPE_KEY
 import com.neexol.arkey.utils.ALL_CATEGORIES_ID
 import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.viewmodels.MainViewModel
@@ -47,7 +47,7 @@ class AccountsListFragment: Fragment() {
         bottomAppBar.setNavigationOnClickListener { showMenu() }
 
         addAccountBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_accountsListFragment_to_createEditAccountFragment)
+            navigateModifyAccount()
         }
     }
 
@@ -67,7 +67,16 @@ class AccountsListFragment: Fragment() {
     }
 
     private fun initRecyclerView() {
-        recyclerView.adapter = accountsListAdapter
+        recyclerView.adapter = accountsListAdapter.apply {
+            setOnAccountClickListener(object : AccountsListAdapter.OnAccountsListClickListener {
+                override fun onAccountClick(account: Account) {
+                    val bundle = Bundle().apply {
+                        putSerializable(MODIFY_ACCOUNT_TYPE_KEY, EditAccount(account))
+                    }
+                    navigateModifyAccount(bundle)
+                }
+            })
+        }
     }
 
     private val navigationMenuCallback = object : NavigationMenuBottomDialog.OnCategoryListener {
@@ -79,5 +88,9 @@ class AccountsListFragment: Fragment() {
     private fun showMenu() {
         val dialog = NavigationMenuBottomDialog.newInstance(navigationMenuCallback)
         dialog.show(childFragmentManager, null)
+    }
+
+    private fun navigateModifyAccount(bundle: Bundle? = null) {
+        findNavController().navigate(R.id.action_accountsListFragment_to_modifyAccountFragment, bundle)
     }
 }

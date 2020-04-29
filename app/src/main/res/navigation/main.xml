@@ -11,11 +11,11 @@
         android:label="AccountsListFragment"
         tools:layout="@layout/fragment_accounts_list">
         <action
-            android:id="@+id/action_accountsListFragment_to_createEditAccountFragment"
-            app:destination="@id/createEditAccountFragment" />
+            android:id="@+id/action_accountsListFragment_to_modifyAccountFragment"
+            app:destination="@id/modifyAccountFragment" />
     </fragment>
     <fragment
-        android:id="@+id/createEditAccountFragment"
-        android:name="com.neexol.arkey.ui.fragments.CreateEditAccountFragment"
-        android:label="CreateEditAccountFragment" />
+        android:id="@+id/modifyAccountFragment"
+        android:name="com.neexol.arkey.ui.fragments.ModifyAccountFragment"
+        android:label="ModifyAccountFragment" />
 </navigation>

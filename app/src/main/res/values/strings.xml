@@ -15,4 +15,9 @@
     <string-array name="array_categories_spinner">
         <item>@string/without_category</item>
     </string-array>
+    <string name="editing_account">Editing account</string>
+    <string name="delete">Delete</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_account_confirmation">Are you really want to delete this account?</string>
 </resources>
