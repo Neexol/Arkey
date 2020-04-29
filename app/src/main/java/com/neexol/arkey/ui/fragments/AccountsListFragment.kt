@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.neexol.arkey.adapters.AccountsListAdapter
+import com.neexol.arkey.adapters.accounts.AccountsListAdapter
 import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog
