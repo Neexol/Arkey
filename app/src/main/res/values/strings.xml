@@ -10,4 +10,5 @@
     <string name="account_site">Site</string>
     <string name="account_desc">Description</string>
     <string name="account_creating">Creating account</string>
+    <string name="save">Save</string>
 </resources>

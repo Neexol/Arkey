@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.neexol.arkey.viewmodels.CreateEditAccountViewModel" />
     </data>
 
     <LinearLayout
@@ -45,7 +47,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapSentences"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:text="@={viewModel.name}"
+                        app:bindAfterTextChanged="@{viewModel::checkData}"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +68,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:text="@={viewModel.login}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,7 +88,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textNoSuggestions"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:text="@={viewModel.password}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,7 +108,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textUri"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:text="@={viewModel.site}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,8 +120,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:hint="@string/account_desc"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/siteInput"
                     app:layout_constraintStart_toStartOf="@id/siteInput"
                     app:layout_constraintTop_toBottomOf="@id/siteInput">
@@ -125,9 +130,25 @@
                         android:gravity="top"
                         android:inputType="textMultiLine|textCapSentences"
                         android:lines="3"
-                        android:maxLines="5" />
+                        android:maxLines="5"
+                        android:text="@={viewModel.desc}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/saveBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save"
+                    android:enabled="@{viewModel.isValid()d}"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/descInput"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@id/descInput"
+                    app:layout_constraintTop_toBottomOf="@id/descInput"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

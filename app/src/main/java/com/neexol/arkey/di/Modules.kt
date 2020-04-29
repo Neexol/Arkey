@@ -5,6 +5,7 @@ import com.neexol.arkey.adapters.AccountsListAdapter
 import com.neexol.arkey.db.Database
 import com.neexol.arkey.repositories.AccountsRepository
 import com.neexol.arkey.repositories.CategoriesRepository
+import com.neexol.arkey.viewmodels.CreateEditAccountViewModel
 import com.neexol.arkey.viewmodels.MainViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -23,6 +24,7 @@ val repositoriesModule = module {
 
 val viewModelsModule = module {
     viewModel { MainViewModel(get(), get()) }
+    viewModel { CreateEditAccountViewModel(get()) }
 }
 
 val adaptersModule = module {

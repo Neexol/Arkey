@@ -20,10 +20,6 @@ class MainViewModel(
 
     val allCategories: LiveData<List<Category>> = categoriesRepo.allCategories
 
-    fun insertAccount(account: Account) = viewModelScope.launch(Dispatchers.IO) {
-        accountsRepo.insert(account)
-    }
-
     private val _selectedCategoryId = MutableLiveData(ALL_CATEGORIES_ID)
     val selectedCategoryId: LiveData<Int> = _selectedCategoryId
 

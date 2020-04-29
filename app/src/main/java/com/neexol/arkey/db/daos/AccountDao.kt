@@ -6,6 +6,6 @@ import com.neexol.arkey.db.entities.Account
 
 @Dao
 abstract class AccountDao: BaseDao<Account> {
-    @Query("SELECT * FROM accounts")
+    @Query("SELECT * FROM accounts ORDER BY id DESC")
     abstract fun getAll(): LiveData<List<Account>>
 }
