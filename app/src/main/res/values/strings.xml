@@ -11,4 +11,8 @@
     <string name="account_desc">Description</string>
     <string name="account_creating">Creating account</string>
     <string name="save">Save</string>
+    <string name="category_choose">Category:</string>
+    <string-array name="array_categories_spinner">
+        <item>@string/without_category</item>
+    </string-array>
 </resources>

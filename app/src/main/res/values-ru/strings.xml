@@ -11,4 +11,5 @@
     <string name="account_site">Сайт</string>
     <string name="account_creating">Создание аккаунта</string>
     <string name="save">Сохранить</string>
+    <string name="category_choose">Категория:</string>
 </resources>

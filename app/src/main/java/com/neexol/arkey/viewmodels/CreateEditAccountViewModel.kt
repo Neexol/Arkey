@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.repositories.AccountsRepository
+import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -19,8 +20,13 @@ class CreateEditAccountViewModel(
     var password = ""
     var site = ""
     var desc = ""
+    var categoryId = WITHOUT_CATEGORY_ID
+
+    val categoryIdsList = mutableListOf<Int>()
 
     fun checkData() = run { isValid.set(!name.isBlank()) }
+
+    fun selectCategory(spinnerIndex: Int) = run { categoryId = categoryIdsList[spinnerIndex] }
 
     fun createAccount() = viewModelScope.launch(Dispatchers.IO) {
         accountsRepo.insert(
@@ -31,7 +37,7 @@ class CreateEditAccountViewModel(
                 password.trim(),
                 site.trim(),
                 desc.trim(),
-                null,
+                if (categoryId == WITHOUT_CATEGORY_ID) null else categoryId,
                 System.currentTimeMillis().toString()
             )
         )
