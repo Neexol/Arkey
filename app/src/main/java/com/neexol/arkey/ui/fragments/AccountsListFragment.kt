@@ -9,8 +9,10 @@ import androidx.lifecycle.Observer
 import com.neexol.arkey.adapters.AccountsListAdapter
 import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Account
-import com.neexol.arkey.mainActivity
+import com.neexol.arkey.utils.mainActivity
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog
+import com.neexol.arkey.utils.ALL_CATEGORIES_ID
+import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_accounts_list.*
 import kotlinx.android.synthetic.main.view_toolbar.*
@@ -58,9 +60,11 @@ class AccountsListFragment: Fragment() {
         })
 
         viewModel.selectedCategoryId.observe(viewLifecycleOwner, Observer { categoryId ->
-            mainActivity().title =
-                viewModel.allCategories.value?.find { it.id == categoryId }?.name ?:
-                        getString(R.string.all_categories)
+            mainActivity().title = when(categoryId) {
+                ALL_CATEGORIES_ID -> getString(R.string.all_categories)
+                WITHOUT_CATEGORY_ID -> getString(R.string.without_category)
+                else -> viewModel.allCategories.value?.find { it.id == categoryId }?.name
+            }
             accountsListAdapter.selectCategory(categoryId)
         })
     }

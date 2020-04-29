@@ -9,6 +9,9 @@ import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Category
+import com.neexol.arkey.utils.ALL_CATEGORIES_ID
+import com.neexol.arkey.utils.NEW_CATEGORY_ID
+import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.dialog_bottom_nav_menu.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -17,9 +20,6 @@ import java.io.Serializable
 class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
 
     companion object {
-        private const val ALL_CATEGORIES_ID = 0
-        private const val NEW_CATEGORY_ID = -1
-
         private const val CALLBACK_KEY = "CALLBACK"
 
         fun newInstance(callback: OnCategoryListener): NavigationMenuBottomDialog {
@@ -58,6 +58,7 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
         with(navigationView.menu) {
             clear()
             add(0, ALL_CATEGORIES_ID, NONE, getString(R.string.all_categories))
+            add(0, WITHOUT_CATEGORY_ID, NONE, getString(R.string.without_category))
             categories.forEach {
                 add(0, it.id!!, NONE, it.name)
             }
@@ -67,7 +68,6 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
         navigationView.setNavigationItemSelectedListener {
             when(it.itemId) {
                 NEW_CATEGORY_ID -> callback?.onNewCategory(TODO())
-                ALL_CATEGORIES_ID -> viewModel.selectCategory(null)
                 else -> viewModel.selectCategory(it.itemId)
             }
             dismiss()

@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Account
+import com.neexol.arkey.utils.ALL_CATEGORIES_ID
+import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import kotlinx.android.synthetic.main.item_account.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -16,14 +18,10 @@ import kotlinx.coroutines.withContext
 
 class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolder>() {
 
-    companion object {
-        const val WITHOUT_CATEGORY = -1
-    }
-
     private val dataList = mutableListOf<Account>()
     private val displayList = mutableListOf<Account>()
 
-    private var selectedCategoryId: Int? = WITHOUT_CATEGORY
+    private var selectedCategoryId: Int = ALL_CATEGORIES_ID
 
     fun updateDataList(newDataList: List<Account>) {
         dataList.clear()
@@ -31,13 +29,14 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         selectCategory(selectedCategoryId)
     }
 
-    fun selectCategory(categoryId: Int?) {
+    fun selectCategory(categoryId: Int) {
         GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
                 selectedCategoryId = categoryId
                 displayList.clear()
                 displayList.addAll(when(selectedCategoryId) {
-                    WITHOUT_CATEGORY -> dataList
+                    ALL_CATEGORIES_ID -> dataList
+                    WITHOUT_CATEGORY_ID -> dataList.filter { it.categoryId == null }
                     else -> dataList.filter { it.categoryId == selectedCategoryId }
                 })
             }
