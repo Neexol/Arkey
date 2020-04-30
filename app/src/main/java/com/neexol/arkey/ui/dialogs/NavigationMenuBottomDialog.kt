@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.Menu.NONE
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.neexol.arkey.R
@@ -15,26 +17,17 @@ import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.dialog_bottom_nav_menu.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.io.Serializable
 
 class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
 
     companion object {
-        private const val CALLBACK_KEY = "CALLBACK"
-
-        fun newInstance(callback: OnCategoryListener): NavigationMenuBottomDialog {
-            return NavigationMenuBottomDialog().apply {
-                arguments = Bundle().apply {
-                    putSerializable(CALLBACK_KEY, callback)
-                }
-            }
-        }
+        const val NAV_MENU_REQUEST_KEY = "NAV_MENU_REQUEST"
+        const val NAV_MENU_KEY = "NAV_MENU"
     }
 
     private val viewModel: MainViewModel by sharedViewModel()
 
     private val categories = mutableListOf<Category>()
-    private var callback: OnCategoryListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,8 +37,6 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        callback = requireArguments().getSerializable(CALLBACK_KEY) as OnCategoryListener
 
         viewModel.allCategories.observe(viewLifecycleOwner, Observer {
             categories.clear()
@@ -66,16 +57,9 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
         }
 
         navigationView.setNavigationItemSelectedListener {
-            when(it.itemId) {
-                NEW_CATEGORY_ID -> callback?.onNewCategory(TODO())
-                else -> viewModel.selectCategory(it.itemId)
-            }
+            setFragmentResult(NAV_MENU_REQUEST_KEY, bundleOf(NAV_MENU_KEY to it.itemId))
             dismiss()
             true
         }
-    }
-
-    interface OnCategoryListener: Serializable {
-        fun onNewCategory(categoryName: String)
     }
 }

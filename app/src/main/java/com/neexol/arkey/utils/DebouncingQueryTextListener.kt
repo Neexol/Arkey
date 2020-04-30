@@ -15,9 +15,7 @@ internal class DebouncingQueryTextListener(
 
     private var searchJob: Job? = null
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        return false
-    }
+    override fun onQueryTextSubmit(query: String?) = false
 
     override fun onQueryTextChange(newText: String?): Boolean {
         searchJob?.cancel()
