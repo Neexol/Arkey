@@ -11,7 +11,7 @@ import com.neexol.arkey.R
 class YesNoDialog: DialogFragment() {
 
     companion object {
-        const val YES_NO_REQUEST_KEY ="YES_NO_REQUEST"
+        const val YES_NO_REQUEST_KEY = "YES_NO_REQUEST"
         const val YES_NO_KEY = "YES_NO"
         private const val TITLE_KEY = "TITLE"
 
@@ -22,11 +22,9 @@ class YesNoDialog: DialogFragment() {
         }
     }
 
-    private val title by lazy { requireArguments().getString(TITLE_KEY) }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
+            .setTitle(requireArguments().getString(TITLE_KEY))
             .setNegativeButton(R.string.no) { _, _ ->
                 setFragmentResult(YES_NO_REQUEST_KEY, bundleOf(YES_NO_KEY to false))
             }

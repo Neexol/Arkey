@@ -111,7 +111,6 @@ class AccountsListFragment: Fragment() {
         }
 
         val menuItem = toolbar.menu.findItem(R.id.action_search_top)
-        toolbar.title = ""
         val searchView = (menuItem.actionView as SearchView)
         searchView.maxWidth = Int.MAX_VALUE
         searchView.isIconified = false
@@ -121,7 +120,6 @@ class AccountsListFragment: Fragment() {
             imm.hideSoftInputFromWindow(searchView.windowToken, 0)
             searchView.setQuery("", true)
             toolbar.menu.clear()
-            setToolbarTitle()
             true
         }
 
