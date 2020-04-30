@@ -45,10 +45,10 @@ class AccountsListFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setToolbarTitle()
-
         initRecyclerView()
         initBottomAppBar()
+
+        updateViewBasedOnSelectedCategory()
 
         setListeners()
         setObservers()
@@ -57,7 +57,11 @@ class AccountsListFragment: Fragment() {
     private fun setListeners() {
         bottomAppBar.setNavigationOnClickListener { showMenu() }
         bottomAppBar.setOnMenuItemClickListener {
-            initAndShowSearchView()
+            when(it.itemId) {
+                R.id.action_search_bottom -> initAndShowSearchView()
+                R.id.action_rename_category -> showCategoryRenaming()
+                R.id.action_delete_category -> viewModel.deleteCurrentCategory()
+            }
             true
         }
 
@@ -69,6 +73,9 @@ class AccountsListFragment: Fragment() {
     private fun setObservers() {
         viewModel.displayAccounts.observe(viewLifecycleOwner, Observer {
             accountsListAdapter.updateDataList(it.toList())
+        })
+        viewModel.selectedCategoryId.observe(viewLifecycleOwner, Observer {
+            updateViewBasedOnSelectedCategory()
         })
     }
 
@@ -95,10 +102,7 @@ class AccountsListFragment: Fragment() {
         ) { _, bundle ->
             when(val result = bundle.getInt(NAV_MENU_KEY)) {
                 NEW_CATEGORY_ID -> {TODO()}
-                else -> {
-                    viewModel.selectCategory(result)
-                    setToolbarTitle()
-                }
+                else -> viewModel.selectCategory(result)
             }
         }
     }
@@ -130,12 +134,29 @@ class AccountsListFragment: Fragment() {
         )
     }
 
-    private fun setToolbarTitle() {
-        val categoryId = viewModel.getSelectedCategoryId()
+    private fun showCategoryRenaming() {
+
+    }
+
+    private fun updateViewBasedOnSelectedCategory() {
+        val categoryId = viewModel.selectedCategoryId.value!!
+        updateToolbarTitle(categoryId)
+        updateCategoryOptionsVisible(categoryId)
+    }
+
+    private fun updateToolbarTitle(categoryId: Int) {
         toolbar.title = when(categoryId) {
             ALL_CATEGORIES_ID -> getString(R.string.all_accounts)
             WITHOUT_CATEGORY_ID -> getString(R.string.without_category)
             else -> viewModel.allCategories.value?.find { it.id == categoryId }?.name
+        }
+    }
+
+    private fun updateCategoryOptionsVisible(categoryId: Int) {
+        val isVisible = categoryId != ALL_CATEGORIES_ID && categoryId != WITHOUT_CATEGORY_ID
+        with(bottomAppBar.menu) {
+            findItem(R.id.action_rename_category).isVisible = isVisible
+            findItem(R.id.action_delete_category).isVisible = isVisible
         }
     }
 

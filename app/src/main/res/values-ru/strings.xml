@@ -20,4 +20,6 @@
     <string name="create_category">Создать категорию</string>
     <string name="settings">Настройки</string>
     <string name="pass_generator">Генератор паролей</string>
+    <string name="delete_category">Удалить категорию</string>
+    <string name="rename_category">Переименовать категорию</string>
 </resources>

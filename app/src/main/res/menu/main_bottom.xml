@@ -6,4 +6,12 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_rename_category"
+        android:title="@string/rename_category"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_delete_category"
+        android:title="@string/delete_category"
+        app:showAsAction="never"/>
 </menu>

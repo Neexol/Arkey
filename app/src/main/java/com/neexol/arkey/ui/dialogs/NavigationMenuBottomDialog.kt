@@ -74,7 +74,7 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
     }
 
     private fun highlightSelectedCategory() {
-        when(val categoryId = viewModel.getSelectedCategoryId()) {
+        when(val categoryId = viewModel.selectedCategoryId.value!!) {
             ALL_CATEGORIES_ID -> {
                 allAccountsTV.selectAsCategory()
             }
