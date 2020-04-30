@@ -2,6 +2,7 @@ package com.neexol.arkey.di
 
 import androidx.room.Room
 import com.neexol.arkey.adapters.accounts.AccountsListAdapter
+import com.neexol.arkey.adapters.categories.CategoriesListAdapter
 import com.neexol.arkey.db.Database
 import com.neexol.arkey.repositories.AccountsRepository
 import com.neexol.arkey.repositories.CategoriesRepository
@@ -29,4 +30,5 @@ val viewModelsModule = module {
 
 val adaptersModule = module {
     single { AccountsListAdapter() }
+    single { CategoriesListAdapter() }
 }

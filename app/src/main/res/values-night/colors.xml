@@ -3,4 +3,5 @@
     <color name="colorPrimary">#BB86FC</color>
     <color name="colorBackground">#121212</color>
     <color name="destructiveColor">#FF6262</color>
+    <color name="colorSeparator">#26FFFFFF</color>
 </resources>

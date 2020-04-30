@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorBackground">#FAFAFA</color>
     <color name="destructiveColor">#EE0202</color>
+    <color name="colorSeparator">#1F000000</color>
 </resources>
