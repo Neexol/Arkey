@@ -7,7 +7,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.neexol.arkey.R
-import java.io.Serializable
 
 class YesNoDialog: DialogFragment() {
 

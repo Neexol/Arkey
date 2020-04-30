@@ -9,15 +9,19 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.neexol.arkey.R
 import com.neexol.arkey.adapters.accounts.AccountsListAdapter
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog
+import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog.Companion.NAV_MENU_KEY
+import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog.Companion.NAV_MENU_REQUEST_KEY
 import com.neexol.arkey.ui.fragments.ModifyAccountFragment.Companion.MODIFY_ACCOUNT_TYPE_KEY
 import com.neexol.arkey.utils.ALL_CATEGORIES_ID
 import com.neexol.arkey.utils.DebouncingQueryTextListener
+import com.neexol.arkey.utils.NEW_CATEGORY_ID
 import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_accounts_list.*
@@ -84,19 +88,21 @@ class AccountsListFragment: Fragment() {
         }
     }
 
-    private fun initBottomAppBar() {
-        bottomAppBar.inflateMenu(R.menu.main_bottom)
-    }
-
-    private val navigationMenuCallback = object : NavigationMenuBottomDialog.OnCategoryListener {
-        override fun onNewCategory(categoryName: String) {
-            TODO("Not yet implemented")
-        }
-    }
+    private fun initBottomAppBar() = bottomAppBar.inflateMenu(R.menu.main_bottom)
 
     private fun showMenu() {
-        val dialog = NavigationMenuBottomDialog.newInstance(navigationMenuCallback)
+        val dialog = NavigationMenuBottomDialog()
         dialog.show(childFragmentManager, null)
+
+        childFragmentManager.setFragmentResultListener(
+            NAV_MENU_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            when(val result = bundle.getInt(NAV_MENU_KEY)) {
+                NEW_CATEGORY_ID -> {TODO()}
+                else -> viewModel.selectCategory(result)
+            }
+        }
     }
 
     private fun initAndShowSearchView() {
