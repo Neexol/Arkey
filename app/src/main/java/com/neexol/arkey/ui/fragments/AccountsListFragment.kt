@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -76,9 +77,7 @@ class AccountsListFragment: Fragment() {
         recyclerView.adapter = accountsListAdapter.apply {
             setOnAccountClickListener(object : AccountsListAdapter.OnAccountsListClickListener {
                 override fun onAccountClick(account: Account) {
-                    val bundle = Bundle().apply {
-                        putSerializable(MODIFY_ACCOUNT_TYPE_KEY, EditAccount(account))
-                    }
+                    val bundle = bundleOf(MODIFY_ACCOUNT_TYPE_KEY to EditAccount(account))
                     navigateModifyAccount(bundle)
                 }
             })

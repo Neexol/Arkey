@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.Menu.NONE
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.neexol.arkey.R
@@ -24,9 +25,7 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
 
         fun newInstance(callback: OnCategoryListener): NavigationMenuBottomDialog {
             return NavigationMenuBottomDialog().apply {
-                arguments = Bundle().apply {
-                    putSerializable(CALLBACK_KEY, callback)
-                }
+                arguments = bundleOf(CALLBACK_KEY to callback)
             }
         }
     }
