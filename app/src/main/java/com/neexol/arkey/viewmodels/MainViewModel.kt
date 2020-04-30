@@ -21,6 +21,7 @@ class MainViewModel(
     fun selectCategory(categoryId: Int) = run { _selectedCategoryId.value = categoryId }
 
     private val _searchQuery = MutableLiveData("")
+    val searchQuery: LiveData<String> = _searchQuery
     fun setSearchQuery(query: String) = run { _searchQuery.value = query }
 
     private val _displayAccounts = MediatorLiveData<List<Account>>()
@@ -56,13 +57,13 @@ class MainViewModel(
 
     val allCategories: LiveData<List<Category>> = categoriesRepo.allCategories
 
-    fun deleteCurrentCategory() {
+    fun deleteCurrentCategory() = viewModelScope.launch(Dispatchers.IO) {
         val deletingCategoryId = selectedCategoryId.value
+        categoriesRepo.deleteById(deletingCategoryId!!)
+        _selectedCategoryId.postValue(WITHOUT_CATEGORY_ID)
+    }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            categoriesRepo.deleteById(deletingCategoryId!!)
-        }
-
-        _selectedCategoryId.value = WITHOUT_CATEGORY_ID
+    fun changeCategoryName(newName: String) = viewModelScope.launch(Dispatchers.IO) {
+        categoriesRepo.update(Category(selectedCategoryId.value!!, newName))
     }
 }

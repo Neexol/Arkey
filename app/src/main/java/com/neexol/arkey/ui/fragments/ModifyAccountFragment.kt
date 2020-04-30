@@ -133,11 +133,13 @@ class ModifyAccountFragment: Fragment() {
 
     private fun createAccount() {
         viewModel.createAccount()
+        mainViewModel.selectCategory(viewModel.categoryId)
         requireActivity().onBackPressed()
     }
 
     private fun editAccount() {
         viewModel.editAccount()
+        mainViewModel.selectCategory(viewModel.categoryId)
         requireActivity().onBackPressed()
     }
 

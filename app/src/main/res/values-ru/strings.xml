@@ -22,4 +22,6 @@
     <string name="pass_generator">Генератор паролей</string>
     <string name="delete_category">Удалить категорию</string>
     <string name="rename_category">Переименовать категорию</string>
+    <string name="cancel">Отмена</string>
+    <string name="new_name_category">Новое название категории</string>
 </resources>

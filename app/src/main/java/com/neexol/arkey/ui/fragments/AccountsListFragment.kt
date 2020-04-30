@@ -1,13 +1,14 @@
 package com.neexol.arkey.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
-import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
@@ -15,9 +16,13 @@ import androidx.navigation.fragment.findNavController
 import com.neexol.arkey.R
 import com.neexol.arkey.adapters.accounts.AccountsListAdapter
 import com.neexol.arkey.db.entities.Account
+import com.neexol.arkey.ui.dialogs.InputTextDialog
+import com.neexol.arkey.ui.dialogs.InputTextDialog.Companion.INPUT_TEXT_KEY
+import com.neexol.arkey.ui.dialogs.InputTextDialog.Companion.INPUT_TEXT_REQUEST_KEY
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog.Companion.NAV_MENU_KEY
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog.Companion.NAV_MENU_REQUEST_KEY
+import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.ui.fragments.ModifyAccountFragment.Companion.MODIFY_ACCOUNT_TYPE_KEY
 import com.neexol.arkey.utils.ALL_CATEGORIES_ID
 import com.neexol.arkey.utils.DebouncingQueryTextListener
@@ -46,7 +51,8 @@ class AccountsListFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
-        initBottomAppBar()
+        initToolbarMenu()
+        initBottomBarMenu()
 
         updateViewBasedOnSelectedCategory()
 
@@ -58,8 +64,8 @@ class AccountsListFragment: Fragment() {
         bottomAppBar.setNavigationOnClickListener { showMenu() }
         bottomAppBar.setOnMenuItemClickListener {
             when(it.itemId) {
-                R.id.action_search_bottom -> initAndShowSearchView()
-                R.id.action_rename_category -> showCategoryRenaming()
+                R.id.action_search_bottom -> showSearchView()
+                R.id.action_rename_category_bottom -> showCategoryRenaming()
                 R.id.action_delete_category -> viewModel.deleteCurrentCategory()
             }
             true
@@ -77,6 +83,9 @@ class AccountsListFragment: Fragment() {
         viewModel.selectedCategoryId.observe(viewLifecycleOwner, Observer {
             updateViewBasedOnSelectedCategory()
         })
+        viewModel.allCategories.observe(viewLifecycleOwner, Observer {
+            updateViewBasedOnSelectedCategory()
+        })
     }
 
     private fun initRecyclerView() {
@@ -90,7 +99,16 @@ class AccountsListFragment: Fragment() {
         }
     }
 
-    private fun initBottomAppBar() = bottomAppBar.inflateMenu(R.menu.main_bottom)
+    private fun initToolbarMenu() {
+        toolbar.inflateMenu(R.menu.main_top)
+        if (!viewModel.searchQuery.value.isNullOrEmpty()) {
+            showSearchView()
+        }
+    }
+
+    private fun initBottomBarMenu() {
+        bottomAppBar.inflateMenu(R.menu.main_bottom)
+    }
 
     private fun showMenu() {
         val dialog = NavigationMenuBottomDialog()
@@ -107,21 +125,17 @@ class AccountsListFragment: Fragment() {
         }
     }
 
-    private fun initAndShowSearchView() {
-        if (toolbar.menu.isEmpty()) {
-            toolbar.inflateMenu(R.menu.main_top)
-        }
-
-        val menuItem = toolbar.menu.findItem(R.id.action_search_top)
-        val searchView = (menuItem.actionView as SearchView)
-        searchView.maxWidth = Int.MAX_VALUE
+    private fun showSearchView() {
+        val searchItem = toolbar.menu.findItem(R.id.action_search_top)
+        searchItem.isVisible = true
+        val searchView = (searchItem.actionView as SearchView)
         searchView.isIconified = false
+        searchView.maxWidth = Int.MAX_VALUE
 
         searchView.setOnCloseListener {
             val imm = requireContext().getSystemService(InputMethodManager::class.java)
             imm.hideSoftInputFromWindow(searchView.windowToken, 0)
-            searchView.setQuery("", true)
-            toolbar.menu.clear()
+            searchItem.isVisible = false
             true
         }
 
@@ -135,7 +149,18 @@ class AccountsListFragment: Fragment() {
     }
 
     private fun showCategoryRenaming() {
+        InputTextDialog.newInstance(
+            getString(R.string.rename_category),
+            toolbar.title.toString()
+        ).show(childFragmentManager, null)
 
+        childFragmentManager.setFragmentResultListener(
+            INPUT_TEXT_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val result = bundle.getString(INPUT_TEXT_KEY)?.trim()
+            if (!result.isNullOrBlank()) { viewModel.changeCategoryName(result) }
+        }
     }
 
     private fun updateViewBasedOnSelectedCategory() {
@@ -155,7 +180,7 @@ class AccountsListFragment: Fragment() {
     private fun updateCategoryOptionsVisible(categoryId: Int) {
         val isVisible = categoryId != ALL_CATEGORIES_ID && categoryId != WITHOUT_CATEGORY_ID
         with(bottomAppBar.menu) {
-            findItem(R.id.action_rename_category).isVisible = isVisible
+            findItem(R.id.action_rename_category_bottom).isVisible = isVisible
             findItem(R.id.action_delete_category).isVisible = isVisible
         }
     }
