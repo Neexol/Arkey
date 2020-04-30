@@ -6,9 +6,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
+import com.neexol.arkey.R
 import com.neexol.arkey.ui.MainActivity
+import kotlinx.android.synthetic.main.dialog_bottom_nav_menu.*
 
 fun Fragment.mainActivity() = this.requireActivity() as MainActivity
 
@@ -31,4 +35,9 @@ fun Spinner.setOnItemSelectedListener(func: (spinnerIndex: Int) -> Unit) {
 
         override fun onNothingSelected(parent: AdapterView<*>?) {}
     }
+}
+
+fun TextView.selectAsCategory() {
+    this.setBackgroundResource(R.drawable.shape_category_selected)
+    this.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
 }

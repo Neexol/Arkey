@@ -1,8 +1,9 @@
 package com.neexol.arkey.ui.dialogs
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu.NONE
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
@@ -10,12 +11,15 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.neexol.arkey.R
+import com.neexol.arkey.adapters.categories.CategoriesListAdapter
 import com.neexol.arkey.db.entities.Category
 import com.neexol.arkey.utils.ALL_CATEGORIES_ID
 import com.neexol.arkey.utils.NEW_CATEGORY_ID
 import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
+import com.neexol.arkey.utils.selectAsCategory
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.dialog_bottom_nav_menu.*
+import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
@@ -27,7 +31,7 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
 
     private val viewModel: MainViewModel by sharedViewModel()
 
-    private val categories = mutableListOf<Category>()
+    private val categoriesListAdapter: CategoriesListAdapter = get()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,28 +42,53 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        highlightSelectedCategory()
+        initRecyclerView()
+        setListeners()
+
         viewModel.allCategories.observe(viewLifecycleOwner, Observer {
-            categories.clear()
-            categories.addAll(it)
-            initNavigationView()
+            categoriesListAdapter.updateDataList(it.toList())
         })
     }
 
-    private fun initNavigationView() {
-        with(navigationView.menu) {
-            clear()
-            add(0, ALL_CATEGORIES_ID, NONE, getString(R.string.all_categories))
-            add(0, WITHOUT_CATEGORY_ID, NONE, getString(R.string.without_category))
-            categories.forEach {
-                add(0, it.id!!, NONE, it.name)
-            }
-            add(0, NEW_CATEGORY_ID, NONE, getString(R.string.new_category))
+    private fun initRecyclerView() {
+        recyclerView.adapter = categoriesListAdapter.apply {
+            setOnCategoryClickListener(object : CategoriesListAdapter.OnCategoriesListClickListener {
+                override fun onCategoryClick(category: Category) {
+                    sendResult(category.id!!)
+                }
+            })
         }
+    }
 
-        navigationView.setNavigationItemSelectedListener {
-            setFragmentResult(NAV_MENU_REQUEST_KEY, bundleOf(NAV_MENU_KEY to it.itemId))
-            dismiss()
-            true
+    private fun setListeners() {
+        allAccountsTV.setOnClickListener {
+            sendResult(ALL_CATEGORIES_ID)
         }
+        withoutCategoryTV.setOnClickListener {
+            sendResult(WITHOUT_CATEGORY_ID)
+        }
+        newCategoryTV.setOnClickListener {
+            sendResult(NEW_CATEGORY_ID)
+        }
+    }
+
+    private fun highlightSelectedCategory() {
+        when(val categoryId = viewModel.getSelectedCategoryId()) {
+            ALL_CATEGORIES_ID -> {
+                allAccountsTV.selectAsCategory()
+            }
+            WITHOUT_CATEGORY_ID -> {
+                withoutCategoryTV.selectAsCategory()
+            }
+            else -> {
+                categoriesListAdapter.highlightCategory(categoryId)
+            }
+        }
+    }
+
+    private fun sendResult(resultId: Int) {
+        setFragmentResult(NAV_MENU_REQUEST_KEY, bundleOf(NAV_MENU_KEY to resultId))
+        dismiss()
     }
 }

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="all_accounts">Все аккаунты</string>
-    <string name="all_categories">Все категории</string>
     <string name="new_category">Новая категория</string>
-    <string name="without_category">Без категории</string>
+    <string name="without_category">Аккаунты без категории</string>
     <string name="account_name">Название</string>
     <string name="account_login">Логин</string>
     <string name="account_password">Пароль</string>
@@ -18,4 +17,7 @@
     <string name="no">Нет</string>
     <string name="delete_account_confirmation">Мы действительно хотите удалить этот аккаунт?</string>
     <string name="search">Поиск</string>
+    <string name="create_category">Создать категорию</string>
+    <string name="settings">Настройки</string>
+    <string name="pass_generator">Генератор паролей</string>
 </resources>

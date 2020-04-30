@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name" translatable="false">Arkey</string>
     <string name="all_accounts">All accounts</string>
-    <string name="all_categories">All categories</string>
     <string name="new_category">New category</string>
-    <string name="without_category">Without category</string>
+    <string name="without_category">Accounts without category</string>
     <string name="account_name">Name</string>
     <string name="account_login">Login</string>
     <string name="account_password">Password</string>
@@ -21,4 +20,7 @@
     <string name="no">No</string>
     <string name="delete_account_confirmation">Are you really want to delete this account?</string>
     <string name="search">Search</string>
+    <string name="create_category">Create category</string>
+    <string name="pass_generator">Password generator</string>
+    <string name="settings">Settings</string>
 </resources>

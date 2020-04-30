@@ -18,6 +18,7 @@ class MainViewModel(
 
     private val selectedCategoryId = MutableLiveData(ALL_CATEGORIES_ID)
     fun selectCategory(categoryId: Int) = run { selectedCategoryId.value = categoryId }
+    fun getSelectedCategoryId() = selectedCategoryId.value!!
 
     private val searchQuery = MutableLiveData("")
     fun setSearchQuery(query: String) = run { searchQuery.value = query }

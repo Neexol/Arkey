@@ -45,7 +45,7 @@ class AccountsListFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.title = getString(R.string.all_accounts)
+        setToolbarTitle()
 
         initRecyclerView()
         initBottomAppBar()
@@ -97,7 +97,7 @@ class AccountsListFragment: Fragment() {
                 NEW_CATEGORY_ID -> {TODO()}
                 else -> {
                     viewModel.selectCategory(result)
-                    setToolbarTitle(result)
+                    setToolbarTitle()
                 }
             }
         }
@@ -130,9 +130,10 @@ class AccountsListFragment: Fragment() {
         )
     }
 
-    private fun setToolbarTitle(categoryId: Int) {
+    private fun setToolbarTitle() {
+        val categoryId = viewModel.getSelectedCategoryId()
         toolbar.title = when(categoryId) {
-            ALL_CATEGORIES_ID -> getString(R.string.all_categories)
+            ALL_CATEGORIES_ID -> getString(R.string.all_accounts)
             WITHOUT_CATEGORY_ID -> getString(R.string.without_category)
             else -> viewModel.allCategories.value?.find { it.id == categoryId }?.name
         }
