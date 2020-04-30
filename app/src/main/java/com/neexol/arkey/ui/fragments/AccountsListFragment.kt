@@ -67,13 +67,8 @@ class AccountsListFragment: Fragment() {
     }
 
     private fun setObservers() {
-        viewModel.allAccounts.observe(viewLifecycleOwner, Observer {
+        viewModel.displayAccounts.observe(viewLifecycleOwner, Observer {
             accountsListAdapter.updateDataList(it.toList())
-        })
-
-        viewModel.selectedCategoryId.observe(viewLifecycleOwner, Observer { categoryId ->
-            setToolbarTitle()
-            accountsListAdapter.selectCategory(categoryId)
         })
     }
 
@@ -100,7 +95,10 @@ class AccountsListFragment: Fragment() {
         ) { _, bundle ->
             when(val result = bundle.getInt(NAV_MENU_KEY)) {
                 NEW_CATEGORY_ID -> {TODO()}
-                else -> viewModel.selectCategory(result)
+                else -> {
+                    viewModel.selectCategory(result)
+                    setToolbarTitle(result)
+                }
             }
         }
     }
@@ -126,18 +124,13 @@ class AccountsListFragment: Fragment() {
         searchView.setOnQueryTextListener(
             DebouncingQueryTextListener(this.lifecycle) { newText ->
                 newText?.let {
-                    if (it.isEmpty()) {
-                        accountsListAdapter.searchReset()
-                    } else {
-                        accountsListAdapter.searchQuery(it)
-                    }
+                    viewModel.setSearchQuery(it)
                 }
             }
         )
     }
 
-    private fun setToolbarTitle() {
-        val categoryId = viewModel.selectedCategoryId.value
+    private fun setToolbarTitle(categoryId: Int) {
         toolbar.title = when(categoryId) {
             ALL_CATEGORIES_ID -> getString(R.string.all_categories)
             WITHOUT_CATEGORY_ID -> getString(R.string.without_category)
