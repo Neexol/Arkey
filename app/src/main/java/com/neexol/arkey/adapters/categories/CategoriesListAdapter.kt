@@ -1,5 +1,6 @@
 package com.neexol.arkey.adapters.categories
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Category
+import com.neexol.arkey.utils.selectAsCategory
 import kotlinx.android.synthetic.main.item_category.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,19 +22,27 @@ class CategoriesListAdapter: RecyclerView.Adapter<CategoriesListAdapter.Category
 
     private var dataList = listOf<Category>()
 
+    private var selectedCategoryId: Int? = null
+
     fun updateDataList(newDataList: List<Category>) {
-        GlobalScope.launch(Dispatchers.Main) {
-            val categoriesDiffResult = withContext(Dispatchers.Default) {
-                val diffUtilCallback =
-                    CategoriesListDiffUtilCallback(
-                        dataList,
-                        newDataList
-                    )
-                DiffUtil.calculateDiff(diffUtilCallback)
-            }
-            dataList = newDataList
-            categoriesDiffResult.dispatchUpdatesTo(this@CategoriesListAdapter)
-        }
+//        GlobalScope.launch(Dispatchers.Main) {
+//            val categoriesDiffResult = withContext(Dispatchers.Default) {
+//                val diffUtilCallback =
+//                    CategoriesListDiffUtilCallback(
+//                        dataList,
+//                        newDataList
+//                    )
+//                DiffUtil.calculateDiff(diffUtilCallback)
+//            }
+//            dataList = newDataList
+//            categoriesDiffResult.dispatchUpdatesTo(this@CategoriesListAdapter)
+//        }
+        dataList = newDataList
+        notifyDataSetChanged()
+    }
+
+    fun highlightCategory(categoryId: Int) {
+        selectedCategoryId = categoryId
     }
 
     override fun getItemCount() = dataList.size
@@ -56,7 +66,11 @@ class CategoriesListAdapter: RecyclerView.Adapter<CategoriesListAdapter.Category
         }
 
         fun bind(position: Int) {
-            categoryName.text = dataList[position].name
+            val category = dataList[position]
+            categoryName.text = category.name
+            if (selectedCategoryId == category.id) {
+                categoryName.selectAsCategory()
+            }
         }
     }
 

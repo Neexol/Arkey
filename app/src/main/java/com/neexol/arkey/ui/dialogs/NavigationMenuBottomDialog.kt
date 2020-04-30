@@ -1,5 +1,7 @@
 package com.neexol.arkey.ui.dialogs
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import com.neexol.arkey.db.entities.Category
 import com.neexol.arkey.utils.ALL_CATEGORIES_ID
 import com.neexol.arkey.utils.NEW_CATEGORY_ID
 import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
+import com.neexol.arkey.utils.selectAsCategory
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.dialog_bottom_nav_menu.*
 import org.koin.android.ext.android.get
@@ -39,8 +42,8 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        highlightSelectedCategory()
         initRecyclerView()
-
         setListeners()
 
         viewModel.allCategories.observe(viewLifecycleOwner, Observer {
@@ -62,13 +65,25 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
         allAccountsTV.setOnClickListener {
             sendResult(ALL_CATEGORIES_ID)
         }
-
         withoutCategoryTV.setOnClickListener {
             sendResult(WITHOUT_CATEGORY_ID)
         }
-
         newCategoryTV.setOnClickListener {
             sendResult(NEW_CATEGORY_ID)
+        }
+    }
+
+    private fun highlightSelectedCategory() {
+        when(val categoryId = viewModel.getSelectedCategoryId()) {
+            ALL_CATEGORIES_ID -> {
+                allAccountsTV.selectAsCategory()
+            }
+            WITHOUT_CATEGORY_ID -> {
+                withoutCategoryTV.selectAsCategory()
+            }
+            else -> {
+                categoriesListAdapter.highlightCategory(categoryId)
+            }
         }
     }
 
