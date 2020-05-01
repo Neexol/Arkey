@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val accountsRepo: AccountsRepository,
+    accountsRepo: AccountsRepository,
     private val categoriesRepo: CategoriesRepository
 ): ViewModel() {
     private val allAccounts: LiveData<List<Account>> = accountsRepo.allAccounts
@@ -58,7 +58,8 @@ class MainViewModel(
     val allCategories: LiveData<List<Category>> = categoriesRepo.allCategories
 
     fun createCategory(categoryName: String) = viewModelScope.launch(Dispatchers.IO) {
-        categoriesRepo.insert(Category(null, categoryName))
+        val newCategoryId = categoriesRepo.insert(categoryName)
+        _selectedCategoryId.postValue(newCategoryId.toInt())
     }
 
     fun changeCategoryName(newName: String) = viewModelScope.launch(Dispatchers.IO) {
@@ -68,6 +69,11 @@ class MainViewModel(
     fun deleteCurrentCategory() = viewModelScope.launch(Dispatchers.IO) {
         val deletingCategoryId = selectedCategoryId.value
         categoriesRepo.deleteById(deletingCategoryId!!)
-        _selectedCategoryId.postValue(WITHOUT_CATEGORY_ID)
+
+        if (displayAccounts.value.isNullOrEmpty()) {
+            _selectedCategoryId.postValue(ALL_CATEGORIES_ID)
+        } else {
+            _selectedCategoryId.postValue(WITHOUT_CATEGORY_ID)
+        }
     }
 }

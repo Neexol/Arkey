@@ -20,12 +20,19 @@ class InputTextDialog: DialogFragment() {
         private const val INPUT_TEXT_REQUEST_KEY = "INPUT_TEXT_REQUEST"
         private const val TITLE_KEY = "TITLE"
         private const val INIT_TEXT_KEY = "INIT_TEXT"
+        private const val HINT_KEY = "HINT"
 
-        fun newInstance(requestKey: String, title: String, initText: String = ""): InputTextDialog {
+        fun newInstance(
+            requestKey: String,
+            title: String,
+            hintText: String = "",
+            initText: String = ""
+        ): InputTextDialog {
             return InputTextDialog().apply {
                 arguments = bundleOf(
                     INPUT_TEXT_REQUEST_KEY to requestKey,
                     TITLE_KEY to title,
+                    HINT_KEY to hintText,
                     INIT_TEXT_KEY to initText
                 )
             }
@@ -35,16 +42,23 @@ class InputTextDialog: DialogFragment() {
     private val requestKey by lazy {
         requireArguments().getString(INPUT_TEXT_REQUEST_KEY)!!
     }
-
     private val title by lazy {
         requireArguments().getString(TITLE_KEY)!!
+    }
+    private val hintText by lazy {
+        requireArguments().getString(HINT_KEY)
+    }
+    private val initText by lazy {
+        requireArguments().getString(INIT_TEXT_KEY)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = LayoutInflater
             .from(requireContext())
             .inflate(R.layout.view_input_text, null, false)
-        view.editText.setText(requireArguments().getString(INIT_TEXT_KEY))
+
+        view.editText.setText(initText)
+        view.inputText.hint = hintText
 
         val dialog =  MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
