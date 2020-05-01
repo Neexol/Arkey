@@ -25,4 +25,5 @@
     <string name="cancel">Отмена</string>
     <string name="new_name_category">Новое название категории</string>
     <string name="category_name_hint">Имя категории</string>
+    <string name="not_filled">Информация не заполнена</string>
 </resources>

@@ -1,13 +1,13 @@
 package com.neexol.arkey.adapters.accounts
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.view.*
-import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.neexol.arkey.R
+import com.neexol.arkey.databinding.ItemAccountBinding
 import com.neexol.arkey.db.entities.Account
 import kotlinx.android.synthetic.main.item_account.view.*
 import kotlinx.coroutines.Dispatchers
@@ -17,9 +17,6 @@ import kotlinx.coroutines.withContext
 
 
 class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolder>() {
-
-    private var collapsedHeight = 0
-    private var expandedHeight = 0
 
     private var clickListener: OnAccountsListClickListener? = null
 
@@ -42,33 +39,69 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
 
     override fun getItemCount() = dataList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        AccountHolder(
-            LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.item_account, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountHolder {
+        val binding = DataBindingUtil.inflate<ItemAccountBinding>(
+            LayoutInflater.from(parent.context),
+            R.layout.item_account,
+            parent,
+            false
         )
+        return AccountHolder(binding)
+    }
 
     override fun onBindViewHolder(holder: AccountHolder, position: Int) = holder.bind(position)
 
-    inner class AccountHolder internal constructor(view: View): RecyclerView.ViewHolder(view) {
-        private val cardView: CardView = view.cardView
-        private val accountName: TextView = view.accountName
+    inner class AccountHolder internal constructor(private val binding: ItemAccountBinding):
+        RecyclerView.ViewHolder(binding.root) {
+        private var collapsedHeight = 0
+        private var expandedHeight = 0
+
+        private val cardView: CardView = binding.cardView
 
         init {
-            view.accountName.setOnClickListener {
-//                clickListener?.onAccountClick(dataList[adapterPosition])
+            binding.editAccountBtn.setOnClickListener {
+                clickListener?.onAccountEditClick(dataList[adapterPosition])
+            }
+            binding.collapsedPanel.setOnClickListener {
                 toggleCardViewHeight(expandedHeight)
             }
             cardView.viewTreeObserver
                 .addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
                     override fun onPreDraw(): Boolean {
                         cardView.viewTreeObserver.removeOnPreDrawListener(this)
+                        cardView.layoutParams = cardView.layoutParams.apply {
+                            height = cardView.accountName.height
+                        }
+                        return true
+                    }
+                })
+        }
+
+        fun bind(position: Int) {
+            val account = dataList[position]
+
+            if (account.login.isEmpty() &&
+                account.password.isEmpty() &&
+                account.site.isEmpty() &&
+                account.description.isEmpty()
+            ) {
+                binding.notFilledNotification.visibility = View.VISIBLE
+            } else {
+                binding.notFilledNotification.visibility = View.GONE
+            }
+
+            binding.account = account
+            binding.executePendingBindings()
+
+            cardView.viewTreeObserver
+                .addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                    override fun onPreDraw(): Boolean {
+                        cardView.viewTreeObserver.removeOnPreDrawListener(this)
                         collapsedHeight = cardView.accountName.height
                         expandedHeight = cardView.height
-                        val layoutParams: ViewGroup.LayoutParams = cardView.layoutParams
-                        layoutParams.height = collapsedHeight
-                        cardView.layoutParams = layoutParams
+                        cardView.layoutParams = cardView.layoutParams.apply {
+                            height = collapsedHeight
+                        }
                         return true
                     }
                 })
@@ -77,8 +110,10 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         private fun toggleCardViewHeight(height: Int) {
             if (cardView.height == collapsedHeight) {
                 expandView(height)
+                binding.editAccountBtn.visibility = View.VISIBLE
             } else {
                 collapseView()
+                binding.editAccountBtn.visibility = View.GONE
             }
         }
 
@@ -109,10 +144,6 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
             }
             anim.start()
         }
-
-        fun bind(position: Int) {
-            accountName.text = dataList[position].name
-        }
     }
 
     fun setOnAccountClickListener(clickListener: OnAccountsListClickListener) {
@@ -120,6 +151,6 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
     }
 
     interface OnAccountsListClickListener {
-        fun onAccountClick(account: Account)
+        fun onAccountEditClick(account: Account)
     }
 }
