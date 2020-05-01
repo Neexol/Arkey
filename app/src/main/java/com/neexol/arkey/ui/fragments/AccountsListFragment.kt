@@ -170,6 +170,7 @@ class AccountsListFragment: Fragment() {
         InputTextDialog.newInstance(
             RENAME_CATEGORY_REQUEST_KEY,
             getString(R.string.rename_category),
+            getString(R.string.category_name_hint),
             toolbar.title.toString()
         ).show(childFragmentManager, null)
     }
@@ -177,7 +178,8 @@ class AccountsListFragment: Fragment() {
     private fun showCategoryCreating() {
         InputTextDialog.newInstance(
             CREATE_CATEGORY_REQUEST_KEY,
-            getString(R.string.create_category)
+            getString(R.string.create_category),
+            getString(R.string.category_name_hint)
         ).show(childFragmentManager, null)
     }
 
