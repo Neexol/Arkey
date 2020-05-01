@@ -9,11 +9,11 @@ class AccountsRepository(
 ) {
     val allAccounts: LiveData<List<Account>> = accountDao.getAll()
 
-    suspend fun insert(account: Account) = accountDao.insert(account)
+    fun insert(account: Account) = accountDao.insert(account)
 
-    suspend fun update(account: Account) = accountDao.update(account)
+    fun update(account: Account) = accountDao.update(account)
 
-    suspend fun delete(account: Account) = accountDao.delete(account)
+    fun delete(account: Account) = accountDao.delete(account)
 
-    suspend fun deleteById(accountId: Int) = accountDao.deleteById(accountId)
+    fun deleteById(accountId: Int) = accountDao.deleteById(accountId)
 }

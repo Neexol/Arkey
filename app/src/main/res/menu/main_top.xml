@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_search_top"
-        android:icon="@drawable/ic_search"
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:visible="false"/>
 </menu>

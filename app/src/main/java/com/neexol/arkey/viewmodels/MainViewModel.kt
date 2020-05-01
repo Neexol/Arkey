@@ -16,12 +16,13 @@ class MainViewModel(
 ): ViewModel() {
     private val allAccounts: LiveData<List<Account>> = accountsRepo.allAccounts
 
-    private val selectedCategoryId = MutableLiveData(ALL_CATEGORIES_ID)
-    fun selectCategory(categoryId: Int) = run { selectedCategoryId.value = categoryId }
-    fun getSelectedCategoryId() = selectedCategoryId.value!!
+    private val _selectedCategoryId = MutableLiveData(ALL_CATEGORIES_ID)
+    val selectedCategoryId: LiveData<Int> = _selectedCategoryId
+    fun selectCategory(categoryId: Int) = run { _selectedCategoryId.value = categoryId }
 
-    private val searchQuery = MutableLiveData("")
-    fun setSearchQuery(query: String) = run { searchQuery.value = query }
+    private val _searchQuery = MutableLiveData("")
+    val searchQuery: LiveData<String> = _searchQuery
+    fun setSearchQuery(query: String) = run { _searchQuery.value = query }
 
     private val _displayAccounts = MediatorLiveData<List<Account>>()
     val displayAccounts: LiveData<List<Account>> = _displayAccounts
@@ -42,7 +43,7 @@ class MainViewModel(
                     _displayAccounts.postValue(
                         displayList.filter {
                             it.name.toLowerCase().contains(
-                                searchQuery.value.orEmpty().toLowerCase().trim()
+                                _searchQuery.value.orEmpty().toLowerCase().trim()
                             )
                         }
                     )
@@ -50,9 +51,23 @@ class MainViewModel(
             }
         }
         _displayAccounts.addSource(allAccounts, onChangedObserver)
-        _displayAccounts.addSource(selectedCategoryId, onChangedObserver)
-        _displayAccounts.addSource(searchQuery, onChangedObserver)
+        _displayAccounts.addSource(_selectedCategoryId, onChangedObserver)
+        _displayAccounts.addSource(_searchQuery, onChangedObserver)
     }
 
     val allCategories: LiveData<List<Category>> = categoriesRepo.allCategories
+
+    fun createCategory(categoryName: String) = viewModelScope.launch(Dispatchers.IO) {
+        categoriesRepo.insert(Category(null, categoryName))
+    }
+
+    fun changeCategoryName(newName: String) = viewModelScope.launch(Dispatchers.IO) {
+        categoriesRepo.update(Category(selectedCategoryId.value!!, newName))
+    }
+
+    fun deleteCurrentCategory() = viewModelScope.launch(Dispatchers.IO) {
+        val deletingCategoryId = selectedCategoryId.value
+        categoriesRepo.deleteById(deletingCategoryId!!)
+        _selectedCategoryId.postValue(WITHOUT_CATEGORY_ID)
+    }
 }
