@@ -10,11 +10,9 @@ class CategoriesRepository(
 ) {
     val allCategories: LiveData<List<Category>> = categoryDao.getAll()
 
-    fun insert(category: Category) = categoryDao.insert(category)
+    fun insert(categoryName: String): Long = categoryDao.insert(Category(null, categoryName))
 
     fun update(category: Category) = categoryDao.update(category)
-
-    fun delete(category: Category) = categoryDao.delete(category)
 
     fun deleteById(categoryId: Int) = categoryDao.deleteById(categoryId)
 }
