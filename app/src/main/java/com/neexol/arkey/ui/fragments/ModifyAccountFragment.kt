@@ -16,6 +16,7 @@ import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.db.entities.Category
 import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.ui.dialogs.YesNoDialog.Companion.RESULT_YES_NO_KEY
+import com.neexol.arkey.utils.ALL_CATEGORIES_ID
 import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.utils.mainActivity
 import com.neexol.arkey.utils.setOnItemSelectedListener
@@ -107,8 +108,15 @@ class ModifyAccountFragment: Fragment() {
             categorySpinner.setOnItemSelectedListener { viewModel.selectCategory(it) }
             categorySpinner.adapter = adapter
 
-            (modifyAccountType as? EditAccount)?.account?.categoryId?.let {
-                categorySpinner.setSelection(viewModel.categoryIdsList.indexOf(it))
+            (modifyAccountType as? CreateAccount)?.let {
+                val selectedCategoryId = mainViewModel.selectedCategoryId.value
+                if (selectedCategoryId != ALL_CATEGORIES_ID) {
+                    categorySpinner.setSelection(viewModel.categoryIdsList.indexOf(selectedCategoryId))
+                }
+            } ?:run {
+                (modifyAccountType as? EditAccount)?.account?.categoryId?.let {
+                    categorySpinner.setSelection(viewModel.categoryIdsList.indexOf(it))
+                }
             }
         }
     }
