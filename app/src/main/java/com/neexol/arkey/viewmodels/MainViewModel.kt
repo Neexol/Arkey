@@ -57,13 +57,17 @@ class MainViewModel(
 
     val allCategories: LiveData<List<Category>> = categoriesRepo.allCategories
 
-    fun deleteCurrentCategory() = viewModelScope.launch(Dispatchers.IO) {
-        val deletingCategoryId = selectedCategoryId.value
-        categoriesRepo.deleteById(deletingCategoryId!!)
-        _selectedCategoryId.postValue(WITHOUT_CATEGORY_ID)
+    fun createCategory(categoryName: String) = viewModelScope.launch(Dispatchers.IO) {
+        categoriesRepo.insert(Category(null, categoryName))
     }
 
     fun changeCategoryName(newName: String) = viewModelScope.launch(Dispatchers.IO) {
         categoriesRepo.update(Category(selectedCategoryId.value!!, newName))
+    }
+
+    fun deleteCurrentCategory() = viewModelScope.launch(Dispatchers.IO) {
+        val deletingCategoryId = selectedCategoryId.value
+        categoriesRepo.deleteById(deletingCategoryId!!)
+        _selectedCategoryId.postValue(WITHOUT_CATEGORY_ID)
     }
 }

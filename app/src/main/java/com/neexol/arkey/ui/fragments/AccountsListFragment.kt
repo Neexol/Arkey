@@ -84,6 +84,14 @@ class AccountsListFragment: Fragment() {
             val result = bundle.getString(RESULT_INPUT_TEXT_KEY)?.trim()
             if (!result.isNullOrBlank()) { viewModel.changeCategoryName(result) }
         }
+
+        childFragmentManager.setFragmentResultListener(
+            CREATE_CATEGORY_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val result = bundle.getString(RESULT_INPUT_TEXT_KEY)?.trim()
+            if (!result.isNullOrBlank()) { viewModel.createCategory(result) }
+        }
     }
 
     private fun setObservers() {
@@ -129,7 +137,7 @@ class AccountsListFragment: Fragment() {
             viewLifecycleOwner
         ) { _, bundle ->
             when(val result = bundle.getInt(NAV_MENU_KEY)) {
-                NEW_CATEGORY_ID -> {TODO()}
+                NEW_CATEGORY_ID -> showCategoryCreating()
                 else -> viewModel.selectCategory(result)
             }
         }
@@ -163,6 +171,13 @@ class AccountsListFragment: Fragment() {
             RENAME_CATEGORY_REQUEST_KEY,
             getString(R.string.rename_category),
             toolbar.title.toString()
+        ).show(childFragmentManager, null)
+    }
+
+    private fun showCategoryCreating() {
+        InputTextDialog.newInstance(
+            CREATE_CATEGORY_REQUEST_KEY,
+            getString(R.string.create_category)
         ).show(childFragmentManager, null)
     }
 
