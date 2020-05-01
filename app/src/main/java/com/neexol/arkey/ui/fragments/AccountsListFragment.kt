@@ -1,12 +1,10 @@
 package com.neexol.arkey.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -17,12 +15,10 @@ import com.neexol.arkey.R
 import com.neexol.arkey.adapters.accounts.AccountsListAdapter
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.ui.dialogs.InputTextDialog
-import com.neexol.arkey.ui.dialogs.InputTextDialog.Companion.INPUT_TEXT_KEY
-import com.neexol.arkey.ui.dialogs.InputTextDialog.Companion.INPUT_TEXT_REQUEST_KEY
+import com.neexol.arkey.ui.dialogs.InputTextDialog.Companion.RESULT_INPUT_TEXT_KEY
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog.Companion.NAV_MENU_KEY
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog.Companion.NAV_MENU_REQUEST_KEY
-import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.ui.fragments.ModifyAccountFragment.Companion.MODIFY_ACCOUNT_TYPE_KEY
 import com.neexol.arkey.utils.ALL_CATEGORIES_ID
 import com.neexol.arkey.utils.DebouncingQueryTextListener
@@ -36,6 +32,11 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class AccountsListFragment: Fragment() {
+
+    companion object {
+        private const val CREATE_CATEGORY_REQUEST_KEY = "CREATE_CATEGORY_REQUEST"
+        private const val RENAME_CATEGORY_REQUEST_KEY = "RENAME_CATEGORY_REQUEST"
+    }
 
     private val viewModel: MainViewModel by sharedViewModel()
 
@@ -62,6 +63,7 @@ class AccountsListFragment: Fragment() {
 
     private fun setListeners() {
         bottomAppBar.setNavigationOnClickListener { showMenu() }
+
         bottomAppBar.setOnMenuItemClickListener {
             when(it.itemId) {
                 R.id.action_search_bottom -> showSearchView()
@@ -73,6 +75,14 @@ class AccountsListFragment: Fragment() {
 
         addAccountBtn.setOnClickListener {
             navigateModifyAccount()
+        }
+
+        childFragmentManager.setFragmentResultListener(
+            RENAME_CATEGORY_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val result = bundle.getString(RESULT_INPUT_TEXT_KEY)?.trim()
+            if (!result.isNullOrBlank()) { viewModel.changeCategoryName(result) }
         }
     }
 
@@ -150,17 +160,10 @@ class AccountsListFragment: Fragment() {
 
     private fun showCategoryRenaming() {
         InputTextDialog.newInstance(
+            RENAME_CATEGORY_REQUEST_KEY,
             getString(R.string.rename_category),
             toolbar.title.toString()
         ).show(childFragmentManager, null)
-
-        childFragmentManager.setFragmentResultListener(
-            INPUT_TEXT_REQUEST_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
-            val result = bundle.getString(INPUT_TEXT_KEY)?.trim()
-            if (!result.isNullOrBlank()) { viewModel.changeCategoryName(result) }
-        }
     }
 
     private fun updateViewBasedOnSelectedCategory() {

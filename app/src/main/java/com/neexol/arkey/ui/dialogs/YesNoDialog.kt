@@ -11,25 +11,41 @@ import com.neexol.arkey.R
 class YesNoDialog: DialogFragment() {
 
     companion object {
-        const val YES_NO_REQUEST_KEY = "YES_NO_REQUEST"
-        const val YES_NO_KEY = "YES_NO"
+        const val RESULT_YES_NO_KEY = "YES_NO"
+        private const val YES_NO_REQUEST_KEY = "YES_NO_REQUEST"
         private const val TITLE_KEY = "TITLE"
 
-        fun newInstance(title: String): YesNoDialog {
+        fun newInstance(requestKey: String, title: String): YesNoDialog {
             return YesNoDialog().apply {
-                arguments = bundleOf(TITLE_KEY to title)
+                arguments = bundleOf(
+                    YES_NO_REQUEST_KEY to requestKey,
+                    TITLE_KEY to title
+                )
             }
         }
     }
 
+    private val requestKey by lazy {
+        requireArguments().getString(YES_NO_REQUEST_KEY)!!
+    }
+
+    private val title by lazy {
+        requireArguments().getString(TITLE_KEY)!!
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireContext())
-            .setTitle(requireArguments().getString(TITLE_KEY))
+            .setTitle(title)
             .setNegativeButton(R.string.no) { _, _ ->
-                setFragmentResult(YES_NO_REQUEST_KEY, bundleOf(YES_NO_KEY to false))
+                setFragmentResult(
+                    requestKey,
+                    bundleOf(RESULT_YES_NO_KEY to false)
+                )
             }
             .setPositiveButton(R.string.yes) { _, _ ->
-                setFragmentResult(YES_NO_REQUEST_KEY, bundleOf(YES_NO_KEY to true))
+                setFragmentResult(requestKey,
+                    bundleOf(RESULT_YES_NO_KEY to true)
+                )
             }
             .create()
     }

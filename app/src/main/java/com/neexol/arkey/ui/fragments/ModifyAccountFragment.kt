@@ -15,8 +15,7 @@ import com.neexol.arkey.databinding.FragmentModifyAccountBinding
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.db.entities.Category
 import com.neexol.arkey.ui.dialogs.YesNoDialog
-import com.neexol.arkey.ui.dialogs.YesNoDialog.Companion.YES_NO_KEY
-import com.neexol.arkey.ui.dialogs.YesNoDialog.Companion.YES_NO_REQUEST_KEY
+import com.neexol.arkey.ui.dialogs.YesNoDialog.Companion.RESULT_YES_NO_KEY
 import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.utils.mainActivity
 import com.neexol.arkey.utils.setOnItemSelectedListener
@@ -39,6 +38,7 @@ class ModifyAccountFragment: Fragment() {
 
     companion object {
         const val MODIFY_ACCOUNT_TYPE_KEY = "MODIFY_ACCOUNT_TYPE"
+        private const val DELETE_ACCOUNT_REQUEST_KEY = "DELETE_ACCOUNT_REQUEST"
     }
 
     private val modifyAccountType by lazy {
@@ -79,11 +79,8 @@ class ModifyAccountFragment: Fragment() {
             }
         }
 
-        deleteBtn.setOnClickListener { showDeleteConfirmationDialog() }
-
-        mainViewModel.allCategories.observe(viewLifecycleOwner, Observer {
-            initCategorySpinner(it)
-        })
+        setListeners()
+        setObservers()
     }
 
     private fun initCategorySpinner(categoriesList: List<Category>) {
@@ -116,19 +113,30 @@ class ModifyAccountFragment: Fragment() {
         }
     }
 
-    private fun showDeleteConfirmationDialog() {
-        YesNoDialog.newInstance(
-            getString(R.string.delete_account_confirmation)
-        ).show(childFragmentManager, null)
+    private fun setListeners() {
+        deleteBtn.setOnClickListener { showDeleteConfirmationDialog() }
 
         childFragmentManager.setFragmentResultListener(
-            YES_NO_REQUEST_KEY,
+            DELETE_ACCOUNT_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
-            if (bundle.getBoolean(YES_NO_KEY)) {
+            if (bundle.getBoolean(RESULT_YES_NO_KEY)) {
                 deleteAccount()
             }
         }
+    }
+
+    private fun setObservers() {
+        mainViewModel.allCategories.observe(viewLifecycleOwner, Observer {
+            initCategorySpinner(it)
+        })
+    }
+
+    private fun showDeleteConfirmationDialog() {
+        YesNoDialog.newInstance(
+            DELETE_ACCOUNT_REQUEST_KEY,
+            getString(R.string.delete_account_confirmation)
+        ).show(childFragmentManager, null)
     }
 
     private fun createAccount() {

@@ -16,19 +16,28 @@ import kotlinx.android.synthetic.main.view_input_text.view.*
 class InputTextDialog: DialogFragment() {
 
     companion object {
-        const val INPUT_TEXT_REQUEST_KEY = "INPUT_TEXT_REQUEST"
-        const val INPUT_TEXT_KEY = "INPUT_TEXT"
+        const val RESULT_INPUT_TEXT_KEY = "INPUT_TEXT"
+        private const val INPUT_TEXT_REQUEST_KEY = "INPUT_TEXT_REQUEST"
         private const val TITLE_KEY = "TITLE"
         private const val INIT_TEXT_KEY = "INIT_TEXT"
 
-        fun newInstance(title: String, initText: String = ""): InputTextDialog {
+        fun newInstance(requestKey: String, title: String, initText: String = ""): InputTextDialog {
             return InputTextDialog().apply {
                 arguments = bundleOf(
+                    INPUT_TEXT_REQUEST_KEY to requestKey,
                     TITLE_KEY to title,
                     INIT_TEXT_KEY to initText
                 )
             }
         }
+    }
+
+    private val requestKey by lazy {
+        requireArguments().getString(INPUT_TEXT_REQUEST_KEY)!!
+    }
+
+    private val title by lazy {
+        requireArguments().getString(TITLE_KEY)!!
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -38,12 +47,15 @@ class InputTextDialog: DialogFragment() {
         view.editText.setText(requireArguments().getString(INIT_TEXT_KEY))
 
         val dialog =  MaterialAlertDialogBuilder(requireContext())
-            .setTitle(requireArguments().getString(TITLE_KEY))
+            .setTitle(title)
             .setView(view)
             .setNegativeButton(R.string.cancel, null)
             .setPositiveButton(R.string.ok) {_, _ ->
                 val result = dialog?.findViewById<EditText>(R.id.editText)?.text.toString()
-                setFragmentResult(INPUT_TEXT_REQUEST_KEY, bundleOf(INPUT_TEXT_KEY to result))
+                setFragmentResult(
+                    requestKey,
+                    bundleOf(RESULT_INPUT_TEXT_KEY to result)
+                )
             }
             .create()
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
