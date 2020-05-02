@@ -11,10 +11,12 @@ import javax.crypto.spec.GCMParameterSpec
 object Coder {
 
     private const val TRANSFORMATION = "AES/GCM/NoPadding"
-    private const val ANDROID_KEY_STORE = "ArkeyKeyStore"
+    private const val ANDROID_KEY_STORE = "AndroidKeyStore"
 
     class Encoder {
-        private val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
+        private val keyGenerator by lazy {
+            KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
+        }
 
         private fun getSecretKey(alias: String): SecretKey {
             keyGenerator.init(

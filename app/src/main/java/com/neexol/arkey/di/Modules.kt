@@ -20,7 +20,7 @@ val databaseModule = module {
 }
 
 val repositoriesModule = module {
-    single { AccountsRepository(get()) }
+    single { AccountsRepository(get(), get(), get()) }
     single { CategoriesRepository(get()) }
 }
 
