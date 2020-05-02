@@ -3,6 +3,7 @@ package com.neexol.arkey.adapters.accounts
 import android.animation.ValueAnimator
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.text.method.PasswordTransformationMethod
 import android.view.*
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
@@ -76,6 +77,14 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
             binding.copyPasswordBtn.setOnClickListener {
                 it.context.addToClipboard("password", dataList[adapterPosition].password)
                 it.toast(it.context.getString(R.string.copied_clipboard))
+            }
+            binding.visibilityPasswordBtn.setOnClickListener {
+                if (it.isActivated) {
+                    binding.passwordHolder.transformationMethod = PasswordTransformationMethod()
+                } else {
+                    binding.passwordHolder.transformationMethod = null
+                }
+                it.isActivated = !it.isActivated
             }
             cardView.viewTreeObserver
                 .addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
