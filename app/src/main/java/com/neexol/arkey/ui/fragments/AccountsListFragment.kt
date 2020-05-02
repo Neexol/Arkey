@@ -107,9 +107,10 @@ class AccountsListFragment: Fragment() {
     }
 
     private fun initRecyclerView() {
+        recyclerView.setHasFixedSize(true)
         recyclerView.adapter = accountsListAdapter.apply {
             setOnAccountClickListener(object : AccountsListAdapter.OnAccountsListClickListener {
-                override fun onAccountClick(account: Account) {
+                override fun onAccountEditClick(account: Account) {
                     val bundle = bundleOf(MODIFY_ACCOUNT_TYPE_KEY to EditAccount(account))
                     navigateModifyAccount(bundle)
                 }
