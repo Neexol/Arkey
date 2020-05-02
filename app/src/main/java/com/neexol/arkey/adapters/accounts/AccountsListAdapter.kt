@@ -131,11 +131,10 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         private fun toggleCardViewHeight(height: Int) {
             if (cardView.height == collapsedHeight) {
                 expandView(height)
-                binding.editAccountBtn.visibility = View.VISIBLE
             } else {
                 collapseView()
-                binding.editAccountBtn.visibility = View.GONE
             }
+            binding.editAccountBtn.apply { isActivated = !isActivated }
         }
 
         private fun collapseView() {
