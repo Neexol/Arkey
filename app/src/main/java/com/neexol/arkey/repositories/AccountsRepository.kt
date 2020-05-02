@@ -9,9 +9,48 @@ class AccountsRepository(
 ) {
     val allAccounts: LiveData<List<Account>> = accountDao.getAll()
 
-    fun insert(account: Account) = accountDao.insert(account)
+    fun insert(
+        name: String,
+        login: String,
+        password: String,
+        site: String,
+        desc: String,
+        categoryId: Int?
+    ) {
+        accountDao.insert(Account(
+            null,
+            name,
+            login,
+            password,
+            "iv",
+            site,
+            desc,
+            categoryId,
+            System.currentTimeMillis().toString()
+        ))
+    }
 
-    fun update(account: Account) = accountDao.update(account)
+    fun update(
+        id: Int,
+        name: String,
+        login: String,
+        password: String,
+        site: String,
+        desc: String,
+        categoryId: Int?
+    ) {
+        accountDao.update(Account(
+            id,
+            name,
+            login,
+            password,
+            "iv",
+            site,
+            desc,
+            categoryId,
+            System.currentTimeMillis().toString()
+        ))
+    }
 
     fun deleteById(accountId: Int) = accountDao.deleteById(accountId)
 }

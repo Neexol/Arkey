@@ -31,21 +31,6 @@ class ModifyAccountViewModel(
 
     fun selectCategory(spinnerIndex: Int) = run { categoryId = categoryIdsList[spinnerIndex] }
 
-    fun createAccount() = viewModelScope.launch(Dispatchers.IO) {
-        accountsRepo.insert(
-            Account(
-                null,
-                name.trim(),
-                login.trim(),
-                password.trim(),
-                site.trim(),
-                desc.trim(),
-                if (categoryId == WITHOUT_CATEGORY_ID) null else categoryId,
-                System.currentTimeMillis().toString()
-            )
-        )
-    }
-
     fun fillAccountData(account: Account) {
         accountId = account.id
         name = account.name
@@ -57,18 +42,26 @@ class ModifyAccountViewModel(
         checkData()
     }
 
+    fun createAccount() = viewModelScope.launch(Dispatchers.IO) {
+        accountsRepo.insert(
+            name.trim(),
+            login.trim(),
+            password.trim(),
+            site.trim(),
+            desc.trim(),
+            if (categoryId == WITHOUT_CATEGORY_ID) null else categoryId
+        )
+    }
+
     fun editAccount() = viewModelScope.launch(Dispatchers.IO) {
         accountsRepo.update(
-            Account(
-                accountId,
-                name.trim(),
-                login.trim(),
-                password.trim(),
-                site.trim(),
-                desc.trim(),
-                if (categoryId == WITHOUT_CATEGORY_ID) null else categoryId,
-                System.currentTimeMillis().toString()
-            )
+            accountId!!,
+            name.trim(),
+            login.trim(),
+            password.trim(),
+            site.trim(),
+            desc.trim(),
+            if (categoryId == WITHOUT_CATEGORY_ID) null else categoryId
         )
     }
 
