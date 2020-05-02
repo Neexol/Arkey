@@ -9,7 +9,7 @@ internal class DebouncingQueryTextListener(
     lifecycle: Lifecycle,
     private val onDebouncingQueryTextChange: (String?) -> Unit
 ) : SearchView.OnQueryTextListener {
-    private val debouncePeriod: Long = 500
+    private val debouncePeriod: Long = 250
 
     private val coroutineScope = lifecycle.coroutineScope
 
