@@ -30,4 +30,5 @@
     <string name="new_name_category">New name of category</string>
     <string name="category_name_hint">Category name</string>
     <string name="not_filled">Information not filled</string>
+    <string name="copied_clipboard">Copied to clipboard</string>
 </resources>

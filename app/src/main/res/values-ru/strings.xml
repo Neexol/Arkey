@@ -26,4 +26,5 @@
     <string name="new_name_category">Новое название категории</string>
     <string name="category_name_hint">Имя категории</string>
     <string name="not_filled">Информация не заполнена</string>
+    <string name="copied_clipboard">Скопировано в буфер обмена</string>
 </resources>

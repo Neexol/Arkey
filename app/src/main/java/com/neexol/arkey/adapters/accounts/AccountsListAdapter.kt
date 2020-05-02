@@ -1,6 +1,8 @@
 package com.neexol.arkey.adapters.accounts
 
 import android.animation.ValueAnimator
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.view.*
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
@@ -9,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.neexol.arkey.R
 import com.neexol.arkey.databinding.ItemAccountBinding
 import com.neexol.arkey.db.entities.Account
+import com.neexol.arkey.utils.addToClipboard
+import com.neexol.arkey.utils.toast
 import kotlinx.android.synthetic.main.item_account.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -64,6 +68,14 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
             }
             binding.collapsedPanel.setOnClickListener {
                 toggleCardViewHeight(expandedHeight)
+            }
+            binding.copyLoginBtn.setOnClickListener {
+                it.context.addToClipboard("login", dataList[adapterPosition].login)
+                it.toast(it.context.getString(R.string.copied_clipboard))
+            }
+            binding.copyPasswordBtn.setOnClickListener {
+                it.context.addToClipboard("password", dataList[adapterPosition].password)
+                it.toast(it.context.getString(R.string.copied_clipboard))
             }
             cardView.viewTreeObserver
                 .addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
