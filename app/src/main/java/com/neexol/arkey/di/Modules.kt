@@ -6,6 +6,7 @@ import com.neexol.arkey.adapters.categories.CategoriesListAdapter
 import com.neexol.arkey.db.Database
 import com.neexol.arkey.repositories.AccountsRepository
 import com.neexol.arkey.repositories.CategoriesRepository
+import com.neexol.arkey.utils.Coder
 import com.neexol.arkey.viewmodels.ModifyAccountViewModel
 import com.neexol.arkey.viewmodels.MainViewModel
 import org.koin.android.ext.koin.androidContext
@@ -31,4 +32,9 @@ val viewModelsModule = module {
 val adaptersModule = module {
     single { AccountsListAdapter() }
     factory { CategoriesListAdapter() }
+}
+
+val codersModule = module {
+    single { Coder.Decoder() }
+    single { Coder.Encoder() }
 }
