@@ -6,6 +6,9 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.Transformation
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
@@ -54,4 +57,41 @@ fun Context.addToClipboard(label: String, text: String) {
 
 fun View.toast(text: String, duration: Int = Snackbar.LENGTH_SHORT) {
     Snackbar.make(this, text, duration).show()
+}
+
+fun View.expand() {
+    this.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    val actualHeight: Int = this.measuredHeight
+    this.layoutParams.height = 0
+    this.visibility = View.VISIBLE
+    val animation = object : Animation() {
+        override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
+            this@expand.layoutParams.height =
+                if (interpolatedTime == 1f) {
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                }
+                else {
+                    (actualHeight * interpolatedTime).toInt()
+                }
+            this@expand.requestLayout()
+        }
+    }
+    animation.duration = (actualHeight / this.context.resources.displayMetrics.density).toLong()
+    this.startAnimation(animation)
+}
+
+fun View.collapse() {
+    val actualHeight: Int = this.measuredHeight
+    val animation = object : Animation() {
+        override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
+            if (interpolatedTime == 1f) {
+                this@collapse.visibility = View.GONE
+            } else {
+                this@collapse.layoutParams.height = actualHeight - (actualHeight * interpolatedTime).toInt()
+                this@collapse.requestLayout()
+            }
+        }
+    }
+    animation.duration = (actualHeight / this.context.resources.displayMetrics.density).toLong()
+    this.startAnimation(animation)
 }

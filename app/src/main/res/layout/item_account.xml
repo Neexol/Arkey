@@ -50,13 +50,15 @@
                     android:id="@+id/editAccountBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/selector_edit_account"
+                    android:src="@drawable/ic_edit_account"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:layout_gravity="center_vertical"
                     android:layout_marginHorizontal="8dp"
-                    android:paddingHorizontal="8dp"/>
+                    android:paddingHorizontal="8dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
 
             </LinearLayout>
 
@@ -64,7 +66,9 @@
                 android:id="@+id/expandedPanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/loginPanel"

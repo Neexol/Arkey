@@ -107,6 +107,7 @@ class AccountsListFragment: Fragment() {
     }
 
     private fun initRecyclerView() {
+        recyclerView.setHasFixedSize(true)
         recyclerView.adapter = accountsListAdapter.apply {
             setOnAccountClickListener(object : AccountsListAdapter.OnAccountsListClickListener {
                 override fun onAccountEditClick(account: Account) {

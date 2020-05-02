@@ -29,6 +29,6 @@ val viewModelsModule = module {
 }
 
 val adaptersModule = module {
-    factory { AccountsListAdapter() }
+    single { AccountsListAdapter() }
     factory { CategoriesListAdapter() }
 }

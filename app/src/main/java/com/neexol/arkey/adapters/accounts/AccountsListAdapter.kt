@@ -1,10 +1,8 @@
 package com.neexol.arkey.adapters.accounts
 
-import android.animation.ValueAnimator
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.text.method.PasswordTransformationMethod
 import android.view.*
+import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
@@ -13,8 +11,9 @@ import com.neexol.arkey.R
 import com.neexol.arkey.databinding.ItemAccountBinding
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.utils.addToClipboard
+import com.neexol.arkey.utils.collapse
+import com.neexol.arkey.utils.expand
 import com.neexol.arkey.utils.toast
-import kotlinx.android.synthetic.main.item_account.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -23,21 +22,26 @@ import kotlinx.coroutines.withContext
 
 class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolder>() {
 
+    private data class AccountItem(
+        val account: Account,
+        var isExpanded: Boolean = false
+    )
+
     private var clickListener: OnAccountsListClickListener? = null
 
-    private var dataList = listOf<Account>()
+    private var dataList = listOf<AccountItem>()
 
     fun updateDataList(newDataList: List<Account>) {
         GlobalScope.launch(Dispatchers.Main) {
             val accountsDiffResult = withContext(Dispatchers.Default) {
                 val diffUtilCallback =
                     AccountsListDiffUtilCallback(
-                        dataList,
+                        dataList.map { it.account },
                         newDataList
                     )
                 DiffUtil.calculateDiff(diffUtilCallback)
             }
-            dataList = newDataList
+            dataList = newDataList.map { AccountItem(it) }
             accountsDiffResult.dispatchUpdatesTo(this@AccountsListAdapter)
         }
     }
@@ -58,24 +62,22 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
 
     inner class AccountHolder internal constructor(private val binding: ItemAccountBinding):
         RecyclerView.ViewHolder(binding.root) {
-        private var collapsedHeight = 0
-        private var expandedHeight = 0
-
-        private val cardView: CardView = binding.cardView
+        private val expandedPanel: LinearLayout = binding.expandedPanel
 
         init {
             binding.editAccountBtn.setOnClickListener {
-                clickListener?.onAccountEditClick(dataList[adapterPosition])
+                clickListener?.onAccountEditClick(dataList[adapterPosition].account)
             }
             binding.collapsedPanel.setOnClickListener {
-                toggleCardViewHeight(expandedHeight)
+                dataList[adapterPosition].isExpanded = !dataList[adapterPosition].isExpanded
+                toggleLayout(adapterPosition)
             }
             binding.copyLoginBtn.setOnClickListener {
-                it.context.addToClipboard("login", dataList[adapterPosition].login)
+                it.context.addToClipboard("login", dataList[adapterPosition].account.login)
                 it.toast(it.context.getString(R.string.copied_clipboard))
             }
             binding.copyPasswordBtn.setOnClickListener {
-                it.context.addToClipboard("password", dataList[adapterPosition].password)
+                it.context.addToClipboard("password", dataList[adapterPosition].account.password)
                 it.toast(it.context.getString(R.string.copied_clipboard))
             }
             binding.visibilityPasswordBtn.setOnClickListener {
@@ -86,20 +88,10 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
                 }
                 it.isActivated = !it.isActivated
             }
-            cardView.viewTreeObserver
-                .addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                    override fun onPreDraw(): Boolean {
-                        cardView.viewTreeObserver.removeOnPreDrawListener(this)
-                        cardView.layoutParams = cardView.layoutParams.apply {
-                            height = cardView.accountName.height
-                        }
-                        return true
-                    }
-                })
         }
 
         fun bind(position: Int) {
-            val account = dataList[position]
+            val account = dataList[position].account
 
             if (account.login.isEmpty() &&
                 account.password.isEmpty() &&
@@ -113,56 +105,21 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
 
             binding.account = account
             binding.executePendingBindings()
-
-            cardView.viewTreeObserver
-                .addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                    override fun onPreDraw(): Boolean {
-                        cardView.viewTreeObserver.removeOnPreDrawListener(this)
-                        collapsedHeight = cardView.accountName.height
-                        expandedHeight = cardView.height
-                        cardView.layoutParams = cardView.layoutParams.apply {
-                            height = collapsedHeight
-                        }
-                        return true
-                    }
-                })
+            toggleLayout(position)
         }
 
-        private fun toggleCardViewHeight(height: Int) {
-            if (cardView.height == collapsedHeight) {
-                expandView(height)
+        private fun toggleLayout(position: Int) {
+            val isExpanded = dataList[position].isExpanded
+            if (isExpanded) {
+                expandedPanel.expand()
             } else {
-                collapseView()
+                expandedPanel.collapse()
             }
-            binding.editAccountBtn.apply { isActivated = !isActivated }
-        }
-
-        private fun collapseView() {
-            val anim = ValueAnimator.ofInt(
-                cardView.measuredHeightAndState,
-                collapsedHeight
-            )
-            anim.addUpdateListener { valueAnimator ->
-                val value = valueAnimator.animatedValue as Int
-                val layoutParams = cardView.layoutParams
-                layoutParams.height = value
-                cardView.layoutParams = layoutParams
+            if (isExpanded) {
+                binding.editAccountBtn.visibility = View.VISIBLE
+            } else {
+                binding.editAccountBtn.visibility = View.GONE
             }
-            anim.start()
-        }
-
-        private fun expandView(height: Int) {
-            val anim = ValueAnimator.ofInt(
-                cardView.measuredHeightAndState,
-                height
-            )
-            anim.addUpdateListener { valueAnimator ->
-                val value = valueAnimator.animatedValue as Int
-                val layoutParams = cardView.layoutParams
-                layoutParams.height = value
-                cardView.layoutParams = layoutParams
-            }
-            anim.start()
         }
     }
 
