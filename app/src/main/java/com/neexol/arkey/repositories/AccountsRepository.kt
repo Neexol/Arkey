@@ -8,8 +8,7 @@ import com.neexol.arkey.utils.Coder
 
 class AccountsRepository(
     private val accountDao: AccountDao,
-    private val encoder: Coder.Encoder,
-    private val decoder: Coder.Decoder
+    private val coder: Coder
 ) {
     companion object {
         private const val PASSWORD_ALIAS = "PasswordAlias"
@@ -20,7 +19,7 @@ class AccountsRepository(
     init {
         allAccounts.addSource(accountDao.getAll()) {
             it.forEach { account ->
-                account.password = decoder.decryptData(
+                account.password = coder.decryptData(
                     PASSWORD_ALIAS,
                     Base64.decode(account.password, Base64.DEFAULT),
                     Base64.decode(account.iv, Base64.DEFAULT)
@@ -38,7 +37,7 @@ class AccountsRepository(
         desc: String,
         categoryId: Int?
     ) {
-        val encodedPair = encoder.encryptText(PASSWORD_ALIAS, password)
+        val encodedPair = coder.encryptText(PASSWORD_ALIAS, password)
         accountDao.insert(Account(
             null,
             name,
@@ -61,7 +60,7 @@ class AccountsRepository(
         desc: String,
         categoryId: Int?
     ) {
-        val encodedPair = encoder.encryptText(PASSWORD_ALIAS, password)
+        val encodedPair = coder.encryptText(PASSWORD_ALIAS, password)
         accountDao.update(Account(
             id,
             name,

@@ -20,7 +20,7 @@ val databaseModule = module {
 }
 
 val repositoriesModule = module {
-    single { AccountsRepository(get(), get(), get()) }
+    single { AccountsRepository(get(), get()) }
     single { CategoriesRepository(get()) }
 }
 
@@ -35,6 +35,5 @@ val adaptersModule = module {
 }
 
 val codersModule = module {
-    single { Coder.Decoder() }
-    single { Coder.Encoder() }
+    single { Coder() }
 }

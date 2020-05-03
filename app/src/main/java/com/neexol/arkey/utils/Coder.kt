@@ -8,49 +8,44 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
-object Coder {
+class Coder {
 
-    private const val TRANSFORMATION = "AES/GCM/NoPadding"
-    private const val ANDROID_KEY_STORE = "AndroidKeyStore"
+    companion object {
+        private const val TRANSFORMATION = "AES/GCM/NoPadding"
+        private const val ANDROID_KEY_STORE = "AndroidKeyStore"
+    }
 
-    class Encoder {
-        private val keyGenerator by lazy {
-            KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
+    private val keyStore by lazy {
+        KeyStore.getInstance(ANDROID_KEY_STORE).apply {
+            load(null)
         }
+    }
 
-        private fun getSecretKey(alias: String): SecretKey {
+    private fun getSecretKey(alias: String): SecretKey {
+        return if (keyStore.containsAlias(alias)) {
+            (keyStore.getEntry(alias, null) as KeyStore.SecretKeyEntry).secretKey
+        } else {
+            val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
             keyGenerator.init(
                 KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                     .build()
             )
-            return keyGenerator.generateKey()
-        }
-
-        fun encryptText(alias: String, textToEncrypt: String): Pair<ByteArray, ByteArray> {
-            val cipher: Cipher = Cipher.getInstance(TRANSFORMATION)
-            cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(alias))
-            return cipher.doFinal(textToEncrypt.toByteArray(charset("UTF-8"))) to cipher.iv
+            keyGenerator.generateKey()
         }
     }
 
-    class Decoder {
-        private val keyStore by lazy {
-            val ks = KeyStore.getInstance(ANDROID_KEY_STORE)
-            ks.load(null)
-            ks
-        }
+    fun encryptText(alias: String, textToEncrypt: String): Pair<ByteArray, ByteArray> {
+        val cipher: Cipher = Cipher.getInstance(TRANSFORMATION)
+        cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(alias))
+        return cipher.doFinal(textToEncrypt.toByteArray(charset("UTF-8"))) to cipher.iv
+    }
 
-        private fun getSecretKey(alias: String): SecretKey {
-            return (keyStore.getEntry(alias, null) as KeyStore.SecretKeyEntry).secretKey
-        }
-
-        fun decryptData(alias: String, encryptedData: ByteArray, encryptionIv: ByteArray): String {
-            val cipher: Cipher = Cipher.getInstance(TRANSFORMATION)
-            val spec = GCMParameterSpec(128, encryptionIv)
-            cipher.init(Cipher.DECRYPT_MODE, getSecretKey(alias), spec)
-            return String(cipher.doFinal(encryptedData), charset("UTF-8"))
-        }
+    fun decryptData(alias: String, encryptedData: ByteArray, encryptionIv: ByteArray): String {
+        val cipher: Cipher = Cipher.getInstance(TRANSFORMATION)
+        val spec = GCMParameterSpec(128, encryptionIv)
+        cipher.init(Cipher.DECRYPT_MODE, getSecretKey(alias), spec)
+        return String(cipher.doFinal(encryptedData), charset("UTF-8"))
     }
 }
