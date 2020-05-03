@@ -20,10 +20,8 @@ import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog.Companion.NAV_MENU_KEY
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog.Companion.NAV_MENU_REQUEST_KEY
 import com.neexol.arkey.ui.fragments.ModifyAccountFragment.Companion.MODIFY_ACCOUNT_TYPE_KEY
-import com.neexol.arkey.utils.ALL_CATEGORIES_ID
+import com.neexol.arkey.utils.*
 import com.neexol.arkey.utils.DebouncingQueryTextListener
-import com.neexol.arkey.utils.NEW_CATEGORY_ID
-import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_accounts_list.*
 import kotlinx.android.synthetic.main.view_toolbar.*
@@ -152,8 +150,7 @@ class AccountsListFragment: Fragment() {
         searchView.maxWidth = Int.MAX_VALUE
 
         searchView.setOnCloseListener {
-            val imm = requireContext().getSystemService(InputMethodManager::class.java)
-            imm.hideSoftInputFromWindow(searchView.windowToken, 0)
+            requireActivity().hideSoftInput(searchView.windowToken)
             searchItem.isVisible = false
             true
         }

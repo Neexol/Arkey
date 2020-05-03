@@ -15,7 +15,7 @@
     <string name="delete">Удалить</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
-    <string name="delete_account_confirmation">Мы действительно хотите удалить этот аккаунт?</string>
+    <string name="delete_account_confirmation">Вы действительно хотите удалить этот аккаунт?</string>
     <string name="search">Поиск</string>
     <string name="create_category">Создать категорию</string>
     <string name="settings">Настройки</string>

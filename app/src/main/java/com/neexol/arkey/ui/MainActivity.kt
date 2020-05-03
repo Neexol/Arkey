@@ -1,13 +1,12 @@
 package com.neexol.arkey.ui
 
-import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar
 import com.neexol.arkey.R
+import com.neexol.arkey.utils.hideSoftInput
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,8 +27,7 @@ class MainActivity : AppCompatActivity() {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener {
             onBackPressed()
-            val imm = getSystemService(InputMethodManager::class.java)
-            imm.hideSoftInputFromWindow(it.windowToken, 0)
+            hideSoftInput(it.windowToken)
         }
     }
 }

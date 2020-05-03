@@ -1,14 +1,17 @@
 package com.neexol.arkey.utils
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.IBinder
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
@@ -19,7 +22,6 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.neexol.arkey.R
 import com.neexol.arkey.ui.MainActivity
-import kotlinx.android.synthetic.main.dialog_bottom_nav_menu.*
 
 fun Fragment.mainActivity() = this.requireActivity() as MainActivity
 
@@ -94,4 +96,8 @@ fun View.collapse() {
     }
     animation.duration = (actualHeight / this.context.resources.displayMetrics.density).toLong()
     this.startAnimation(animation)
+}
+
+fun Activity.hideSoftInput(windowToken: IBinder) {
+    getSystemService(InputMethodManager::class.java).hideSoftInputFromWindow(windowToken, 0)
 }

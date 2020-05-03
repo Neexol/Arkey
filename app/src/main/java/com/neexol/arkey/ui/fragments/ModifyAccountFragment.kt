@@ -10,16 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.neexol.arkey.R
 import com.neexol.arkey.databinding.FragmentModifyAccountBinding
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.db.entities.Category
 import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.ui.dialogs.YesNoDialog.Companion.RESULT_YES_NO_KEY
-import com.neexol.arkey.utils.ALL_CATEGORIES_ID
-import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
-import com.neexol.arkey.utils.mainActivity
-import com.neexol.arkey.utils.setOnItemSelectedListener
+import com.neexol.arkey.utils.*
 import com.neexol.arkey.viewmodels.ModifyAccountViewModel
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_modify_account.*
@@ -150,17 +148,20 @@ class ModifyAccountFragment: Fragment() {
     private fun createAccount() {
         viewModel.createAccount()
         mainViewModel.selectCategory(viewModel.categoryId)
-        requireActivity().onBackPressed()
+        findNavController().popBackStack()
+        requireActivity().hideSoftInput(requireView().windowToken)
     }
 
     private fun editAccount() {
         viewModel.editAccount()
         mainViewModel.selectCategory(viewModel.categoryId)
-        requireActivity().onBackPressed()
+        findNavController().popBackStack()
+        requireActivity().hideSoftInput(requireView().windowToken)
     }
 
     private fun deleteAccount() {
         viewModel.deleteAccount()
-        requireActivity().onBackPressed()
+        findNavController().popBackStack()
+        requireActivity().hideSoftInput(requireView().windowToken)
     }
 }
