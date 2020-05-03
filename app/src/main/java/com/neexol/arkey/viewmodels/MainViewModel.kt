@@ -5,8 +5,7 @@ import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.db.entities.Category
 import com.neexol.arkey.repositories.AccountsRepository
 import com.neexol.arkey.repositories.CategoriesRepository
-import com.neexol.arkey.utils.ALL_CATEGORIES_ID
-import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
+import com.neexol.arkey.utils.Categories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -16,7 +15,7 @@ class MainViewModel(
 ): ViewModel() {
     private val allAccounts: LiveData<List<Account>> = accountsRepo.allAccounts
 
-    private val _selectedCategoryId = MutableLiveData(ALL_CATEGORIES_ID)
+    private val _selectedCategoryId = MutableLiveData(Categories.ALL_CATEGORIES.id)
     val selectedCategoryId: LiveData<Int> = _selectedCategoryId
     fun selectCategory(categoryId: Int) = run { _selectedCategoryId.value = categoryId }
 
@@ -36,8 +35,8 @@ class MainViewModel(
             viewModelScope.launch(Dispatchers.IO) {
                 allAccounts.value?.let { accountsList ->
                     val displayList = when(selectedCategoryId.value) {
-                        ALL_CATEGORIES_ID -> accountsList.toMutableList()
-                        WITHOUT_CATEGORY_ID -> accountsList.filter { it.categoryId == null }
+                        Categories.ALL_CATEGORIES.id -> accountsList.toMutableList()
+                        Categories.WITHOUT_CATEGORY.id -> accountsList.filter { it.categoryId == null }
                         else -> accountsList.filter { it.categoryId == selectedCategoryId.value }
                     }
                     _displayAccounts.postValue(
@@ -71,9 +70,9 @@ class MainViewModel(
         categoriesRepo.deleteById(deletingCategoryId!!)
 
         if (displayAccounts.value.isNullOrEmpty()) {
-            _selectedCategoryId.postValue(ALL_CATEGORIES_ID)
+            _selectedCategoryId.postValue(Categories.ALL_CATEGORIES.id)
         } else {
-            _selectedCategoryId.postValue(WITHOUT_CATEGORY_ID)
+            _selectedCategoryId.postValue(Categories.WITHOUT_CATEGORY.id)
         }
     }
 }

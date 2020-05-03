@@ -3,7 +3,6 @@ package com.neexol.arkey.adapters.accounts
 import android.text.method.PasswordTransformationMethod
 import android.view.*
 import android.widget.LinearLayout
-import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView

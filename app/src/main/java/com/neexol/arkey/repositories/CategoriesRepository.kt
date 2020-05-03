@@ -2,7 +2,6 @@ package com.neexol.arkey.repositories
 
 import androidx.lifecycle.LiveData
 import com.neexol.arkey.db.daos.CategoryDao
-import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.db.entities.Category
 
 class CategoriesRepository(

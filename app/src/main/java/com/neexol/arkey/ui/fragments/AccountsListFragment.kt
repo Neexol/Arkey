@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -136,7 +135,7 @@ class AccountsListFragment: Fragment() {
             viewLifecycleOwner
         ) { _, bundle ->
             when(val result = bundle.getInt(NAV_MENU_KEY)) {
-                NEW_CATEGORY_ID -> showCategoryCreating()
+                Categories.NEW_CATEGORY.id -> showCategoryCreating()
                 else -> viewModel.selectCategory(result)
             }
         }
@@ -189,14 +188,16 @@ class AccountsListFragment: Fragment() {
 
     private fun updateToolbarTitle(categoryId: Int) {
         toolbar.title = when(categoryId) {
-            ALL_CATEGORIES_ID -> getString(R.string.all_accounts)
-            WITHOUT_CATEGORY_ID -> getString(R.string.without_category)
+            Categories.ALL_CATEGORIES.id -> getString(R.string.all_accounts)
+            Categories.WITHOUT_CATEGORY.id -> getString(R.string.without_category)
             else -> viewModel.allCategories.value?.find { it.id == categoryId }?.name
         }
     }
 
     private fun updateCategoryOptionsVisible(categoryId: Int) {
-        val isVisible = categoryId != ALL_CATEGORIES_ID && categoryId != WITHOUT_CATEGORY_ID
+        val isVisible =
+            categoryId != Categories.ALL_CATEGORIES.id &&
+                    categoryId != Categories.WITHOUT_CATEGORY.id
         with(bottomAppBar.menu) {
             findItem(R.id.action_rename_category_bottom).isVisible = isVisible
             findItem(R.id.action_delete_category).isVisible = isVisible

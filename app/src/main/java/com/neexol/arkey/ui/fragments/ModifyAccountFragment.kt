@@ -89,7 +89,7 @@ class ModifyAccountFragment: Fragment() {
                 viewModel.categoryIdsList.clear()
 
                 categoryNamesList.add(getString(R.string.without_category))
-                viewModel.categoryIdsList.add(WITHOUT_CATEGORY_ID)
+                viewModel.categoryIdsList.add(Categories.WITHOUT_CATEGORY.id)
                 categoriesList.forEach { category ->
                     categoryNamesList.add(category.name)
                     viewModel.categoryIdsList.add(category.id!!)
@@ -108,7 +108,7 @@ class ModifyAccountFragment: Fragment() {
 
             (modifyAccountType as? CreateAccount)?.let {
                 val selectedCategoryId = mainViewModel.selectedCategoryId.value
-                if (selectedCategoryId != ALL_CATEGORIES_ID) {
+                if (selectedCategoryId != Categories.ALL_CATEGORIES.id) {
                     categorySpinner.setSelection(viewModel.categoryIdsList.indexOf(selectedCategoryId))
                 }
             } ?:run {

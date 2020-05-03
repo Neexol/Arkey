@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.repositories.AccountsRepository
-import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
+import com.neexol.arkey.utils.Categories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -23,7 +23,7 @@ class ModifyAccountViewModel(
     var password = ""
     var site = ""
     var desc = ""
-    var categoryId = WITHOUT_CATEGORY_ID
+    var categoryId = Categories.WITHOUT_CATEGORY.id
 
     val categoryIdsList = mutableListOf<Int>()
 
@@ -38,7 +38,7 @@ class ModifyAccountViewModel(
         password = account.password
         site = account.site
         desc = account.description
-        categoryId = account.categoryId ?: WITHOUT_CATEGORY_ID
+        categoryId = account.categoryId ?: Categories.WITHOUT_CATEGORY.id
         checkData()
     }
 
@@ -49,7 +49,7 @@ class ModifyAccountViewModel(
             password.trim(),
             site.trim(),
             desc.trim(),
-            if (categoryId == WITHOUT_CATEGORY_ID) null else categoryId
+            if (categoryId == Categories.WITHOUT_CATEGORY.id) null else categoryId
         )
     }
 
@@ -61,7 +61,7 @@ class ModifyAccountViewModel(
             password.trim(),
             site.trim(),
             desc.trim(),
-            if (categoryId == WITHOUT_CATEGORY_ID) null else categoryId
+            if (categoryId == Categories.WITHOUT_CATEGORY.id) null else categoryId
         )
     }
 

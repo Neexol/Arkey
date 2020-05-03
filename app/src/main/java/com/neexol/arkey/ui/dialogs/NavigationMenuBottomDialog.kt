@@ -11,9 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.neexol.arkey.R
 import com.neexol.arkey.adapters.categories.CategoriesListAdapter
 import com.neexol.arkey.db.entities.Category
-import com.neexol.arkey.utils.ALL_CATEGORIES_ID
-import com.neexol.arkey.utils.NEW_CATEGORY_ID
-import com.neexol.arkey.utils.WITHOUT_CATEGORY_ID
+import com.neexol.arkey.utils.Categories
 import com.neexol.arkey.utils.selectAsCategory
 import com.neexol.arkey.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.dialog_bottom_nav_menu.*
@@ -61,22 +59,22 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
 
     private fun setListeners() {
         allAccountsTV.setOnClickListener {
-            sendResult(ALL_CATEGORIES_ID)
+            sendResult(Categories.ALL_CATEGORIES.id)
         }
         withoutCategoryTV.setOnClickListener {
-            sendResult(WITHOUT_CATEGORY_ID)
+            sendResult(Categories.WITHOUT_CATEGORY.id)
         }
         newCategoryTV.setOnClickListener {
-            sendResult(NEW_CATEGORY_ID)
+            sendResult(Categories.NEW_CATEGORY.id)
         }
     }
 
     private fun highlightSelectedCategory() {
         when(val categoryId = viewModel.selectedCategoryId.value!!) {
-            ALL_CATEGORIES_ID -> {
+            Categories.ALL_CATEGORIES.id -> {
                 allAccountsTV.selectAsCategory()
             }
-            WITHOUT_CATEGORY_ID -> {
+            Categories.WITHOUT_CATEGORY.id -> {
                 withoutCategoryTV.selectAsCategory()
             }
             else -> {
