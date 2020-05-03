@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.neexol.arkey.R
 import com.neexol.arkey.databinding.FragmentPasswordGeneratorBinding
 import com.neexol.arkey.utils.copyToClipboard
 import com.neexol.arkey.utils.mainActivity
+import com.neexol.arkey.utils.setNavigationResult
 import com.neexol.arkey.utils.toast
 import com.neexol.arkey.viewmodels.PasswordGeneratorViewModel
 import kotlinx.android.synthetic.main.fragment_password_generator.*
@@ -19,6 +21,11 @@ import kotlinx.android.synthetic.main.view_toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PasswordGeneratorFragment: Fragment() {
+
+    companion object {
+        const val IS_NEED_TO_SHOW_USE_BUTTON_KEY = "IS_NEED_TO_SHOW_USE_BUTTON"
+        const val PASSWORD_RESULT_KEY = "PASSWORD_RESULT"
+    }
 
     val viewModel: PasswordGeneratorViewModel by viewModel()
 
@@ -42,6 +49,9 @@ class PasswordGeneratorFragment: Fragment() {
         toolbar.title = getString(R.string.pass_generator)
         mainActivity().enableNavigateButton(toolbar)
 
+        arguments?.getBoolean(IS_NEED_TO_SHOW_USE_BUTTON_KEY)?.let {
+            usePasswordPanel.visibility = View.VISIBLE
+        }
 
         setListeners()
     }
@@ -79,6 +89,11 @@ class PasswordGeneratorFragment: Fragment() {
                 viewModel.generatePassword()
             }
             sliderValueLabel.text = value.toInt().toString()
+        }
+
+        usePasswordBtn.setOnClickListener {
+            setNavigationResult(PASSWORD_RESULT_KEY, viewModel.password.get()!!)
+            findNavController().popBackStack()
         }
 
         uppercaseSwitch.setOnCheckedChangeListener(onSwitchChangeListener)

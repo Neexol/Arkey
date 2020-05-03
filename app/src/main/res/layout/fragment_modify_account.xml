@@ -70,7 +70,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="textEmailAddress"
                             android:singleLine="true"
-                            android:text="@={viewModel.login}" />
+                            android:text="@={viewModel.login}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -86,11 +86,14 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/passwordEdit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textNoSuggestions"
                             android:singleLine="true"
-                            android:text="@={viewModel.password}" />
+                            android:text="@={viewModel.password}"
+                            android:drawablePadding="4dp"
+                            android:drawableEnd="@drawable/ic_key" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -162,7 +165,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        android:enabled="@{viewModel.isValid()d}"
+                        android:enabled="@{viewModel.isValid()}"
                         android:text="@string/save"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@id/descInput"

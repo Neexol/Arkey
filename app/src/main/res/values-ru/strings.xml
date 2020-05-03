@@ -32,4 +32,5 @@
     <string name="password_lowercase_letters">Строчные буквы (a-z)</string>
     <string name="password_digits">Цифры (0-9)</string>
     <string name="password_special">Специальные символы</string>
+    <string name="use_this_password">Использовать этот пароль</string>
 </resources>
