@@ -31,4 +31,9 @@
     <string name="category_name_hint">Category name</string>
     <string name="not_filled">Information not filled</string>
     <string name="copied_clipboard">Copied to clipboard</string>
+    <string name="password_length">Length</string>
+    <string name="password_uppercase_letters">Uppercase (A-Z)</string>
+    <string name="password_lowercase_letters">Lowercase (a-z)</string>
+    <string name="password_digits">Digits (0-9)</string>
+    <string name="password_special">Special symbols</string>
 </resources>

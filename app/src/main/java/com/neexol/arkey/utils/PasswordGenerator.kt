@@ -26,7 +26,7 @@ class PasswordGenerator private constructor(
         val uppercaseSet = ('A'..'Z').toSet()
         val lowercaseSet = ('a'..'z').toSet()
         val digitsSet = ('0'..'9').toSet()
-        val specialSet = ("~!@#\$%^&*/+-=?_.,:;(){}[]<>\"\\").toSet()
+        val specialSet = ("~!@#\$%^&*/+-=?_(){}[]<>").toSet()
     }
 
     private val symbolsPoolSets = mutableSetOf<Set<Char>>().apply {

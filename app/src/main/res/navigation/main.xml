@@ -13,9 +13,22 @@
         <action
             android:id="@+id/action_accountsListFragment_to_modifyAccountFragment"
             app:destination="@id/modifyAccountFragment" />
+        <action
+            android:id="@+id/action_accountsListFragment_to_passwordGeneratorFragment"
+            app:destination="@id/passwordGeneratorFragment" />
     </fragment>
     <fragment
         android:id="@+id/modifyAccountFragment"
         android:name="com.neexol.arkey.ui.fragments.ModifyAccountFragment"
-        android:label="ModifyAccountFragment" />
+        android:label="ModifyAccountFragment"
+        tools:layout="@layout/fragment_modify_account">
+        <action
+            android:id="@+id/action_modifyAccountFragment_to_passwordGeneratorFragment"
+            app:destination="@id/passwordGeneratorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/passwordGeneratorFragment"
+        android:name="com.neexol.arkey.ui.fragments.PasswordGeneratorFragment"
+        android:label="PasswordGeneratorFragment"
+        tools:layout="@layout/fragment_password_generator"/>
 </navigation>

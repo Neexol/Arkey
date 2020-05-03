@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.neexol.arkey.R
 import com.neexol.arkey.databinding.ItemAccountBinding
 import com.neexol.arkey.db.entities.Account
-import com.neexol.arkey.utils.addToClipboard
+import com.neexol.arkey.utils.copyToClipboard
 import com.neexol.arkey.utils.collapse
 import com.neexol.arkey.utils.expand
 import com.neexol.arkey.utils.toast
@@ -72,11 +72,11 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
                 toggleLayout(adapterPosition)
             }
             binding.copyLoginBtn.setOnClickListener {
-                it.context.addToClipboard("login", dataList[adapterPosition].account.login)
+                it.context.copyToClipboard("login", dataList[adapterPosition].account.login)
                 it.toast(it.context.getString(R.string.copied_clipboard))
             }
             binding.copyPasswordBtn.setOnClickListener {
-                it.context.addToClipboard("password", dataList[adapterPosition].account.password)
+                it.context.copyToClipboard("password", dataList[adapterPosition].account.password)
                 it.toast(it.context.getString(R.string.copied_clipboard))
             }
             binding.visibilityPasswordBtn.setOnClickListener {

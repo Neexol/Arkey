@@ -51,7 +51,7 @@ fun TextView.selectAsCategory() {
     this.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
 }
 
-fun Context.addToClipboard(label: String, text: String) {
+fun Context.copyToClipboard(label: String, text: String) {
     val clipboard = this.getSystemService(ClipboardManager::class.java)
     val clip = ClipData.newPlainText(label, text)
     clipboard.setPrimaryClip(clip)

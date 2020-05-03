@@ -1,15 +1,15 @@
 package com.neexol.arkey.viewmodels
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.neexol.arkey.utils.PasswordGenerator
 
 class PasswordGeneratorViewModel(
     private val passwordGeneratorBuilder: PasswordGenerator.Builder
 ): ViewModel() {
-    var password = ""
-        private set
+    val password = ObservableField("")
 
-    var length = 16
+    var length: Int = 16
     var isUppercaseEnabled = true
     var isLowercaseEnabled = true
     var isDigitsEnabled = true
@@ -18,13 +18,15 @@ class PasswordGeneratorViewModel(
     init { generatePassword() }
 
     fun generatePassword() {
-        password = passwordGeneratorBuilder
-            .length(length)
-            .isUppercaseEnabled(isUppercaseEnabled)
-            .isLowercaseEnabled(isLowercaseEnabled)
-            .isDigitsEnabled(isDigitsEnabled)
-            .isSpecialEnabled(isSpecialEnabled)
-            .build()
-            .generate()
+        password.set(
+            passwordGeneratorBuilder
+                .length(length)
+                .isUppercaseEnabled(isUppercaseEnabled)
+                .isLowercaseEnabled(isLowercaseEnabled)
+                .isDigitsEnabled(isDigitsEnabled)
+                .isSpecialEnabled(isSpecialEnabled)
+                .build()
+                .generate()
+        )
     }
 }

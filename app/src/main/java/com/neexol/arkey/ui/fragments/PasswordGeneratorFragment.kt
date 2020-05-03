@@ -1,0 +1,89 @@
+package com.neexol.arkey.ui.fragments
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.CompoundButton
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.neexol.arkey.R
+import com.neexol.arkey.databinding.FragmentPasswordGeneratorBinding
+import com.neexol.arkey.utils.copyToClipboard
+import com.neexol.arkey.utils.mainActivity
+import com.neexol.arkey.utils.toast
+import com.neexol.arkey.viewmodels.PasswordGeneratorViewModel
+import kotlinx.android.synthetic.main.fragment_password_generator.*
+import kotlinx.android.synthetic.main.view_toolbar.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+class PasswordGeneratorFragment: Fragment() {
+
+    val viewModel: PasswordGeneratorViewModel by viewModel()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = DataBindingUtil.inflate<FragmentPasswordGeneratorBinding>(
+            inflater,
+            R.layout.fragment_password_generator,
+            container,
+            false
+        )
+        binding.viewModel = viewModel
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        toolbar.title = getString(R.string.pass_generator)
+        mainActivity().enableNavigateButton(toolbar)
+
+
+        setListeners()
+    }
+
+    private val onSwitchChangeListener = CompoundButton.OnCheckedChangeListener { view, isChecked ->
+        val viewModelSwitch = when(view.id) {
+            R.id.uppercaseSwitch -> PasswordGeneratorViewModel::isUppercaseEnabled
+            R.id.lowercaseSwitch -> PasswordGeneratorViewModel::isLowercaseEnabled
+            R.id.digitsSwitch -> PasswordGeneratorViewModel::isDigitsEnabled
+            else -> PasswordGeneratorViewModel::isSpecialEnabled
+        }
+        if (viewModelSwitch.get(viewModel) != isChecked) {
+            viewModelSwitch.set(viewModel, isChecked)
+            viewModel.generatePassword()
+        }
+
+        val switchList = listOf<SwitchMaterial>(uppercaseSwitch, lowercaseSwitch, digitsSwitch, specialSwitch)
+        val enabledSwitchList = switchList.filter { it.isChecked }
+        if (enabledSwitchList.size == 1) {
+            enabledSwitchList[0].isEnabled = false
+        } else {
+            switchList.forEach { it.isEnabled = true }
+        }
+    }
+
+    private fun setListeners() {
+        copyBtn.setOnClickListener {
+            requireContext().copyToClipboard("password", viewModel.password.get()!!)
+            it.toast(it.context.getString(R.string.copied_clipboard))
+        }
+
+        lengthSlider.addOnChangeListener { _, value, _ ->
+            if (viewModel.length != value.toInt()) {
+                viewModel.length = value.toInt()
+                viewModel.generatePassword()
+            }
+            sliderValueLabel.text = value.toInt().toString()
+        }
+
+        uppercaseSwitch.setOnCheckedChangeListener(onSwitchChangeListener)
+        lowercaseSwitch.setOnCheckedChangeListener(onSwitchChangeListener)
+        digitsSwitch.setOnCheckedChangeListener(onSwitchChangeListener)
+        specialSwitch.setOnCheckedChangeListener(onSwitchChangeListener)
+    }
+}

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.neexol.arkey.R
 import com.neexol.arkey.adapters.categories.CategoriesListAdapter
@@ -66,6 +67,9 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
         }
         newCategoryTV.setOnClickListener {
             sendResult(Categories.NEW_CATEGORY.id)
+        }
+        passGeneratorTV.setOnClickListener {
+            findNavController().navigate(R.id.action_accountsListFragment_to_passwordGeneratorFragment)
         }
     }
 
