@@ -17,7 +17,8 @@ class App: Application() {
                 repositoriesModule,
                 viewModelsModule,
                 adaptersModule,
-                codersModule
+                coderModule,
+                passwordGeneratorModule
             ))
         }
     }

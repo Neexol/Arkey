@@ -7,8 +7,10 @@ import com.neexol.arkey.db.Database
 import com.neexol.arkey.repositories.AccountsRepository
 import com.neexol.arkey.repositories.CategoriesRepository
 import com.neexol.arkey.utils.Coder
+import com.neexol.arkey.utils.PasswordGenerator
 import com.neexol.arkey.viewmodels.ModifyAccountViewModel
 import com.neexol.arkey.viewmodels.MainViewModel
+import com.neexol.arkey.viewmodels.PasswordGeneratorViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -27,6 +29,7 @@ val repositoriesModule = module {
 val viewModelsModule = module {
     viewModel { MainViewModel(get(), get()) }
     viewModel { ModifyAccountViewModel(get()) }
+    viewModel { PasswordGeneratorViewModel(get()) }
 }
 
 val adaptersModule = module {
@@ -34,6 +37,10 @@ val adaptersModule = module {
     factory { CategoriesListAdapter() }
 }
 
-val codersModule = module {
+val coderModule = module {
     single { Coder() }
+}
+
+val passwordGeneratorModule = module {
+    single { PasswordGenerator.Builder() }
 }

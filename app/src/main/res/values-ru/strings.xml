@@ -27,4 +27,10 @@
     <string name="category_name_hint">Имя категории</string>
     <string name="not_filled">Информация не заполнена</string>
     <string name="copied_clipboard">Скопировано в буфер обмена</string>
+    <string name="password_length">Длина</string>
+    <string name="password_uppercase_letters">Прописные буквы (A-Z)</string>
+    <string name="password_lowercase_letters">Строчные буквы (a-z)</string>
+    <string name="password_digits">Цифры (0-9)</string>
+    <string name="password_special">Специальные символы</string>
+    <string name="use_this_password">Использовать этот пароль</string>
 </resources>

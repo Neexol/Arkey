@@ -2,9 +2,11 @@ package com.neexol.arkey.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -17,6 +19,8 @@ import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.db.entities.Category
 import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.ui.dialogs.YesNoDialog.Companion.RESULT_YES_NO_KEY
+import com.neexol.arkey.ui.fragments.PasswordGeneratorFragment.Companion.IS_NEED_TO_SHOW_USE_BUTTON_KEY
+import com.neexol.arkey.ui.fragments.PasswordGeneratorFragment.Companion.PASSWORD_RESULT_KEY
 import com.neexol.arkey.utils.*
 import com.neexol.arkey.viewmodels.ModifyAccountViewModel
 import com.neexol.arkey.viewmodels.MainViewModel
@@ -122,6 +126,16 @@ class ModifyAccountFragment: Fragment() {
     private fun setListeners() {
         deleteBtn.setOnClickListener { showDeleteConfirmationDialog() }
 
+        passwordEdit.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                if(event.rawX >= (passwordEdit.right - passwordEdit.compoundDrawables[2].bounds.width())) {
+                    navigateToPassGenerator()
+                    return@setOnTouchListener true
+                }
+            }
+            false
+        }
+
         childFragmentManager.setFragmentResultListener(
             DELETE_ACCOUNT_REQUEST_KEY,
             viewLifecycleOwner
@@ -135,6 +149,10 @@ class ModifyAccountFragment: Fragment() {
     private fun setObservers() {
         mainViewModel.allCategories.observe(viewLifecycleOwner, Observer {
             initCategorySpinner(it)
+        })
+
+        getNavigationResult<String>(PASSWORD_RESULT_KEY)?.observe(viewLifecycleOwner, Observer {
+            viewModel.password = it
         })
     }
 
@@ -163,5 +181,12 @@ class ModifyAccountFragment: Fragment() {
         viewModel.deleteAccount()
         findNavController().popBackStack()
         requireActivity().hideSoftInput(requireView().windowToken)
+    }
+
+    private fun navigateToPassGenerator() {
+        findNavController().navigate(
+            R.id.action_modifyAccountFragment_to_passwordGeneratorFragment,
+            bundleOf(IS_NEED_TO_SHOW_USE_BUTTON_KEY to true)
+        )
     }
 }

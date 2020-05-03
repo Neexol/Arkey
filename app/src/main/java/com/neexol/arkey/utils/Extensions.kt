@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.neexol.arkey.R
 import com.neexol.arkey.ui.MainActivity
+import androidx.navigation.fragment.findNavController
 
 fun Fragment.mainActivity() = this.requireActivity() as MainActivity
 
@@ -51,7 +52,7 @@ fun TextView.selectAsCategory() {
     this.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
 }
 
-fun Context.addToClipboard(label: String, text: String) {
+fun Context.copyToClipboard(label: String, text: String) {
     val clipboard = this.getSystemService(ClipboardManager::class.java)
     val clip = ClipData.newPlainText(label, text)
     clipboard.setPrimaryClip(clip)
@@ -101,3 +102,9 @@ fun View.collapse() {
 fun Activity.hideSoftInput(windowToken: IBinder) {
     getSystemService(InputMethodManager::class.java).hideSoftInputFromWindow(windowToken, 0)
 }
+
+fun <T> Fragment.getNavigationResult(key: String) =
+    findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)
+
+fun <T> Fragment.setNavigationResult(key: String, result: T) =
+    findNavController().previousBackStackEntry?.savedStateHandle?.set(key, result)
