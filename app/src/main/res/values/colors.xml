@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryVariant">#3700B3</color>
     <color name="colorTranslucentPrimary">#1A6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorBackground">#FAFAFA</color>
-    <color name="colorDestructive">#EE0202</color>
+    <color name="colorError">#B00020</color>
     <color name="colorSeparator">#1F000000</color>
 </resources>

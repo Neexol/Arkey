@@ -2,9 +2,10 @@
 
     <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorSecondaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorError">@color/colorError</item>
         <item name="colorOnSecondary">@color/colorBackground</item>
         <item name="android:colorBackground">@color/colorBackground</item>
     </style>

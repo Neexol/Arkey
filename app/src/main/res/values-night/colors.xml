@@ -3,6 +3,6 @@
     <color name="colorPrimary">#BB86FC</color>
     <color name="colorTranslucentPrimary">#1ABB86FC</color>
     <color name="colorBackground">#121212</color>
-    <color name="colorDestructive">#FF6262</color>
+    <color name="colorError">#CF6679</color>
     <color name="colorSeparator">#26FFFFFF</color>
 </resources>
