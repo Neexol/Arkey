@@ -21,26 +21,23 @@ import kotlinx.coroutines.withContext
 
 class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolder>() {
 
-    private data class AccountItem(
-        val account: Account,
-        var isExpanded: Boolean = false
-    )
-
     private var clickListener: OnAccountsListClickListener? = null
 
-    private var dataList = listOf<AccountItem>()
+    private var dataList = listOf<Account>()
+
+    private val expandedAccountsIds = mutableListOf<Int>()
 
     fun updateDataList(newDataList: List<Account>) {
         GlobalScope.launch(Dispatchers.Main) {
             val accountsDiffResult = withContext(Dispatchers.Default) {
                 val diffUtilCallback =
                     AccountsListDiffUtilCallback(
-                        dataList.map { it.account },
+                        dataList,
                         newDataList
                     )
                 DiffUtil.calculateDiff(diffUtilCallback)
             }
-            dataList = newDataList.map { AccountItem(it) }
+            dataList = newDataList
             accountsDiffResult.dispatchUpdatesTo(this@AccountsListAdapter)
         }
     }
@@ -65,18 +62,23 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
 
         init {
             binding.editAccountBtn.setOnClickListener {
-                clickListener?.onAccountEditClick(dataList[adapterPosition].account)
+                clickListener?.onAccountEditClick(dataList[adapterPosition])
             }
             binding.collapsedPanel.setOnClickListener {
-                dataList[adapterPosition].isExpanded = !dataList[adapterPosition].isExpanded
+                val accountId = dataList[adapterPosition].id
+                if (expandedAccountsIds.contains(accountId)) {
+                    expandedAccountsIds.remove(accountId!!)
+                } else {
+                    expandedAccountsIds.add(accountId!!)
+                }
                 toggleLayout(adapterPosition)
             }
             binding.copyLoginBtn.setOnClickListener {
-                it.context.copyToClipboard("login", dataList[adapterPosition].account.login)
+                it.context.copyToClipboard("login", dataList[adapterPosition].login)
                 it.toast(it.context.getString(R.string.copied_clipboard))
             }
             binding.copyPasswordBtn.setOnClickListener {
-                it.context.copyToClipboard("password", dataList[adapterPosition].account.password)
+                it.context.copyToClipboard("password", dataList[adapterPosition].password)
                 it.toast(it.context.getString(R.string.copied_clipboard))
             }
             binding.visibilityPasswordBtn.setOnClickListener {
@@ -90,7 +92,7 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         }
 
         fun bind(position: Int) {
-            val account = dataList[position].account
+            val account = dataList[position]
 
             if (account.login.isEmpty() &&
                 account.password.isEmpty() &&
@@ -108,7 +110,7 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         }
 
         private fun toggleLayout(position: Int) {
-            val isExpanded = dataList[position].isExpanded
+            val isExpanded = expandedAccountsIds.contains(dataList[position].id)
             if (isExpanded) {
                 expandedPanel.expand()
             } else {
