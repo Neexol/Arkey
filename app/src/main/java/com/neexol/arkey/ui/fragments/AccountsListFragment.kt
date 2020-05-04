@@ -72,7 +72,11 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
         }
 
         addAccountBtn.setOnClickListener {
-            navigateModifyAccount()
+            navigateModifyAccount(
+                bundleOf(MODIFY_ACCOUNT_TYPE_KEY to CreateAccount(
+                    viewModel.selectedCategoryId.value!!
+                ))
+            )
         }
 
         childFragmentManager.setFragmentResultListener(
@@ -200,13 +204,17 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
         }
     }
 
-    private fun navigateModifyAccount(bundle: Bundle? = null) {
-        findNavController().navigate(R.id.action_accountsListFragment_to_modifyAccountFragment, bundle)
+    private fun navigateModifyAccount(bundle: Bundle) {
+        findNavController().navigate(
+            R.id.action_accountsListFragment_to_modifyAccountFragment,
+            bundle
+        )
     }
 
     override fun onAccountEditClick(account: Account) {
-        val bundle = bundleOf(MODIFY_ACCOUNT_TYPE_KEY to EditAccount(account))
-        navigateModifyAccount(bundle)
+        navigateModifyAccount(
+            bundleOf(MODIFY_ACCOUNT_TYPE_KEY to EditAccount(account))
+        )
     }
 
     override fun onCopyClick(text: String) {

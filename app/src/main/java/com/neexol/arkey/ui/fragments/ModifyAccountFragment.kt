@@ -32,7 +32,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.Serializable
 
 sealed class ModifyAccountType: Serializable
-    object CreateAccount: ModifyAccountType()
+    data class CreateAccount(val selectedCategoryId: Int): ModifyAccountType()
     data class EditAccount(val account: Account): ModifyAccountType()
 
 class ModifyAccountFragment: Fragment() {
@@ -43,7 +43,7 @@ class ModifyAccountFragment: Fragment() {
     }
 
     private val modifyAccountType by lazy {
-        (arguments?.getSerializable(MODIFY_ACCOUNT_TYPE_KEY) as? EditAccount) ?: CreateAccount
+        requireArguments().getSerializable(MODIFY_ACCOUNT_TYPE_KEY) as ModifyAccountType
     }
 
     private val mainViewModel: MainViewModel by sharedViewModel()
@@ -69,7 +69,7 @@ class ModifyAccountFragment: Fragment() {
         mainActivity().enableNavigateButton(toolbar)
 
         when(modifyAccountType) {
-            CreateAccount -> {
+            is CreateAccount -> {
                 toolbar.title = getString(R.string.account_creating)
                 saveBtn.setOnClickListener { createAccount() }
             }
@@ -98,18 +98,20 @@ class ModifyAccountFragment: Fragment() {
             categorySpinner.setOnItemSelectedListener { viewModel.selectCategory(it) }
             categorySpinner.adapter = adapter
 
-            (modifyAccountType as? EditAccount)?.account?.categoryId?.let {
-                categorySpinner.setSelection(categoriesList.indexOfFirst { titleWithId ->
-                    titleWithId.id == it
-                })
-            } ?:run {
-                val selectedCategoryId = mainViewModel.selectedCategoryId.value
-                if (selectedCategoryId != Categories.ALL_CATEGORIES.id) {
-                    categorySpinner.setSelection(categoriesList.indexOfFirst { titleWithId ->
-                        titleWithId.id == selectedCategoryId
-                    })
+            val categoryIdForSelection = when(modifyAccountType) {
+                is CreateAccount -> {
+                    val selectedCategoryId = (modifyAccountType as CreateAccount).selectedCategoryId
+                    if (selectedCategoryId == Categories.ALL_CATEGORIES.id) {
+                        Categories.WITHOUT_CATEGORY.id
+                    } else {
+                        selectedCategoryId
+                    }
                 }
+                is EditAccount -> (modifyAccountType as EditAccount).account.categoryId
             }
+            categorySpinner.setSelection(
+                categoriesList.indexOfFirst { it.id == categoryIdForSelection }
+            )
         }
     }
 
