@@ -37,4 +37,5 @@
     <string name="password_digits">Digits (0-9)</string>
     <string name="password_special">Special symbols</string>
     <string name="use_this_password">Use this password</string>
+    <string name="accounts_without_category">Accounts without category</string>
 </resources>

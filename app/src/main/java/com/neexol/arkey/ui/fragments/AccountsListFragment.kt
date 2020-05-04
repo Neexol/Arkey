@@ -185,7 +185,7 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
     private fun updateToolbarTitle(categoryId: Int) {
         toolbar.title = when(categoryId) {
             Categories.ALL_CATEGORIES.id -> getString(R.string.all_accounts)
-            Categories.WITHOUT_CATEGORY.id -> getString(R.string.without_category)
+            Categories.WITHOUT_CATEGORY.id -> getString(R.string.accounts_without_category)
             else -> viewModel.allCategories.value?.find { it.id == categoryId }?.name
         }
     }

@@ -33,4 +33,5 @@
     <string name="password_digits">Цифры (0-9)</string>
     <string name="password_special">Специальные символы</string>
     <string name="use_this_password">Использовать этот пароль</string>
+    <string name="accounts_without_category">Аккаунты без категории</string>
 </resources>
