@@ -83,7 +83,7 @@ class PasswordGeneratorFragment: Fragment() {
             it.toast(it.context.getString(R.string.copied_clipboard))
         }
 
-        lengthSlider.addOnChangeListener { _, value, _ ->
+        lengthSlider.setOnChangeListener { _, value ->
             if (viewModel.length != value.toInt()) {
                 viewModel.length = value.toInt()
                 viewModel.generatePassword()
