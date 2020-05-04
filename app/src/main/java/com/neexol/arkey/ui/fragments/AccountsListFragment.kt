@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.neexol.arkey.R
 import com.neexol.arkey.adapters.accounts.AccountsListAdapter
 import com.neexol.arkey.db.entities.Account
@@ -28,7 +29,7 @@ import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class AccountsListFragment: Fragment() {
+class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickListener {
 
     companion object {
         private const val CREATE_CATEGORY_REQUEST_KEY = "CREATE_CATEGORY_REQUEST"
@@ -106,12 +107,7 @@ class AccountsListFragment: Fragment() {
     private fun initRecyclerView() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = accountsListAdapter.apply {
-            setOnAccountClickListener(object : AccountsListAdapter.OnAccountsListClickListener {
-                override fun onAccountEditClick(account: Account) {
-                    val bundle = bundleOf(MODIFY_ACCOUNT_TYPE_KEY to EditAccount(account))
-                    navigateModifyAccount(bundle)
-                }
-            })
+            setOnAccountClickListener(this@AccountsListFragment)
         }
     }
 
@@ -206,5 +202,21 @@ class AccountsListFragment: Fragment() {
 
     private fun navigateModifyAccount(bundle: Bundle? = null) {
         findNavController().navigate(R.id.action_accountsListFragment_to_modifyAccountFragment, bundle)
+    }
+
+    override fun onAccountEditClick(account: Account) {
+        val bundle = bundleOf(MODIFY_ACCOUNT_TYPE_KEY to EditAccount(account))
+        navigateModifyAccount(bundle)
+    }
+
+    override fun onCopyClick(text: String) {
+        requireContext().copyToClipboard(text)
+        Snackbar.make(
+            requireView(),
+            getString(R.string.copied_clipboard),
+            Snackbar.LENGTH_SHORT
+        ).apply {
+            anchorView = addAccountBtn
+        }.show()
     }
 }

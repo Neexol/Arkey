@@ -8,13 +8,13 @@ import android.widget.CompoundButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.neexol.arkey.R
 import com.neexol.arkey.databinding.FragmentPasswordGeneratorBinding
 import com.neexol.arkey.utils.copyToClipboard
 import com.neexol.arkey.utils.mainActivity
 import com.neexol.arkey.utils.setNavigationResult
-import com.neexol.arkey.utils.toast
 import com.neexol.arkey.viewmodels.PasswordGeneratorViewModel
 import kotlinx.android.synthetic.main.fragment_password_generator.*
 import kotlinx.android.synthetic.main.view_toolbar.*
@@ -79,8 +79,12 @@ class PasswordGeneratorFragment: Fragment() {
 
     private fun setListeners() {
         copyBtn.setOnClickListener {
-            requireContext().copyToClipboard("password", viewModel.password.get()!!)
-            it.toast(it.context.getString(R.string.copied_clipboard))
+            requireContext().copyToClipboard(viewModel.password.get()!!)
+            Snackbar.make(
+                requireView(),
+                getString(R.string.copied_clipboard),
+                Snackbar.LENGTH_SHORT
+            ).show()
         }
 
         lengthSlider.setOnChangeListener { _, value ->

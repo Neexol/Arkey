@@ -2,7 +2,7 @@
 <resources>
     <string name="all_accounts">Все аккаунты</string>
     <string name="new_category">Новая категория</string>
-    <string name="without_category">Аккаунты без категории</string>
+    <string name="without_category">Без категории</string>
     <string name="account_name">Название</string>
     <string name="account_login">Логин</string>
     <string name="account_password">Пароль</string>

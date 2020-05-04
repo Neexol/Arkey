@@ -52,14 +52,10 @@ fun TextView.selectAsCategory() {
     this.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
 }
 
-fun Context.copyToClipboard(label: String, text: String) {
+fun Context.copyToClipboard(text: String, label: String = "credentials") {
     val clipboard = this.getSystemService(ClipboardManager::class.java)
     val clip = ClipData.newPlainText(label, text)
     clipboard.setPrimaryClip(clip)
-}
-
-fun View.toast(text: String, duration: Int = Snackbar.LENGTH_SHORT) {
-    Snackbar.make(this, text, duration).show()
 }
 
 fun View.expand() {
