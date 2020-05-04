@@ -85,18 +85,14 @@ class ModifyAccountFragment: Fragment() {
     }
 
     private fun initCategorySpinner(categoriesList: List<ModifyAccountViewModel.TitleWithId>) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            val adapter = withContext(Dispatchers.IO) {
-                ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item,
-                    categoriesList.map { it.title ?: getString(R.string.without_category) }
-                ).apply {
-                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                }
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                categoriesList.map { it.title ?: getString(R.string.without_category) }
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
-            categorySpinner.setOnItemSelectedListener { viewModel.selectCategory(it) }
-            categorySpinner.adapter = adapter
 
             val categoryIdForSelection = when(modifyAccountType) {
                 is CreateAccount -> {
@@ -109,9 +105,16 @@ class ModifyAccountFragment: Fragment() {
                 }
                 is EditAccount -> (modifyAccountType as EditAccount).account.categoryId
             }
-            categorySpinner.setSelection(
-                categoriesList.indexOfFirst { it.id == categoryIdForSelection }
-            )
+
+            withContext(Dispatchers.Main) {
+                categorySpinner.adapter = adapter
+                categorySpinner.setOnItemSelectedListener {
+                    viewModel.selectCategory(it)
+                }
+                categorySpinner.setSelection(
+                    categoriesList.indexOfFirst { it.id == categoryIdForSelection }
+                )
+            }
         }
     }
 
