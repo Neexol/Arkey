@@ -79,6 +79,9 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:hint="@string/account_password"
+                        app:endIconMode="custom"
+                        app:endIconDrawable="@drawable/ic_key"
+                        app:endIconContentDescription="@string/pass_generator"
                         android:layout_marginTop="8dp"
                         app:layout_constraintEnd_toEndOf="@id/loginInput"
                         app:layout_constraintStart_toStartOf="@id/loginInput"
@@ -91,9 +94,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="textNoSuggestions"
                             android:singleLine="true"
-                            android:text="@={viewModel.password}"
-                            android:drawablePadding="4dp"
-                            android:drawableEnd="@drawable/ic_key" />
+                            android:text="@={viewModel.password}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

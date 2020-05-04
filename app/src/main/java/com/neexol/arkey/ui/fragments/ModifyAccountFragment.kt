@@ -126,14 +126,8 @@ class ModifyAccountFragment: Fragment() {
     private fun setListeners() {
         deleteBtn.setOnClickListener { showDeleteConfirmationDialog() }
 
-        passwordEdit.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_UP) {
-                if(event.rawX >= (passwordEdit.right - passwordEdit.compoundDrawables[2].bounds.width())) {
-                    navigateToPassGenerator()
-                    return@setOnTouchListener true
-                }
-            }
-            false
+        passwordInput.setEndIconOnClickListener {
+            navigateToPassGenerator()
         }
 
         childFragmentManager.setFragmentResultListener(
