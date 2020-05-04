@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.neexol.arkey.R
 import com.neexol.arkey.databinding.FragmentModifyAccountBinding
 import com.neexol.arkey.db.entities.Account
-import com.neexol.arkey.db.entities.Category
 import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.ui.dialogs.YesNoDialog.Companion.RESULT_YES_NO_KEY
 import com.neexol.arkey.ui.fragments.PasswordGeneratorFragment.Companion.IS_NEED_TO_SHOW_USE_BUTTON_KEY
@@ -85,23 +84,13 @@ class ModifyAccountFragment: Fragment() {
         setObservers()
     }
 
-    private fun initCategorySpinner(categoriesList: List<Category>) {
+    private fun initCategorySpinner(categoriesList: List<ModifyAccountViewModel.TitleWithId>) {
         viewLifecycleOwner.lifecycleScope.launch {
             val adapter = withContext(Dispatchers.IO) {
-                val categoryNamesList = mutableListOf<String>()
-                viewModel.categoryIdsList.clear()
-
-                categoryNamesList.add(getString(R.string.without_category))
-                viewModel.categoryIdsList.add(Categories.WITHOUT_CATEGORY.id)
-                categoriesList.forEach { category ->
-                    categoryNamesList.add(category.name)
-                    viewModel.categoryIdsList.add(category.id!!)
-                }
-
                 ArrayAdapter(
                     requireContext(),
                     android.R.layout.simple_spinner_item,
-                    categoryNamesList
+                    categoriesList.map { it.title ?: getString(R.string.without_category) }
                 ).apply {
                     setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 }
@@ -109,14 +98,16 @@ class ModifyAccountFragment: Fragment() {
             categorySpinner.setOnItemSelectedListener { viewModel.selectCategory(it) }
             categorySpinner.adapter = adapter
 
-            (modifyAccountType as? CreateAccount)?.let {
+            (modifyAccountType as? EditAccount)?.account?.categoryId?.let {
+                categorySpinner.setSelection(categoriesList.indexOfFirst { titleWithId ->
+                    titleWithId.id == it
+                })
+            } ?:run {
                 val selectedCategoryId = mainViewModel.selectedCategoryId.value
                 if (selectedCategoryId != Categories.ALL_CATEGORIES.id) {
-                    categorySpinner.setSelection(viewModel.categoryIdsList.indexOf(selectedCategoryId))
-                }
-            } ?:run {
-                (modifyAccountType as? EditAccount)?.account?.categoryId?.let {
-                    categorySpinner.setSelection(viewModel.categoryIdsList.indexOf(it))
+                    categorySpinner.setSelection(categoriesList.indexOfFirst { titleWithId ->
+                        titleWithId.id == selectedCategoryId
+                    })
                 }
             }
         }
@@ -140,7 +131,7 @@ class ModifyAccountFragment: Fragment() {
     }
 
     private fun setObservers() {
-        mainViewModel.allCategories.observe(viewLifecycleOwner, Observer {
+        viewModel.displayCategoriesLiveData.observe(viewLifecycleOwner, Observer {
             initCategorySpinner(it)
         })
 

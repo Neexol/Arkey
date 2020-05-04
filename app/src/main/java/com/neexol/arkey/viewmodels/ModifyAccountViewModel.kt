@@ -1,17 +1,42 @@
 package com.neexol.arkey.viewmodels
 
 import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.repositories.AccountsRepository
+import com.neexol.arkey.repositories.CategoriesRepository
 import com.neexol.arkey.utils.Categories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ModifyAccountViewModel(
-    private val accountsRepo: AccountsRepository
+    private val accountsRepo: AccountsRepository,
+    categoriesRepo: CategoriesRepository
 ): ViewModel() {
+
+    data class TitleWithId (
+        val id: Int,
+        val title: String?
+    )
+
+    private val _displayCategoriesLiveData = MediatorLiveData<List<TitleWithId>>()
+    val displayCategoriesLiveData: LiveData<List<TitleWithId>> = _displayCategoriesLiveData
+
+    init {
+        _displayCategoriesLiveData.addSource(categoriesRepo.allCategories) {
+            val displayCategoriesList = mutableListOf<TitleWithId>()
+
+            displayCategoriesList.add(TitleWithId(Categories.WITHOUT_CATEGORY.id, null))
+            it.forEach { category ->
+                displayCategoriesList.add(TitleWithId(category.id!!, category.name))
+            }
+
+            _displayCategoriesLiveData.value = displayCategoriesList.toList()
+        }
+    }
 
     var accountId: Int? = null
         private set
@@ -25,11 +50,13 @@ class ModifyAccountViewModel(
     var desc = ""
     var categoryId = Categories.WITHOUT_CATEGORY.id
 
-    val categoryIdsList = mutableListOf<Int>()
-
     fun checkData() = run { isValid.set(!name.isBlank()) }
 
-    fun selectCategory(spinnerIndex: Int) = run { categoryId = categoryIdsList[spinnerIndex] }
+    fun selectCategory(spinnerIndex: Int) {
+        displayCategoriesLiveData.value?.get(spinnerIndex)?.id?.let {
+            categoryId = it
+        }
+    }
 
     fun fillAccountData(account: Account) {
         accountId = account.id

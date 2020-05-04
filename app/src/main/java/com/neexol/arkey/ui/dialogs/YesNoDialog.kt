@@ -43,7 +43,8 @@ class YesNoDialog: DialogFragment() {
                 )
             }
             .setPositiveButton(R.string.yes) { _, _ ->
-                setFragmentResult(requestKey,
+                setFragmentResult(
+                    requestKey,
                     bundleOf(RESULT_YES_NO_KEY to true)
                 )
             }

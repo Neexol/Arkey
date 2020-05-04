@@ -90,6 +90,16 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
             val result = bundle.getString(RESULT_INPUT_TEXT_KEY)?.trim()
             if (!result.isNullOrBlank()) { viewModel.createCategory(result) }
         }
+
+        childFragmentManager.setFragmentResultListener(
+            NAV_MENU_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            when(val result = bundle.getInt(NAV_MENU_KEY)) {
+                Categories.NEW_CATEGORY.id -> showCategoryCreating()
+                else -> viewModel.selectCategory(result)
+            }
+        }
     }
 
     private fun setObservers() {
@@ -125,16 +135,6 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
     private fun showMenu() {
         val dialog = NavigationMenuBottomDialog()
         dialog.show(childFragmentManager, null)
-
-        childFragmentManager.setFragmentResultListener(
-            NAV_MENU_REQUEST_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
-            when(val result = bundle.getInt(NAV_MENU_KEY)) {
-                Categories.NEW_CATEGORY.id -> showCategoryCreating()
-                else -> viewModel.selectCategory(result)
-            }
-        }
     }
 
     private fun showSearchView() {

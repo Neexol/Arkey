@@ -28,7 +28,7 @@ val repositoriesModule = module {
 
 val viewModelsModule = module {
     viewModel { MainViewModel(get(), get()) }
-    viewModel { ModifyAccountViewModel(get()) }
+    viewModel { ModifyAccountViewModel(get(), get()) }
     viewModel { PasswordGeneratorViewModel(get()) }
 }
 
