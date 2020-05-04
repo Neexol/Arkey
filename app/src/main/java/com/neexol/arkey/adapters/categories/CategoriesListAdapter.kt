@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.item_category.view.*
 
 class CategoriesListAdapter: RecyclerView.Adapter<CategoriesListAdapter.CategoryHolder>() {
 
-    private var clickListener: OnCategoriesListClickListener? = null
+    private var clickListener: ((Int) -> Unit)? = null
 
     private var dataList = listOf<Category>()
 
@@ -43,7 +43,7 @@ class CategoriesListAdapter: RecyclerView.Adapter<CategoriesListAdapter.Category
 
         init {
             categoryName.setOnClickListener {
-                clickListener?.onCategoryClick(dataList[adapterPosition])
+                clickListener?.invoke(dataList[adapterPosition].id!!)
             }
         }
 
@@ -56,11 +56,7 @@ class CategoriesListAdapter: RecyclerView.Adapter<CategoriesListAdapter.Category
         }
     }
 
-    fun setOnCategoryClickListener(clickListener: OnCategoriesListClickListener) {
+    fun setOnCategoryClickListener(clickListener: (Int) -> Unit) {
         this.clickListener = clickListener
-    }
-
-    interface OnCategoriesListClickListener {
-        fun onCategoryClick(category: Category)
     }
 }

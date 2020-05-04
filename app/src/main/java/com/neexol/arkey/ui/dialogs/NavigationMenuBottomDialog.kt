@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.neexol.arkey.R
 import com.neexol.arkey.adapters.categories.CategoriesListAdapter
-import com.neexol.arkey.db.entities.Category
 import com.neexol.arkey.utils.Categories
 import com.neexol.arkey.utils.selectAsCategory
 import com.neexol.arkey.viewmodels.MainViewModel
@@ -40,7 +39,7 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         highlightSelectedCategory()
-        initRecyclerView()
+        recyclerView.adapter = categoriesListAdapter
         setListeners()
 
         viewModel.allCategories.observe(viewLifecycleOwner, Observer {
@@ -48,47 +47,38 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
         })
     }
 
-    private fun initRecyclerView() {
-        recyclerView.adapter = categoriesListAdapter.apply {
-            setOnCategoryClickListener(object : CategoriesListAdapter.OnCategoriesListClickListener {
-                override fun onCategoryClick(category: Category) {
-                    sendResult(category.id!!)
-                }
-            })
+    private val onMenuItemClickListener = View.OnClickListener {
+        when(it.id) {
+            R.id.allAccountsTV -> sendResult(Categories.ALL_CATEGORIES.id)
+            R.id.withoutCategoryTV -> sendResult(Categories.WITHOUT_CATEGORY.id)
+            R.id.newCategoryTV -> sendResult(Categories.NEW_CATEGORY.id)
         }
     }
 
     private fun setListeners() {
-        allAccountsTV.setOnClickListener {
-            sendResult(Categories.ALL_CATEGORIES.id)
-        }
-        withoutCategoryTV.setOnClickListener {
-            sendResult(Categories.WITHOUT_CATEGORY.id)
-        }
-        newCategoryTV.setOnClickListener {
-            sendResult(Categories.NEW_CATEGORY.id)
-        }
-        passGeneratorTV.setOnClickListener {
-            findNavController().navigate(R.id.action_accountsListFragment_to_passwordGeneratorFragment)
-        }
+        allAccountsTV.setOnClickListener(onMenuItemClickListener)
+        withoutCategoryTV.setOnClickListener(onMenuItemClickListener)
+        newCategoryTV.setOnClickListener(onMenuItemClickListener)
+
+        categoriesListAdapter.setOnCategoryClickListener{ sendResult(it) }
+
+        passGeneratorTV.setOnClickListener { navigateToPassGenerator() }
     }
 
     private fun highlightSelectedCategory() {
         when(val categoryId = viewModel.selectedCategoryId.value!!) {
-            Categories.ALL_CATEGORIES.id -> {
-                allAccountsTV.selectAsCategory()
-            }
-            Categories.WITHOUT_CATEGORY.id -> {
-                withoutCategoryTV.selectAsCategory()
-            }
-            else -> {
-                categoriesListAdapter.highlightCategory(categoryId)
-            }
+            Categories.ALL_CATEGORIES.id -> allAccountsTV.selectAsCategory()
+            Categories.WITHOUT_CATEGORY.id -> withoutCategoryTV.selectAsCategory()
+            else -> categoriesListAdapter.highlightCategory(categoryId)
         }
     }
 
     private fun sendResult(resultId: Int) {
         setFragmentResult(NAV_MENU_REQUEST_KEY, bundleOf(NAV_MENU_KEY to resultId))
         dismiss()
+    }
+
+    private fun navigateToPassGenerator() {
+        findNavController().navigate(R.id.action_accountsListFragment_to_passwordGeneratorFragment)
     }
 }
