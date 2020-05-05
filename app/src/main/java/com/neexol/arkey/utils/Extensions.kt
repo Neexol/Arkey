@@ -19,9 +19,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
 import com.neexol.arkey.R
-import com.neexol.arkey.ui.MainActivity
+import com.neexol.arkey.ui.activities.MainActivity
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 

@@ -39,6 +39,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="masterPasswordActivity">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="199" />
+                            <option name="y" value="571" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="modifyAccountFragment">
                     <value>
                       <LayoutPositions>
@@ -77,8 +89,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-202" />
-                            <option name="y" value="396" />
+                            <option name="x" value="-157" />
+                            <option name="y" value="561" />
                           </Point>
                         </option>
                       </LayoutPositions>

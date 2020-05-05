@@ -50,4 +50,5 @@
     <string name="change_master_password">Change master password</string>
     <string name="dark_theme">Dark theme</string>
     <string name="use_fingerprint">Use fingerprint</string>
+    <string name="master_password_changed">The master password has been changed</string>
 </resources>

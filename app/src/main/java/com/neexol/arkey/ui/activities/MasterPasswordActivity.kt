@@ -1,5 +1,6 @@
-package com.neexol.arkey.ui
+package com.neexol.arkey.ui.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.neexol.arkey.R
+import com.neexol.arkey.contracts.ChangeMasterPassContract.Companion.CHANGE_MASTER_REQUEST_KEY
 import com.neexol.arkey.databinding.ActivityChangeMasterPasswordBinding
 import com.neexol.arkey.databinding.ActivityInputMasterPasswordBinding
 import com.neexol.arkey.databinding.ActivityNewMasterPasswordBinding
@@ -22,10 +24,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class MasterPasswordActivity : AppCompatActivity() {
-
-    companion object {
-        const val MASTER_PASSWORD_OPERATION_TYPE_KEY = "MASTER_PASSWORD_OPERATION_TYPE"
-    }
 
     private val masterPasswordRepo: MasterPasswordRepository by inject()
 
@@ -68,7 +66,7 @@ class MasterPasswordActivity : AppCompatActivity() {
     }
 
     private fun extractOperationType(): MasterPasswordOperationType {
-        return intent?.getSerializableExtra(MASTER_PASSWORD_OPERATION_TYPE_KEY)?.let {
+        return intent?.getSerializableExtra(CHANGE_MASTER_REQUEST_KEY)?.let {
             ChangeMasterPassword
         } ?:run {
             if (masterPasswordRepo.isMasterPasswordExist()) {
@@ -83,15 +81,9 @@ class MasterPasswordActivity : AppCompatActivity() {
         viewModel.operationStatusLiveData.observe(this, Observer {
             if (it) {
                 when(viewModel.masterPasswordOperationType) {
-                    InputMasterPassword -> {
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
-                    }
-                    NewMasterPassword -> {
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
-                    }
-                    ChangeMasterPassword -> {}
+                    InputMasterPassword -> startActivity(Intent(this, MainActivity::class.java))
+                    NewMasterPassword -> startActivity(Intent(this, MainActivity::class.java))
+                    ChangeMasterPassword -> setResult(Activity.RESULT_OK)
                 }
                 finish()
             }

@@ -1,4 +1,4 @@
-package com.neexol.arkey.ui
+package com.neexol.arkey.ui.activities
 
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity

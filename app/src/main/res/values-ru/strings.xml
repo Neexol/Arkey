@@ -46,4 +46,5 @@
     <string name="change_master_password">Изменить мастер-пароль</string>
     <string name="dark_theme">Тёмная тема</string>
     <string name="use_fingerprint">Использовать отпечаток пальца</string>
+    <string name="master_password_changed">Мастер-пароль был изменён</string>
 </resources>

@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
-        <activity android:name=".ui.MasterPasswordActivity"
+        <activity android:name=".ui.activities.MasterPasswordActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation"
             tools:ignore="LockedOrientationActivity">
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
