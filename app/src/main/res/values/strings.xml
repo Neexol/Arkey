@@ -47,4 +47,7 @@
     <string name="current_master_password_error">Wrong master password</string>
     <string name="master_password_equals_error">Master passwords must be the same</string>
     <string name="master_password_warning">You need to create a master password that you will use to login to the application. This is the only password you will need to remember! \n\nWarning! For your security, the master password will not be saved by the application, which means you will not be able to restore it. Write down this password to make sure you don\'t forget it!</string>
+    <string name="change_master_password">Change master password</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="use_fingerprint">Use fingerprint</string>
 </resources>

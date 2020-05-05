@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_accountsListFragment_to_passwordGeneratorFragment"
             app:destination="@id/passwordGeneratorFragment" />
+        <action
+            android:id="@+id/action_accountsListFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/modifyAccountFragment"
@@ -31,4 +34,9 @@
         android:name="com.neexol.arkey.ui.fragments.PasswordGeneratorFragment"
         android:label="PasswordGeneratorFragment"
         tools:layout="@layout/fragment_password_generator"/>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.neexol.arkey.ui.fragments.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings"/>
 </navigation>
