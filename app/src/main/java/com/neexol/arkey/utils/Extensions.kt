@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.view.inputmethod.InputMethodManager
@@ -23,6 +24,7 @@ import com.neexol.arkey.R
 import com.neexol.arkey.ui.activities.MainActivity
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
+import java.lang.Exception
 
 fun Fragment.mainActivity() = this.requireActivity() as MainActivity
 
@@ -106,7 +108,10 @@ fun View.collapse() {
 }
 
 fun Activity.hideSoftInput(windowToken: IBinder) {
-    getSystemService(InputMethodManager::class.java).hideSoftInputFromWindow(windowToken, 0)
+    try {
+        getSystemService(InputMethodManager::class.java)
+            .hideSoftInputFromWindow(windowToken, 0)
+    } catch (ignored: Exception) {}
 }
 
 fun <T> Fragment.getNavigationResult(key: String) =
@@ -114,3 +119,7 @@ fun <T> Fragment.getNavigationResult(key: String) =
 
 fun <T> Fragment.setNavigationResult(key: String, result: T) =
     findNavController().previousBackStackEntry?.savedStateHandle?.set(key, result)
+
+fun Activity.blockScreenCapture() {
+    window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+}

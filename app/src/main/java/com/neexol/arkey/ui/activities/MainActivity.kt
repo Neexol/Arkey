@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.neexol.arkey.R
+import com.neexol.arkey.utils.blockScreenCapture
 import com.neexol.arkey.utils.hideSoftInput
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        blockScreenCapture()
         setContentView(R.layout.activity_main)
         paintStatusBar()
     }

@@ -14,10 +14,7 @@ import com.neexol.arkey.databinding.ActivityChangeMasterPasswordBinding
 import com.neexol.arkey.databinding.ActivityInputMasterPasswordBinding
 import com.neexol.arkey.databinding.ActivityNewMasterPasswordBinding
 import com.neexol.arkey.repositories.MasterPasswordRepository
-import com.neexol.arkey.utils.ChangeMasterPassword
-import com.neexol.arkey.utils.InputMasterPassword
-import com.neexol.arkey.utils.MasterPasswordOperationType
-import com.neexol.arkey.utils.NewMasterPassword
+import com.neexol.arkey.utils.*
 import com.neexol.arkey.viewmodels.MasterPasswordViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,6 +30,7 @@ class MasterPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        blockScreenCapture()
         setContentView()
         paintStatusBar()
         observeOperationStatus()
