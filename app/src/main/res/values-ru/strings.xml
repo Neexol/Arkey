@@ -34,4 +34,13 @@
     <string name="password_special">Специальные символы</string>
     <string name="use_this_password">Использовать этот пароль</string>
     <string name="accounts_without_category">Аккаунты без категории</string>
+    <string name="master_password">Мастер-пароль</string>
+    <string name="new_master_password">Новый мастер-пароль</string>
+    <string name="confirm_master_password">Подтвердите мастер-пароль</string>
+    <string name="current_master_password">Текущий мастер-пароль</string>
+    <string name="confirm_new_master_password">Подтвердите новый мастер-пароль</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="master_password_equals_error">Мастер-пароли должны быть одинаковыми</string>
+    <string name="current_master_password_error">Неправильный мастер-пароль</string>
+    <string name="master_password_warning">Вам нужно придумать мастер-пароль, который вы будете использовать для входа в приложение. Это единственный пароль, который вам придется запомнить! \n\nВнимание! Для вашей безопасности, мастер-пароль не будет сохраняться приложением, а значит вы не сможете его восстановить. Запишите этот пароль, чтобы точно его не забыть!</string>
 </resources>

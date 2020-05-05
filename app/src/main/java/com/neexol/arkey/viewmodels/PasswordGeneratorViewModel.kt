@@ -2,7 +2,7 @@ package com.neexol.arkey.viewmodels
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
-import com.neexol.arkey.utils.PasswordGenerator
+import com.neexol.arkey.generators.PasswordGenerator
 
 class PasswordGeneratorViewModel(
     private val passwordGeneratorBuilder: PasswordGenerator.Builder

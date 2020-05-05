@@ -18,7 +18,8 @@ class App: Application() {
                 viewModelsModule,
                 adaptersModule,
                 coderModule,
-                passwordGeneratorModule
+                generatorsModule,
+                persistenceModule
             ))
         }
     }
