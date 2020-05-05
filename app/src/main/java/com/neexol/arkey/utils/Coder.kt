@@ -11,7 +11,9 @@ import javax.crypto.spec.GCMParameterSpec
 class Coder {
 
     companion object {
-        private const val TRANSFORMATION = "AES/GCM/NoPadding"
+        private const val TRANSFORMATION = KeyProperties.KEY_ALGORITHM_AES +
+                "/${KeyProperties.BLOCK_MODE_GCM}" +
+                "/${KeyProperties.ENCRYPTION_PADDING_NONE}"
         private const val ANDROID_KEY_STORE = "AndroidKeyStore"
     }
 
@@ -23,11 +25,14 @@ class Coder {
 
     private fun getSecretKey(alias: String): SecretKey {
         return if (keyStore.containsAlias(alias)) {
-            (keyStore.getEntry(alias, null) as KeyStore.SecretKeyEntry).secretKey
+            keyStore.getKey(alias, null) as SecretKey
         } else {
             val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
             keyGenerator.init(
-                KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                KeyGenParameterSpec.Builder(
+                    alias,
+                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+                )
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                     .build()
@@ -37,13 +42,13 @@ class Coder {
     }
 
     fun encryptText(alias: String, textToEncrypt: String): Pair<ByteArray, ByteArray> {
-        val cipher: Cipher = Cipher.getInstance(TRANSFORMATION)
+        val cipher = Cipher.getInstance(TRANSFORMATION)
         cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(alias))
         return cipher.doFinal(textToEncrypt.toByteArray(charset("UTF-8"))) to cipher.iv
     }
 
     fun decryptData(alias: String, encryptedData: ByteArray, encryptionIv: ByteArray): String {
-        val cipher: Cipher = Cipher.getInstance(TRANSFORMATION)
+        val cipher = Cipher.getInstance(TRANSFORMATION)
         val spec = GCMParameterSpec(128, encryptionIv)
         cipher.init(Cipher.DECRYPT_MODE, getSecretKey(alias), spec)
         return String(cipher.doFinal(encryptedData), charset("UTF-8"))
