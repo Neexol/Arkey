@@ -23,8 +23,19 @@ import com.google.android.material.snackbar.Snackbar
 import com.neexol.arkey.R
 import com.neexol.arkey.ui.MainActivity
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputLayout
 
 fun Fragment.mainActivity() = this.requireActivity() as MainActivity
+
+@BindingAdapter("handleErrorFrom")
+fun TextInputLayout.handleError(error: String) {
+    if (error.isNotEmpty()) {
+        this.isErrorEnabled = true
+        this.error = error
+    } else {
+        this.isErrorEnabled = false
+    }
+}
 
 @BindingAdapter("bindAfterTextChanged")
 fun EditText.setAfterTextChangedListener(func: () -> Unit) {

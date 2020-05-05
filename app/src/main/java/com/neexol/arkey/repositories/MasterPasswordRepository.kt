@@ -1,15 +1,17 @@
 package com.neexol.arkey.repositories
 
 import com.neexol.arkey.generators.HashGenerator
-import com.neexol.arkey.persistence.MasterKeyPreferences
+import com.neexol.arkey.persistence.MasterPasswordPreferences
 
 class MasterPasswordRepository(
     private val hashGenerator: HashGenerator,
-    private val masterKeyPrefs: MasterKeyPreferences
+    private val masterPasswordPrefs: MasterPasswordPreferences
 ) {
-    fun isMasterKeyValid(masterKey: String) =
-        masterKeyPrefs.isCorrectMasterKeyHash(hashGenerator.generateHash(masterKey))
+    fun isMasterPasswordExist() = masterPasswordPrefs.isMasterPasswordExist()
 
-    fun storeNewMasterKey(masterKey: String) =
-        masterKeyPrefs.storeMasterKeyHash(hashGenerator.generateHash(masterKey))
+    fun isMasterPasswordValid(masterPassword: String) =
+        masterPasswordPrefs.isCorrectMasterPasswordHash(hashGenerator.generateHash(masterPassword))
+
+    fun storeNewMasterPassword(masterPassword: String) =
+        masterPasswordPrefs.storeMasterPasswordHash(hashGenerator.generateHash(masterPassword))
 }
