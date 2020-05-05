@@ -1,4 +1,4 @@
-package com.neexol.arkey.utils
+package com.neexol.arkey.generators
 
 class PasswordGenerator private constructor(
     private val length: Int,
@@ -19,7 +19,13 @@ class PasswordGenerator private constructor(
         fun isLowercaseEnabled(isLowercaseEnabled: Boolean) = apply { this.isLowercaseEnabled = isLowercaseEnabled }
         fun isDigitsEnabled(isDigitsEnabled: Boolean) = apply { this.isDigitsEnabled = isDigitsEnabled }
         fun isSpecialEnabled(isSpecialEnabled: Boolean) = apply { this.isSpecialEnabled = isSpecialEnabled }
-        fun build() = PasswordGenerator(length, isUppercaseEnabled, isLowercaseEnabled, isDigitsEnabled, isSpecialEnabled)
+        fun build() = PasswordGenerator(
+            length,
+            isUppercaseEnabled,
+            isLowercaseEnabled,
+            isDigitsEnabled,
+            isSpecialEnabled
+        )
     }
 
     private companion object {

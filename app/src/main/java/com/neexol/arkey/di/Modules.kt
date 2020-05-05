@@ -4,10 +4,13 @@ import androidx.room.Room
 import com.neexol.arkey.adapters.accounts.AccountsListAdapter
 import com.neexol.arkey.adapters.categories.CategoriesListAdapter
 import com.neexol.arkey.db.Database
+import com.neexol.arkey.generators.HashGenerator
 import com.neexol.arkey.repositories.AccountsRepository
 import com.neexol.arkey.repositories.CategoriesRepository
 import com.neexol.arkey.utils.Coder
-import com.neexol.arkey.utils.PasswordGenerator
+import com.neexol.arkey.generators.PasswordGenerator
+import com.neexol.arkey.persistence.MasterKeyPreferences
+import com.neexol.arkey.repositories.MasterPasswordRepository
 import com.neexol.arkey.viewmodels.ModifyAccountViewModel
 import com.neexol.arkey.viewmodels.MainViewModel
 import com.neexol.arkey.viewmodels.PasswordGeneratorViewModel
@@ -24,6 +27,7 @@ val databaseModule = module {
 val repositoriesModule = module {
     single { AccountsRepository(get(), get()) }
     single { CategoriesRepository(get()) }
+    single { MasterPasswordRepository(get(), get()) }
 }
 
 val viewModelsModule = module {
@@ -41,6 +45,11 @@ val coderModule = module {
     single { Coder() }
 }
 
-val passwordGeneratorModule = module {
+val generatorsModule = module {
     single { PasswordGenerator.Builder() }
+    single { HashGenerator() }
+}
+
+val persistenceModule = module {
+    single { MasterKeyPreferences(androidContext()) }
 }
