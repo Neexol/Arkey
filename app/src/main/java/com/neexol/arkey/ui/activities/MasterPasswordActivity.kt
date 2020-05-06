@@ -5,7 +5,12 @@ import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.neexol.arkey.R
@@ -16,6 +21,7 @@ import com.neexol.arkey.databinding.ActivityNewMasterPasswordBinding
 import com.neexol.arkey.repositories.MasterPasswordRepository
 import com.neexol.arkey.utils.*
 import com.neexol.arkey.viewmodels.MasterPasswordViewModel
+import kotlinx.android.synthetic.main.activity_input_master_password.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -39,9 +45,11 @@ class MasterPasswordActivity : AppCompatActivity() {
     private fun setContentView() {
         when(viewModel.masterPasswordOperationType) {
             InputMasterPassword -> {
-                DataBindingUtil.setContentView<ActivityInputMasterPasswordBinding>(
+                val binding = DataBindingUtil.setContentView<ActivityInputMasterPasswordBinding>(
                     this, R.layout.activity_input_master_password
-                ).viewModel = viewModel
+                )
+                binding.viewModel = viewModel
+                initEdit(binding.masterPasswordInput.editText!!)
             }
             NewMasterPassword -> {
                 DataBindingUtil.setContentView<ActivityNewMasterPasswordBinding>(
@@ -86,5 +94,17 @@ class MasterPasswordActivity : AppCompatActivity() {
                 finish()
             }
         })
+    }
+
+    private fun initEdit(editText: EditText) {
+        editText.requestFocus()
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        editText.setOnEditorActionListener { _, actionId, event ->
+            if ((event != null && (event.keyCode == KeyEvent.KEYCODE_ENTER)) ||
+                (actionId == EditorInfo.IME_ACTION_DONE)) {
+                confirmBtn.performClick()
+            }
+            false
+        }
     }
 }
