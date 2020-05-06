@@ -47,4 +47,5 @@
     <string name="dark_theme">Тёмная тема</string>
     <string name="use_fingerprint">Использовать отпечаток пальца</string>
     <string name="master_password_changed">Мастер-пароль был изменён</string>
+    <string name="delete_category_confirmation">Вы действительно хотите удалить выбранную категорию?</string>
 </resources>

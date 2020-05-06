@@ -19,6 +19,7 @@ import com.neexol.arkey.ui.dialogs.InputTextDialog.Companion.RESULT_INPUT_TEXT_K
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog.Companion.NAV_MENU_KEY
 import com.neexol.arkey.ui.dialogs.NavigationMenuBottomDialog.Companion.NAV_MENU_REQUEST_KEY
+import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.ui.fragments.ModifyAccountFragment.Companion.MODIFY_ACCOUNT_TYPE_KEY
 import com.neexol.arkey.utils.*
 import com.neexol.arkey.utils.DebouncingQueryTextListener
@@ -34,6 +35,7 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
     companion object {
         private const val CREATE_CATEGORY_REQUEST_KEY = "CREATE_CATEGORY_REQUEST"
         private const val RENAME_CATEGORY_REQUEST_KEY = "RENAME_CATEGORY_REQUEST"
+        private const val DELETE_CATEGORY_REQUEST_KEY = "DELETE_CATEGORY_REQUEST"
     }
 
     private val viewModel: MainViewModel by sharedViewModel()
@@ -66,7 +68,7 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
             when(it.itemId) {
                 R.id.action_search_bottom -> showSearchView()
                 R.id.action_rename_category_bottom -> showCategoryRenaming()
-                R.id.action_delete_category -> viewModel.deleteCurrentCategory()
+                R.id.action_delete_category -> showDeleteCategoryConfirmation()
             }
             true
         }
@@ -93,6 +95,15 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
         ) { _, bundle ->
             val result = bundle.getString(RESULT_INPUT_TEXT_KEY)?.trim()
             if (!result.isNullOrBlank()) { viewModel.createCategory(result) }
+        }
+
+        childFragmentManager.setFragmentResultListener(
+            DELETE_CATEGORY_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            if (bundle.getBoolean(YesNoDialog.RESULT_YES_NO_KEY)) {
+                viewModel.deleteCurrentCategory()
+            }
         }
 
         childFragmentManager.setFragmentResultListener(
@@ -161,6 +172,13 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
                 }
             }
         )
+    }
+
+    private fun showDeleteCategoryConfirmation() {
+        YesNoDialog.newInstance(
+            DELETE_CATEGORY_REQUEST_KEY,
+            getString(R.string.delete_category_confirmation)
+        ).show(childFragmentManager, null)
     }
 
     private fun showCategoryRenaming() {
