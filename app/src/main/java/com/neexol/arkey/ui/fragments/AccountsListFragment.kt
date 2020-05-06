@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
@@ -119,6 +120,13 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
 
     private fun setObservers() {
         viewModel.displayAccounts.observe(viewLifecycleOwner, Observer {
+            if (it.isEmpty() && recyclerView.isVisible) {
+                recyclerView.isVisible = false
+                emptyListNotification.isVisible = true
+            } else {
+                recyclerView.isVisible = true
+                emptyListNotification.isVisible = false
+            }
             accountsListAdapter.updateDataList(it.toList())
         })
         viewModel.selectedCategoryId.observe(viewLifecycleOwner, Observer {

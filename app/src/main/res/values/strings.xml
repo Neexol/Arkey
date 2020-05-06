@@ -57,4 +57,5 @@
     <string name="reset_app_btn">Delete all data</string>
     <string name="reset_db_confirmation">Are you really want to delete all data?</string>
     <string name="database_name" translatable="false">accounts_db</string>
+    <string name="empty_accounts_list">You don\'t have an account yet</string>
 </resources>
