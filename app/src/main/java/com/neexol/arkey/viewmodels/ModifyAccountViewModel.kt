@@ -1,10 +1,10 @@
 package com.neexol.arkey.viewmodels
 
+import android.app.Application
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.neexol.arkey.App
+import com.neexol.arkey.R
 import com.neexol.arkey.db.entities.Account
 import com.neexol.arkey.repositories.AccountsRepository
 import com.neexol.arkey.repositories.CategoriesRepository
@@ -13,9 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ModifyAccountViewModel(
+    app: Application,
     private val accountsRepo: AccountsRepository,
-    categoriesRepo: CategoriesRepository
-): ViewModel() {
+    private val categoriesRepo: CategoriesRepository
+): AndroidViewModel(app) {
 
     data class TitleWithId (
         val id: Int,
@@ -33,6 +34,10 @@ class ModifyAccountViewModel(
             it.forEach { category ->
                 displayCategoriesList.add(TitleWithId(category.id!!, category.name))
             }
+            displayCategoriesList.add(TitleWithId(
+                Categories.NEW_CATEGORY.id,
+                "➕  " + getApplication<App>().getString(R.string.create_category)
+            ))
 
             _displayCategoriesLiveData.value = displayCategoriesList.toList()
         }
@@ -94,5 +99,10 @@ class ModifyAccountViewModel(
 
     fun deleteAccount() = viewModelScope.launch(Dispatchers.IO) {
         accountsRepo.deleteById(accountId!!)
+    }
+
+    fun createCategory(categoryName: String) = viewModelScope.launch(Dispatchers.IO) {
+        val newCategoryId = categoriesRepo.insert(categoryName)
+        categoryId = newCategoryId.toInt()
     }
 }

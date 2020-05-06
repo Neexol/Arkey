@@ -29,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground">
 
                 <TextView
                     android:id="@+id/accountName"

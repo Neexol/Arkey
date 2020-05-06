@@ -35,7 +35,7 @@ val repositoriesModule = module {
 
 val viewModelsModule = module {
     viewModel { MainViewModel(get(), get()) }
-    viewModel { ModifyAccountViewModel(get(), get()) }
+    viewModel { ModifyAccountViewModel(androidApplication(), get(), get()) }
     viewModel { PasswordGeneratorViewModel(get()) }
     viewModel { (operationType: MasterPasswordOperationType) ->
         MasterPasswordViewModel(androidApplication(), get(), operationType)

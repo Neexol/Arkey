@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.neexol.arkey.R
 import com.neexol.arkey.databinding.FragmentModifyAccountBinding
 import com.neexol.arkey.db.entities.Account
+import com.neexol.arkey.ui.dialogs.InputTextDialog
 import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.ui.dialogs.YesNoDialog.Companion.RESULT_YES_NO_KEY
 import com.neexol.arkey.ui.fragments.PasswordGeneratorFragment.Companion.IS_NEED_TO_SHOW_USE_BUTTON_KEY
@@ -39,6 +40,7 @@ class ModifyAccountFragment: Fragment() {
 
     companion object {
         const val MODIFY_ACCOUNT_TYPE_KEY = "MODIFY_ACCOUNT_TYPE"
+        private const val CREATE_CATEGORY_REQUEST_KEY = "CREATE_CATEGORY_REQUEST"
         private const val DELETE_ACCOUNT_REQUEST_KEY = "DELETE_ACCOUNT_REQUEST"
     }
 
@@ -75,7 +77,8 @@ class ModifyAccountFragment: Fragment() {
             }
             is EditAccount -> {
                 toolbar.title = getString(R.string.editing_account)
-                viewModel.fillAccountData((modifyAccountType as EditAccount).account)
+                viewModel.accountId
+                    ?: viewModel.fillAccountData((modifyAccountType as EditAccount).account)
                 saveBtn.setOnClickListener { editAccount() }
             }
         }
@@ -94,22 +97,34 @@ class ModifyAccountFragment: Fragment() {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
 
-            val categoryIdForSelection = when(modifyAccountType) {
-                is CreateAccount -> {
-                    val selectedCategoryId = (modifyAccountType as CreateAccount).selectedCategoryId
-                    if (selectedCategoryId == Categories.ALL_CATEGORIES.id) {
-                        Categories.WITHOUT_CATEGORY.id
-                    } else {
-                        selectedCategoryId
+            val categoryIdForSelection =
+                if (viewModel.categoryId == Categories.WITHOUT_CATEGORY.id) {
+                    when(modifyAccountType) {
+                        is CreateAccount -> {
+                            val selectedCategoryId = (modifyAccountType as CreateAccount).selectedCategoryId
+                            if (selectedCategoryId == Categories.ALL_CATEGORIES.id) {
+                                Categories.WITHOUT_CATEGORY.id
+                            } else {
+                                selectedCategoryId
+                            }
+                        }
+                        is EditAccount -> (modifyAccountType as EditAccount).account.categoryId
                     }
+                } else {
+                    viewModel.categoryId
                 }
-                is EditAccount -> (modifyAccountType as EditAccount).account.categoryId
-            }
 
             withContext(Dispatchers.Main) {
                 categorySpinner.adapter = adapter
-                categorySpinner.setOnItemSelectedListener {
-                    viewModel.selectCategory(it)
+                categorySpinner.setOnItemSelectedListener { spinnerIndex ->
+                    if (spinnerIndex == categorySpinner.adapter.count - 1) {
+                        showCategoryCreating()
+                        categorySpinner.setSelection(
+                            categoriesList.indexOfFirst { it.id == viewModel.categoryId }
+                        )
+                    } else {
+                        viewModel.selectCategory(spinnerIndex)
+                    }
                 }
                 categorySpinner.setSelection(
                     categoriesList.indexOfFirst { it.id == categoryIdForSelection }
@@ -121,8 +136,16 @@ class ModifyAccountFragment: Fragment() {
     private fun setListeners() {
         deleteBtn.setOnClickListener { showDeleteConfirmationDialog() }
 
-        passwordInput.setEndIconOnClickListener {
-            navigateToPassGenerator()
+        passwordInput.setEndIconOnClickListener { navigateToPassGenerator() }
+
+        childFragmentManager.setFragmentResultListener(
+            CREATE_CATEGORY_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val result = bundle.getString(InputTextDialog.RESULT_INPUT_TEXT_KEY)?.trim()
+            if (!result.isNullOrBlank()) {
+                viewModel.createCategory(result)
+            }
         }
 
         childFragmentManager.setFragmentResultListener(
@@ -143,6 +166,14 @@ class ModifyAccountFragment: Fragment() {
         getNavigationResult<String>(PASSWORD_RESULT_KEY)?.observe(viewLifecycleOwner, Observer {
             viewModel.password = it
         })
+    }
+
+    private fun showCategoryCreating() {
+        InputTextDialog.newInstance(
+            CREATE_CATEGORY_REQUEST_KEY,
+            getString(R.string.create_category),
+            getString(R.string.category_name_hint)
+        ).show(childFragmentManager, null)
     }
 
     private fun showDeleteConfirmationDialog() {

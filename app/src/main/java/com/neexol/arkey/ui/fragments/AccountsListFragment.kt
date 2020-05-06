@@ -82,19 +82,19 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
         }
 
         childFragmentManager.setFragmentResultListener(
-            RENAME_CATEGORY_REQUEST_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
-            val result = bundle.getString(RESULT_INPUT_TEXT_KEY)?.trim()
-            if (!result.isNullOrBlank()) { viewModel.changeCategoryName(result) }
-        }
-
-        childFragmentManager.setFragmentResultListener(
             CREATE_CATEGORY_REQUEST_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
             val result = bundle.getString(RESULT_INPUT_TEXT_KEY)?.trim()
             if (!result.isNullOrBlank()) { viewModel.createCategory(result) }
+        }
+
+        childFragmentManager.setFragmentResultListener(
+            RENAME_CATEGORY_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val result = bundle.getString(RESULT_INPUT_TEXT_KEY)?.trim()
+            if (!result.isNullOrBlank()) { viewModel.changeCategoryName(result) }
         }
 
         childFragmentManager.setFragmentResultListener(
