@@ -4,9 +4,9 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.Bundle
 import android.os.IBinder
-import android.text.Editable
-import android.text.TextWatcher
+import android.os.Parcelable
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -14,40 +14,18 @@ import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
-import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import com.neexol.arkey.R
 import com.neexol.arkey.ui.activities.MainActivity
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textfield.TextInputLayout
+import java.io.Serializable
 import java.lang.Exception
+import kotlin.properties.ReadWriteProperty
 
 fun Fragment.mainActivity() = this.requireActivity() as MainActivity
-
-@BindingAdapter("handleErrorFrom")
-fun TextInputLayout.handleError(error: String) {
-    if (error.isNotEmpty()) {
-        this.isErrorEnabled = true
-        this.error = error
-    } else {
-        this.isErrorEnabled = false
-    }
-}
-
-@BindingAdapter("bindAfterTextChanged")
-fun EditText.setAfterTextChangedListener(func: () -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(text: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            func.invoke()
-        }
-    })
-}
 
 fun Spinner.setOnItemSelectedListener(func: (spinnerIndex: Int) -> Unit) {
     this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -123,3 +101,25 @@ fun <T> Fragment.setNavigationResult(key: String, result: T) =
 fun Activity.blockScreenCapture() {
     window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 }
+
+fun <T> Bundle.put(key: String, value: T) {
+    when (value) {
+        is Boolean -> putBoolean(key, value)
+        is String -> putString(key, value)
+        is Int -> putInt(key, value)
+        is Short -> putShort(key, value)
+        is Long -> putLong(key, value)
+        is Byte -> putByte(key, value)
+        is ByteArray -> putByteArray(key, value)
+        is Char -> putChar(key, value)
+        is CharArray -> putCharArray(key, value)
+        is CharSequence -> putCharSequence(key, value)
+        is Float -> putFloat(key, value)
+        is Bundle -> putBundle(key, value)
+        is Parcelable -> putParcelable(key, value)
+        is Serializable -> putSerializable(key, value)
+        else -> throw IllegalStateException("Type of property $key is not supported")
+    }
+}
+
+fun <T : Any> argument(): ReadWriteProperty<Fragment, T> = FragmentArgumentDelegate()
