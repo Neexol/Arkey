@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.neexol.arkey.R
+import com.neexol.arkey.utils.argument
 import kotlinx.android.synthetic.main.view_input_text.view.*
 
 
@@ -17,10 +18,6 @@ class InputTextDialog: DialogFragment() {
 
     companion object {
         const val RESULT_INPUT_TEXT_KEY = "INPUT_TEXT"
-        private const val INPUT_TEXT_REQUEST_KEY = "INPUT_TEXT_REQUEST"
-        private const val TITLE_KEY = "TITLE"
-        private const val INIT_TEXT_KEY = "INIT_TEXT"
-        private const val HINT_KEY = "HINT"
 
         fun newInstance(
             requestKey: String,
@@ -29,28 +26,18 @@ class InputTextDialog: DialogFragment() {
             initText: String = ""
         ): InputTextDialog {
             return InputTextDialog().apply {
-                arguments = bundleOf(
-                    INPUT_TEXT_REQUEST_KEY to requestKey,
-                    TITLE_KEY to title,
-                    HINT_KEY to hintText,
-                    INIT_TEXT_KEY to initText
-                )
+                this.requestKey = requestKey
+                this.title = title
+                this.hintText = hintText
+                this.initText = initText
             }
         }
     }
 
-    private val requestKey by lazy {
-        requireArguments().getString(INPUT_TEXT_REQUEST_KEY)!!
-    }
-    private val title by lazy {
-        requireArguments().getString(TITLE_KEY)!!
-    }
-    private val hintText by lazy {
-        requireArguments().getString(HINT_KEY)
-    }
-    private val initText by lazy {
-        requireArguments().getString(INIT_TEXT_KEY)
-    }
+    private var requestKey: String by argument()
+    private var title: String by argument()
+    private var hintText: String by argument()
+    private var initText: String by argument()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = LayoutInflater
@@ -79,9 +66,6 @@ class InputTextDialog: DialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        requireArguments().putString(
-            INIT_TEXT_KEY,
-            dialog?.findViewById<EditText>(R.id.editText)?.text.toString()
-        )
+        initText = dialog?.findViewById<EditText>(R.id.editText)?.text.toString()
     }
 }
