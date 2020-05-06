@@ -64,6 +64,7 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
 
         passGeneratorTV.setOnClickListener { navigateToPassGenerator() }
         settingsTV.setOnClickListener { navigateToSettings() }
+        aboutTV.setOnClickListener { navigateToAbout() }
     }
 
     private fun highlightSelectedCategory() {
@@ -85,5 +86,9 @@ class NavigationMenuBottomDialog: BottomSheetDialogFragment() {
 
     private fun navigateToSettings() {
         findNavController().navigate(R.id.action_accountsListFragment_to_settingsFragment)
+    }
+
+    private fun navigateToAbout() {
+        findNavController().navigate(R.id.action_accountsListFragment_to_aboutFragment)
     }
 }
