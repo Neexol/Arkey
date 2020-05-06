@@ -13,7 +13,7 @@ class MainViewModel(
     accountsRepo: AccountsRepository,
     private val categoriesRepo: CategoriesRepository
 ): ViewModel() {
-    private val allAccounts: LiveData<List<Account>> = accountsRepo.allAccounts
+    private val allAccounts: LiveData<List<Account>> = accountsRepo.allAccountsLiveData
 
     private val _selectedCategoryId = MutableLiveData(Categories.ALL_CATEGORIES.id)
     val selectedCategoryId: LiveData<Int> = _selectedCategoryId

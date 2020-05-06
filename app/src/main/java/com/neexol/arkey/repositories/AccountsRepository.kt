@@ -1,6 +1,7 @@
 package com.neexol.arkey.repositories
 
 import android.util.Base64
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.neexol.arkey.db.daos.AccountDao
 import com.neexol.arkey.db.entities.Account
@@ -14,10 +15,11 @@ class AccountsRepository(
         private const val PASSWORD_ALIAS = "PasswordAlias"
     }
 
-    val allAccounts = MediatorLiveData<List<Account>>()
+    private val _allAccountMediatorLiveData = MediatorLiveData<List<Account>>()
+    val allAccountsLiveData: LiveData<List<Account>> = _allAccountMediatorLiveData
 
     init {
-        allAccounts.addSource(accountDao.getAll()) {
+        _allAccountMediatorLiveData.addSource(accountDao.getAll()) {
             it.forEach { account ->
                 account.password = coder.decryptData(
                     PASSWORD_ALIAS,
@@ -25,7 +27,7 @@ class AccountsRepository(
                     Base64.decode(account.iv, Base64.DEFAULT)
                 )
             }
-            allAccounts.value = it
+            _allAccountMediatorLiveData.value = it
         }
     }
 
