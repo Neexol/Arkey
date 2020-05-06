@@ -9,23 +9,31 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.neexol.arkey.R
 import com.neexol.arkey.contracts.ChangeMasterPassContract.Companion.CHANGE_MASTER_REQUEST_KEY
 import com.neexol.arkey.databinding.ActivityChangeMasterPasswordBinding
 import com.neexol.arkey.databinding.ActivityInputMasterPasswordBinding
 import com.neexol.arkey.databinding.ActivityNewMasterPasswordBinding
 import com.neexol.arkey.repositories.MasterPasswordRepository
+import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.utils.*
 import com.neexol.arkey.viewmodels.MasterPasswordViewModel
 import kotlinx.android.synthetic.main.activity_input_master_password.*
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class MasterPasswordActivity : AppCompatActivity() {
+
+    companion object {
+        private const val RESET_DATABASE_REQUEST_KEY = "RESET_DATABASE_REQUEST"
+    }
 
     private val masterPasswordRepo: MasterPasswordRepository by inject()
 
@@ -48,7 +56,7 @@ class MasterPasswordActivity : AppCompatActivity() {
                     this, R.layout.activity_input_master_password
                 )
                 binding.viewModel = viewModel
-                initEdit(binding.masterPasswordInput.editText!!)
+                initInputPasswordLayout(binding)
             }
             NewMasterPassword -> {
                 DataBindingUtil.setContentView<ActivityNewMasterPasswordBinding>(
@@ -95,15 +103,46 @@ class MasterPasswordActivity : AppCompatActivity() {
         })
     }
 
-    private fun initEdit(editText: EditText) {
-        editText.requestFocus()
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        editText.setOnEditorActionListener { _, actionId, event ->
-            if ((event != null && (event.keyCode == KeyEvent.KEYCODE_ENTER)) ||
-                (actionId == EditorInfo.IME_ACTION_DONE)) {
-                confirmBtn.performClick()
+    private fun initInputPasswordLayout(binding: ActivityInputMasterPasswordBinding) {
+        with(binding.masterPasswordInput.editText!!) {
+            requestFocus()
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+            setOnEditorActionListener { _, actionId, event ->
+                if ((event != null && (event.keyCode == KeyEvent.KEYCODE_ENTER)) ||
+                    (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    confirmBtn.performClick()
+                }
+                false
             }
-            false
+        }
+
+        binding.forgotBtn.setOnClickListener {
+            binding.forgotPanel.apply { isVisible = !isVisible }
+        }
+
+        binding.resetApplicationBtn.setOnClickListener {
+            YesNoDialog.newInstance(
+                RESET_DATABASE_REQUEST_KEY,
+                getString(R.string.reset_db_confirmation)
+            ).show(supportFragmentManager, null)
+        }
+
+        supportFragmentManager.setFragmentResultListener(
+            RESET_DATABASE_REQUEST_KEY,
+            this
+        ) { _, bundle ->
+            if (bundle.getBoolean(YesNoDialog.RESULT_YES_NO_KEY)) {
+                resetApplication()
+            }
+        }
+    }
+
+    private fun resetApplication() {
+        lifecycleScope.launch {
+            masterPasswordRepo.deleteMasterPassword()
+            deleteDatabase(getString(R.string.database_name))
+            viewModelStore.clear()
+            recreate()
         }
     }
 }

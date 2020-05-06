@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -50,7 +51,7 @@ class PasswordGeneratorFragment: Fragment() {
         mainActivity().enableNavigateButton(toolbar)
 
         arguments?.getBoolean(IS_NEED_TO_SHOW_USE_BUTTON_KEY)?.let {
-            usePasswordPanel.visibility = View.VISIBLE
+            usePasswordPanel.isVisible = true
         }
 
         setListeners()

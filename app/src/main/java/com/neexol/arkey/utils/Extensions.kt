@@ -17,6 +17,7 @@ import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.neexol.arkey.R
 import com.neexol.arkey.ui.activities.MainActivity
@@ -52,7 +53,7 @@ fun View.expand() {
     this.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     val actualHeight: Int = this.measuredHeight
     this.layoutParams.height = 0
-    this.visibility = View.VISIBLE
+    this.isVisible = true
     val animation = object : Animation() {
         override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
             this@expand.layoutParams.height =
@@ -74,7 +75,7 @@ fun View.collapse() {
     val animation = object : Animation() {
         override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
             if (interpolatedTime == 1f) {
-                this@collapse.visibility = View.GONE
+                this@collapse.isVisible = false
             } else {
                 this@collapse.layoutParams.height = actualHeight - (actualHeight * interpolatedTime).toInt()
                 this@collapse.requestLayout()

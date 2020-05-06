@@ -3,6 +3,7 @@ package com.neexol.arkey.adapters.accounts
 import android.text.method.PasswordTransformationMethod
 import android.view.*
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -90,15 +91,10 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
         fun bind(position: Int) {
             val account = dataList[position]
 
-            if (account.login.isEmpty() &&
-                account.password.isEmpty() &&
-                account.site.isEmpty() &&
-                account.description.isEmpty()
-            ) {
-                binding.notFilledNotification.visibility = View.VISIBLE
-            } else {
-                binding.notFilledNotification.visibility = View.GONE
-            }
+            binding.notFilledNotification.isVisible = account.login.isEmpty() &&
+                    account.password.isEmpty() &&
+                    account.site.isEmpty() &&
+                    account.description.isEmpty()
 
             binding.account = account
             binding.executePendingBindings()
@@ -112,11 +108,7 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
             } else {
                 expandedPanel.collapse()
             }
-            if (isExpanded) {
-                binding.editAccountBtn.visibility = View.VISIBLE
-            } else {
-                binding.editAccountBtn.visibility = View.GONE
-            }
+            binding.editAccountBtn.isVisible = isExpanded
         }
     }
 

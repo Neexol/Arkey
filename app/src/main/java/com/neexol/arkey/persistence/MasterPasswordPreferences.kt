@@ -3,6 +3,8 @@ package com.neexol.arkey.persistence
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MasterPasswordPreferences(context: Context) {
 
@@ -27,5 +29,9 @@ class MasterPasswordPreferences(context: Context) {
 
     fun storeMasterPasswordHash(masterPasswordHash: String) {
         preferences.edit().putString(MASTER_PASSWORD_HASH_KEY, masterPasswordHash).apply()
+    }
+
+    suspend fun deleteMasterPassword() = withContext(Dispatchers.IO) {
+        preferences.edit().remove(MASTER_PASSWORD_HASH_KEY).commit()
     }
 }

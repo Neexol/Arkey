@@ -32,6 +32,9 @@
                     android:drawablePadding="16dp"
                     android:padding="16dp"
                     android:text="@string/change_master_password"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

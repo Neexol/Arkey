@@ -16,7 +16,7 @@ import com.neexol.arkey.utils.NewMasterPassword
 class MasterPasswordViewModel(
     app: Application,
     private val masterPasswordRepo: MasterPasswordRepository,
-    val masterPasswordOperationType: MasterPasswordOperationType = NewMasterPassword
+    val masterPasswordOperationType: MasterPasswordOperationType
 ): AndroidViewModel(app) {
 
     var masterPassword = ""

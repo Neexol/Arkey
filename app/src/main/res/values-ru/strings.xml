@@ -48,4 +48,8 @@
     <string name="use_fingerprint">Использовать отпечаток пальца</string>
     <string name="master_password_changed">Мастер-пароль был изменён</string>
     <string name="delete_category_confirmation">Вы действительно хотите удалить выбранную категорию?</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="reset_app_warning">Для большей безопасности мастер-пароль нигде не хранится и его нельзя восстановить. Вы можете удалить текущее хранилище и создать новое, с новым матер-паролем.\nПри создании нового хранилища все ваши данные будут безвозвратно удалены.</string>
+    <string name="reset_app_btn">Удалить все данные</string>
+    <string name="reset_db_confirmation">Вы действительно хотите удалить все данные?</string>
 </resources>

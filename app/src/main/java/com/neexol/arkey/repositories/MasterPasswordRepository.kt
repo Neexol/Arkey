@@ -14,4 +14,6 @@ class MasterPasswordRepository(
 
     fun storeNewMasterPassword(masterPassword: String) =
         masterPasswordPrefs.storeMasterPasswordHash(hashGenerator.generateHash(masterPassword))
+
+    suspend fun deleteMasterPassword() = masterPasswordPrefs.deleteMasterPassword()
 }

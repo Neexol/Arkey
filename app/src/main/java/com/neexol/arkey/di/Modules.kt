@@ -1,6 +1,7 @@
 package com.neexol.arkey.di
 
 import androidx.room.Room
+import com.neexol.arkey.R
 import com.neexol.arkey.adapters.accounts.AccountsListAdapter
 import com.neexol.arkey.adapters.categories.CategoriesListAdapter
 import com.neexol.arkey.db.Database
@@ -22,7 +23,13 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val databaseModule = module {
-    single { Room.databaseBuilder(androidContext(), Database::class.java, "accounts_db").build() }
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            Database::class.java,
+            androidContext().getString(R.string.database_name)
+        ).build()
+    }
     single { get<Database>().accountDao() }
     single { get<Database>().categoryDao() }
 }
