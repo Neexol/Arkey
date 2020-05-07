@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="account"
+            type="com.neexol.arkey.db.entities.Account" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="4dp"
+        app:cardElevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/collapsedPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/accountName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{account.name}"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    tools:text="Instagram" />
+
+                <ImageView
+                    android:id="@+id/editAccountBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_edit_account"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="8dp"
+                    android:paddingHorizontal="8dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/expandedPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/loginPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{account.login.empty ? View.GONE : View.VISIBLE}">
+
+                    <ImageView
+                        android:id="@+id/copyLoginBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_copy"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:padding="8dp"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/loginTitle"
+                        app:layout_constraintBottom_toBottomOf="@id/loginHolder"/>
+
+                    <TextView
+                        android:id="@+id/loginTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="@string/account_login"
+                        android:layout_marginEnd="56dp"
+                        app:layout_constraintStart_toEndOf="@id/copyLoginBtn"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/loginHolder"
+                        style="@style/TextAppearance.MaterialComponents.Body2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:singleLine="true"
+                        android:text="@{account.login}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/loginTitle"
+                        app:layout_constraintStart_toStartOf="@id/loginTitle"
+                        app:layout_constraintTop_toBottomOf="@id/loginTitle"
+                        tools:text="Sample login" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/passwordPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{account.password.empty ? View.GONE : View.VISIBLE}">
+
+                    <ImageView
+                        android:id="@+id/copyPasswordBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_copy"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:padding="8dp"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/passwordTitle"
+                        app:layout_constraintBottom_toBottomOf="@id/passwordHolder"/>
+
+                    <TextView
+                        android:id="@+id/passwordTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="@string/account_password"
+                        app:layout_constraintEnd_toStartOf="@+id/visibilityPasswordBtn"
+                        app:layout_constraintStart_toEndOf="@id/copyPasswordBtn"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/passwordHolder"
+                        style="@style/TextAppearance.MaterialComponents.Body2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:ellipsize="end"
+                        android:password="true"
+                        android:singleLine="true"
+                        android:text="@{account.password}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/passwordTitle"
+                        app:layout_constraintStart_toStartOf="@id/passwordTitle"
+                        app:layout_constraintTop_toBottomOf="@id/passwordTitle"
+                        tools:text="Sample password" />
+
+                    <ImageView
+                        android:id="@+id/visibilityPasswordBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/selector_pass_visibility"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:padding="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/copyPasswordBtn"
+                        app:layout_constraintBottom_toBottomOf="@id/copyPasswordBtn"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/sitePanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{account.site.empty ? View.GONE : View.VISIBLE}">
+
+                    <TextView
+                        android:id="@+id/siteTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="56dp"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="@string/account_site"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/siteHolder"
+                        style="@style/TextAppearance.MaterialComponents.Body2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="@{account.site}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/siteTitle"
+                        app:layout_constraintStart_toStartOf="@id/siteTitle"
+                        app:layout_constraintTop_toBottomOf="@id/siteTitle"
+                        tools:text="Sample site" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/descPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{account.description.empty ? View.GONE : View.VISIBLE}">
+
+                    <TextView
+                        android:id="@+id/descTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="56dp"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="@string/account_desc"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/descHolder"
+                        style="@style/TextAppearance.MaterialComponents.Body2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="5"
+                        android:text="@{account.description}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/descTitle"
+                        app:layout_constraintStart_toStartOf="@id/descTitle"
+                        app:layout_constraintTop_toBottomOf="@id/descTitle"
+                        tools:text="Sample desc" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/notFilledNotification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/not_filled"
+                    android:layout_marginStart="56dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

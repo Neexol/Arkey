@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    app:startDestination="@id/accountsListFragment">
+
+    <fragment
+        android:id="@+id/accountsListFragment"
+        android:name="com.neexol.arkey.ui.fragments.AccountsListFragment"
+        android:label="AccountsListFragment"
+        tools:layout="@layout/fragment_accounts_list">
+        <action
+            android:id="@+id/action_accountsListFragment_to_modifyAccountFragment"
+            app:destination="@id/modifyAccountFragment" />
+        <action
+            android:id="@+id/action_accountsListFragment_to_passwordGeneratorFragment"
+            app:destination="@id/passwordGeneratorFragment" />
+        <action
+            android:id="@+id/action_accountsListFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_accountsListFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/modifyAccountFragment"
+        android:name="com.neexol.arkey.ui.fragments.ModifyAccountFragment"
+        android:label="ModifyAccountFragment"
+        tools:layout="@layout/fragment_modify_account">
+        <action
+            android:id="@+id/action_modifyAccountFragment_to_passwordGeneratorFragment"
+            app:destination="@id/passwordGeneratorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/passwordGeneratorFragment"
+        android:name="com.neexol.arkey.ui.fragments.PasswordGeneratorFragment"
+        android:label="PasswordGeneratorFragment"
+        tools:layout="@layout/fragment_password_generator"/>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.neexol.arkey.ui.fragments.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings"/>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.neexol.arkey.ui.fragments.AboutFragment"
+        android:label="AboutFragment"
+        tools:layout="@layout/fragment_about"/>
+</navigation>

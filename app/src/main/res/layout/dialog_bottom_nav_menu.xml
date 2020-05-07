@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="8dp">
+
+    <ImageView
+        android:id="@+id/dragIndicator"
+        android:layout_width="24dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/shape_draggable"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/allAccountsTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:paddingStart="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:text="@string/all_accounts"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        style="@style/TextAppearance.MaterialComponents.Body1"/>
+
+    <TextView
+        android:id="@+id/withoutCategoryTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:paddingStart="40dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/accounts_without_category"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginHorizontal="16dp"
+        style="@style/TextAppearance.MaterialComponents.Body1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginHorizontal="16dp"/>
+
+    <View
+        android:id="@+id/separator2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorSeparator"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/newCategoryTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/create_category"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:drawableStart="@drawable/ic_add"
+        android:drawablePadding="8dp"
+        android:layout_marginHorizontal="16dp"
+        style="@style/TextAppearance.MaterialComponents.Body1" />
+
+    <View
+        android:id="@+id/separator3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorSeparator"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/passGeneratorTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:text="@string/pass_generator"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:drawableStart="@drawable/ic_key"
+        android:drawablePadding="8dp"
+        style="@style/TextAppearance.MaterialComponents.Body1" />
+
+    <TextView
+        android:id="@+id/settingsTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:text="@string/settings"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:drawableStart="@drawable/ic_settings"
+        android:drawablePadding="8dp"
+        style="@style/TextAppearance.MaterialComponents.Body1" />
+
+    <TextView
+        android:id="@+id/aboutTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:text="@string/about_app"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:drawableStart="@drawable/ic_about"
+        android:drawablePadding="8dp"
+        style="@style/TextAppearance.MaterialComponents.Body1" />
+
+</LinearLayout>

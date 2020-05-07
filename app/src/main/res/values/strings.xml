@@ -1,3 +1,71 @@
 <resources>
-    <string name="app_name">Arkey</string>
+    <string name="app_name" translatable="false">Arkey</string>
+    <string name="all_accounts">All accounts</string>
+    <string name="new_category">New category</string>
+    <string name="without_category">Without category</string>
+    <string name="account_name">Name</string>
+    <string name="account_login">Login</string>
+    <string name="account_password">Password</string>
+    <string name="account_site">Site</string>
+    <string name="account_desc">Description</string>
+    <string name="account_creating">Creating account</string>
+    <string name="save">Save</string>
+    <string name="category_choose">Category:</string>
+    <string-array name="array_categories_spinner">
+        <item>@string/without_category</item>
+    </string-array>
+    <string name="editing_account">Editing account</string>
+    <string name="delete">Delete</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_account_confirmation">Are you really want to delete this account?</string>
+    <string name="search">Search</string>
+    <string name="create_category">Create category</string>
+    <string name="pass_generator">Password generator</string>
+    <string name="settings">Settings</string>
+    <string name="delete_category">Delete category</string>
+    <string name="rename_category">Rename category</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="new_name_category">New name of category</string>
+    <string name="category_name_hint">Category name</string>
+    <string name="not_filled">Information not filled</string>
+    <string name="copied_clipboard">Copied to clipboard</string>
+    <string name="password_length">Length</string>
+    <string name="password_uppercase_letters">Uppercase (A-Z)</string>
+    <string name="password_lowercase_letters">Lowercase (a-z)</string>
+    <string name="password_digits">Digits (0-9)</string>
+    <string name="password_special">Special symbols</string>
+    <string name="use_this_password">Use this password</string>
+    <string name="accounts_without_category">Accounts without category</string>
+    <string name="master_password">Master password</string>
+    <string name="new_master_password">New master password</string>
+    <string name="confirm_master_password">Confim master password</string>
+    <string name="current_master_password">Current master password</string>
+    <string name="confirm_new_master_password">Confirm new master password</string>
+    <string name="confirm">Confirm</string>
+    <string name="current_master_password_error">Wrong master password</string>
+    <string name="master_password_equals_error">Master passwords must be the same</string>
+    <string name="master_password_warning">You need to create a master password that you will use to login to the application. This is the only password you will need to remember! \n\nWarning! For your security, the master password will not be saved by the application, which means you will not be able to restore it. Write down this password to make sure you don\'t forget it!</string>
+    <string name="change_master_password">Change master password</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="use_fingerprint">Use fingerprint</string>
+    <string name="master_password_changed">The master password has been changed</string>
+    <string name="delete_category_confirmation">Are you really want to delete selected category?</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="reset_app_warning">For greater safety, the master password is not stored anywhere and cannot be recovered. You can delete the current storage and create a new one with a new master password.\nWhen you create a new repository, all your data will be irrevocably deleted.</string>
+    <string name="reset_app_btn">Delete all data</string>
+    <string name="reset_db_confirmation">Are you really want to delete all data?</string>
+    <string name="database_name" translatable="false">accounts_db</string>
+    <string name="empty_accounts_list_notification">You don\'t have an account yet</string>
+    <string name="about_app">About</string>
+    <string name="vk_id" translatable="false">neexol</string>
+    <string name="author_email_address" translatable="false">almostroll@yandex.ru</string>
+    <string name="source_code">Source code</string>
+    <string name="source_code_url" translatable="false">https://github.com/Neexol/Arkey</string>
+    <string name="vk_url" translatable="false">https://vk.com/neexol</string>
+    <string name="arkey_desc">Arkey it`s a free open-source password manager. Arkey is a full autonomous and store data only on user device. Arkey work absolutely without the Internet.</string>
+    <string name="arkey_cource_work_desc">Arkey was created as a course work by Alexeev Nikita, student of RTU MIREA, IKBO-12-18.</string>
+    <string name="empty_search_result_notification">Nothing found</string>
+    <string name="empty_category_notification">There are no accounts in this category</string>
 </resources>
