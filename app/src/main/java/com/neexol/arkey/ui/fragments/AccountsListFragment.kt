@@ -10,6 +10,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.neexol.arkey.R
@@ -78,7 +80,8 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
             navigateModifyAccount(
                 bundleOf(MODIFY_ACCOUNT_TYPE_KEY to CreateAccount(
                     viewModel.selectedCategoryId.value!!
-                ))
+                )),
+                FragmentNavigatorExtras(addAccountBtn to "sharedModifyAccount")
             )
         }
 
@@ -230,13 +233,6 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
         }
     }
 
-    private fun navigateModifyAccount(bundle: Bundle) {
-        findNavController().navigate(
-            R.id.action_accountsListFragment_to_modifyAccountFragment,
-            bundle
-        )
-    }
-
     override fun onAccountEditClick(account: Account) {
         navigateModifyAccount(
             bundleOf(MODIFY_ACCOUNT_TYPE_KEY to EditAccount(account))
@@ -252,5 +248,14 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
         ).apply {
             anchorView = addAccountBtn
         }.show()
+    }
+
+    private fun navigateModifyAccount(bundle: Bundle, extras: Navigator.Extras? = null) {
+        findNavController().navigate(
+            R.id.action_accountsListFragment_to_modifyAccountFragment,
+            bundle,
+            null,
+            extras
+        )
     }
 }

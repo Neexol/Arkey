@@ -26,7 +26,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="4dp"
                 android:layout_marginHorizontal="16dp"
-                app:cardElevation="2dp">
+                app:cardElevation="2dp"
+                android:transitionName="sharedModifyAccount">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

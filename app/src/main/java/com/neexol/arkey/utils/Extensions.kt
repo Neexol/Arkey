@@ -14,6 +14,7 @@ import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
+import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -30,11 +31,10 @@ fun Fragment.mainActivity() = this.requireActivity() as MainActivity
 
 fun Spinner.setOnItemSelectedListener(func: (spinnerIndex: Int) -> Unit) {
     this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            func.invoke(position)
-        }
-
         override fun onNothingSelected(parent: AdapterView<*>?) {}
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            func(position)
+        }
     }
 }
 
@@ -124,3 +124,13 @@ fun <T> Bundle.put(key: String, value: T) {
 }
 
 fun <T : Any> argument(): ReadWriteProperty<Fragment, T> = FragmentArgumentDelegate()
+
+fun SeekBar.setOnChangeValueListener(func: (Int) -> Unit) {
+    this.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            func(progress)
+        }
+    })
+}

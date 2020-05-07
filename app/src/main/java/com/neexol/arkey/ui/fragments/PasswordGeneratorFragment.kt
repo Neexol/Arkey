@@ -16,6 +16,7 @@ import com.neexol.arkey.databinding.FragmentPasswordGeneratorBinding
 import com.neexol.arkey.utils.copyToClipboard
 import com.neexol.arkey.utils.mainActivity
 import com.neexol.arkey.utils.setNavigationResult
+import com.neexol.arkey.utils.setOnChangeValueListener
 import com.neexol.arkey.viewmodels.PasswordGeneratorViewModel
 import kotlinx.android.synthetic.main.fragment_password_generator.*
 import kotlinx.android.synthetic.main.view_toolbar.*
@@ -88,13 +89,21 @@ class PasswordGeneratorFragment: Fragment() {
             ).show()
         }
 
-        lengthSlider.setOnChangeListener { _, value ->
-            if (viewModel.length != value.toInt()) {
-                viewModel.length = value.toInt()
+        lengthSeekbar.setOnChangeValueListener {
+            val value = it + 4
+            if (viewModel.length != value) {
+                viewModel.length = value
                 viewModel.generatePassword()
             }
-            sliderValueLabel.text = value.toInt().toString()
+            sliderValueLabel.text = value.toString()
         }
+//        lengthSlider.setOnChangeListener { _, value ->
+//            if (viewModel.length != value.toInt()) {
+//                viewModel.length = value.toInt()
+//                viewModel.generatePassword()
+//            }
+//            sliderValueLabel.text = value.toInt().toString()
+//        }
 
         usePasswordBtn.setOnClickListener {
             setNavigationResult(PASSWORD_RESULT_KEY, viewModel.password.get()!!)

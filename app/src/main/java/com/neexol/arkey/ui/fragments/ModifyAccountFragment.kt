@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.transition.MaterialContainerTransform
 import com.neexol.arkey.R
 import com.neexol.arkey.databinding.FragmentModifyAccountBinding
 import com.neexol.arkey.db.entities.Account
@@ -50,6 +52,13 @@ class ModifyAccountFragment: Fragment() {
 
     private val mainViewModel: MainViewModel by sharedViewModel()
     private val viewModel: ModifyAccountViewModel by viewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            scrimColor = ContextCompat.getColor(requireContext(), android.R.color.transparent)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
