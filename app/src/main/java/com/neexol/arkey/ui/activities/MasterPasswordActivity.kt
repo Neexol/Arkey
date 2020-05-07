@@ -42,6 +42,7 @@ class MasterPasswordActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_App)
         super.onCreate(savedInstanceState)
         blockScreenCapture()
         setContentView()
