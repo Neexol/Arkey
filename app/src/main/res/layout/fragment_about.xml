@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/view_toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:layout_marginHorizontal="16dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arkey_logo"
+                    android:layout_gravity="center"
+                    android:layout_margin="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/arkey_desc"
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:gravity="center"
+                    android:layout_marginTop="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/arkey_cource_work_desc"
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:id="@+id/vkTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_vk_logo"
+                        android:padding="4dp"
+                        android:drawablePadding="8dp"
+                        android:text="@string/vk_id"
+                        android:layout_weight="1"
+                        android:layout_alignParentStart="true"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        style="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                    <TextView
+                        android:id="@+id/githubTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_github_logo"
+                        android:padding="4dp"
+                        android:drawablePadding="8dp"
+                        android:text="@string/source_code"
+                        android:layout_weight="1"
+                        android:layout_alignParentEnd="true"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        style="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/mailTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_email"
+                    android:layout_marginTop="8dp"
+                    android:paddingVertical="4dp"
+                    android:drawablePadding="8dp"
+                    android:text="@string/author_email_address"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    style="@style/TextAppearance.MaterialComponents.Body1"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </ScrollView>
+
+</FrameLayout>
