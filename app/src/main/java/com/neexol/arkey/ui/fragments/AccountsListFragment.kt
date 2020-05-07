@@ -218,7 +218,7 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
     }
 
     private fun invalidateList(accountsList: List<Account>) {
-        if (accountsList.isEmpty() && recyclerView.isVisible) {
+        if (accountsList.isEmpty()) {
             emptyListNotification.text = getString(
                 when {
                     !viewModel.searchQuery.value.isNullOrBlank() -> {
@@ -232,10 +232,8 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
                     }
                 }
             )
-            recyclerView.isVisible = false
             emptyListNotification.isVisible = true
         } else {
-            recyclerView.isVisible = true
             emptyListNotification.isVisible = false
         }
     }

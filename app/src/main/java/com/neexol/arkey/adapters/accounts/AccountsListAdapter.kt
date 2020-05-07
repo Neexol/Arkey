@@ -36,7 +36,7 @@ class AccountsListAdapter: RecyclerView.Adapter<AccountsListAdapter.AccountHolde
                     )
                 DiffUtil.calculateDiff(diffUtilCallback)
             }
-            dataList = newDataList
+            dataList = newDataList.toList()
             accountsDiffResult.dispatchUpdatesTo(this@AccountsListAdapter)
         }
     }
