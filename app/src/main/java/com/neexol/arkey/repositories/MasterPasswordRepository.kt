@@ -7,13 +7,13 @@ class MasterPasswordRepository(
     private val hashGenerator: HashGenerator,
     private val masterPasswordPrefs: MasterPasswordPreferences
 ) {
-    fun isMasterPasswordExist() = masterPasswordPrefs.isMasterPasswordExist()
+    fun isMasterPasswordExist() = masterPasswordPrefs.getMasterPasswordHash() != null
 
     fun isMasterPasswordValid(masterPassword: String) =
-        masterPasswordPrefs.isCorrectMasterPasswordHash(hashGenerator.generateHash(masterPassword))
+        hashGenerator.generateHash(masterPassword) == masterPasswordPrefs.getMasterPasswordHash()
 
     fun storeNewMasterPassword(masterPassword: String) =
         masterPasswordPrefs.storeMasterPasswordHash(hashGenerator.generateHash(masterPassword))
 
-    suspend fun deleteMasterPassword() = masterPasswordPrefs.deleteMasterPassword()
+    suspend fun deleteMasterPassword() = masterPasswordPrefs.deleteMasterPasswordHash()
 }

@@ -19,6 +19,7 @@ import com.neexol.arkey.contracts.ChangeMasterPassContract.Companion.CHANGE_MAST
 import com.neexol.arkey.databinding.ActivityChangeMasterPasswordBinding
 import com.neexol.arkey.databinding.ActivityInputMasterPasswordBinding
 import com.neexol.arkey.databinding.ActivityNewMasterPasswordBinding
+import com.neexol.arkey.persistence.SettingsPreferences
 import com.neexol.arkey.repositories.MasterPasswordRepository
 import com.neexol.arkey.ui.dialogs.YesNoDialog
 import com.neexol.arkey.utils.*
@@ -35,6 +36,8 @@ class MasterPasswordActivity : AppCompatActivity() {
         private const val RESET_DATABASE_REQUEST_KEY = "RESET_DATABASE_REQUEST"
     }
 
+    private val settingsPrefs: SettingsPreferences by inject()
+
     private val masterPasswordRepo: MasterPasswordRepository by inject()
 
     private val viewModel: MasterPasswordViewModel by viewModel {
@@ -43,6 +46,7 @@ class MasterPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_App)
+        setDarkThemeEnabled(settingsPrefs.isDarkThemeEnabled)
         super.onCreate(savedInstanceState)
         blockScreenCapture()
         setContentView()

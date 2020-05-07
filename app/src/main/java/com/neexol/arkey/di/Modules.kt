@@ -11,6 +11,7 @@ import com.neexol.arkey.repositories.CategoriesRepository
 import com.neexol.arkey.utils.Coder
 import com.neexol.arkey.generators.PasswordGenerator
 import com.neexol.arkey.persistence.MasterPasswordPreferences
+import com.neexol.arkey.persistence.SettingsPreferences
 import com.neexol.arkey.repositories.MasterPasswordRepository
 import com.neexol.arkey.utils.MasterPasswordOperationType
 import com.neexol.arkey.viewmodels.ModifyAccountViewModel
@@ -65,4 +66,5 @@ val generatorsModule = module {
 
 val persistenceModule = module {
     single { MasterPasswordPreferences(androidContext()) }
+    single { SettingsPreferences(androidContext()) }
 }

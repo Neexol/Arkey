@@ -20,18 +20,13 @@ class MasterPasswordPreferences(context: Context) {
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
-    fun isMasterPasswordExist() = preferences.contains(MASTER_PASSWORD_HASH_KEY)
-
-    fun isCorrectMasterPasswordHash(masterPasswordHash: String): Boolean {
-        val storedMasterPasswordHash = preferences.getString(MASTER_PASSWORD_HASH_KEY, null)
-        return storedMasterPasswordHash == masterPasswordHash
-    }
+    fun getMasterPasswordHash() = preferences.getString(MASTER_PASSWORD_HASH_KEY, null)
 
     fun storeMasterPasswordHash(masterPasswordHash: String) {
         preferences.edit().putString(MASTER_PASSWORD_HASH_KEY, masterPasswordHash).apply()
     }
 
-    suspend fun deleteMasterPassword() = withContext(Dispatchers.IO) {
+    suspend fun deleteMasterPasswordHash() = withContext(Dispatchers.IO) {
         preferences.edit().remove(MASTER_PASSWORD_HASH_KEY).commit()
     }
 }

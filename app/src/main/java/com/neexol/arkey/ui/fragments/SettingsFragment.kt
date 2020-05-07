@@ -9,11 +9,16 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.neexol.arkey.R
 import com.neexol.arkey.contracts.ChangeMasterPassContract
+import com.neexol.arkey.persistence.SettingsPreferences
 import com.neexol.arkey.utils.mainActivity
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.android.synthetic.main.fragment_settings.view.*
 import kotlinx.android.synthetic.main.view_toolbar.*
+import org.koin.android.ext.android.inject
 
 class SettingsFragment: Fragment() {
+
+    private val settingsPrefs: SettingsPreferences by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,6 +30,8 @@ class SettingsFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mainActivity().enableNavigateButton(toolbar)
         toolbar.title = getString(R.string.settings)
+
+        view.darkThemeSwitch.isChecked = settingsPrefs.isDarkThemeEnabled
 
         setListeners()
     }
@@ -43,6 +50,21 @@ class SettingsFragment: Fragment() {
     private fun setListeners() {
         changeMasterBtn.setOnClickListener {
             changeMasterPassContractRegistration(true)
+        }
+
+        darkThemeSwitch.setOnCheckedChangeListener { _, isDark ->
+            if (isDark != settingsPrefs.isDarkThemeEnabled) {
+                if (isDark) {
+                    settingsPrefs.storeDarkTheme()
+                } else {
+                    settingsPrefs.storeLightTheme()
+                }
+            }
+            requireActivity().recreate()
+        }
+
+        darkThemePanel.setOnClickListener {
+            darkThemeSwitch.apply { isChecked = !isChecked }
         }
     }
 }

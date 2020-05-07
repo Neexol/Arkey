@@ -19,14 +19,15 @@
             android:layout_marginHorizontal="16dp"
             app:cardElevation="2dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/changeMasterBtn"
                     style="@style/TextAppearance.MaterialComponents.Body1"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_key"
                     android:drawablePadding="16dp"
@@ -34,63 +35,36 @@
                     android:text="@string/change_master_password"
                     android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
-                    android:focusable="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:focusable="true" />
 
-                <TextView
-                    android:id="@+id/fingerprintLabel"
-                    style="@style/TextAppearance.MaterialComponents.Body1"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/darkThemePanel"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_fingerprint"
-                    android:drawablePadding="16dp"
-                    android:padding="16dp"
-                    android:text="@string/use_fingerprint"
-                    app:layout_constraintEnd_toStartOf="@id/fingerprintSwitch"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/changeMasterBtn"/>
+                    android:orientation="horizontal"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/fingerprintSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="@id/fingerprintLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/fingerprintLabel" />
+                    <TextView
+                        android:id="@+id/darkThemeLabel"
+                        style="@style/TextAppearance.MaterialComponents.Body1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_palette"
+                        android:drawablePadding="16dp"
+                        android:padding="16dp"
+                        android:text="@string/dark_theme"
+                        android:layout_weight="1"/>
 
-                <View
-                    android:id="@+id/separator"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSeparator"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fingerprintLabel" />
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/darkThemeSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16dp" />
 
-                <TextView
-                    android:id="@+id/darkThemeLabel"
-                    style="@style/TextAppearance.MaterialComponents.Body1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_palette"
-                    android:drawablePadding="16dp"
-                    android:padding="16dp"
-                    android:text="@string/dark_theme"
-                    app:layout_constraintEnd_toStartOf="@id/darkThemeSwitch"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/separator" />
+                </LinearLayout>
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/darkThemeSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="@id/darkThemeLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/darkThemeLabel" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 

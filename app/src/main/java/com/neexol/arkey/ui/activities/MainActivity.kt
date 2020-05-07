@@ -6,13 +6,19 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.neexol.arkey.R
+import com.neexol.arkey.persistence.SettingsPreferences
 import com.neexol.arkey.utils.blockScreenCapture
 import com.neexol.arkey.utils.hideSoftInput
+import com.neexol.arkey.utils.setDarkThemeEnabled
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
 
+    private val settingsPrefs: SettingsPreferences by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_App)
+        setDarkThemeEnabled(settingsPrefs.isDarkThemeEnabled)
         super.onCreate(savedInstanceState)
         blockScreenCapture()
         setContentView(R.layout.activity_main)
