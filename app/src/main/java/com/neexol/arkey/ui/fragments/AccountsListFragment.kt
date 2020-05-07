@@ -123,14 +123,8 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
 
     private fun setObservers() {
         viewModel.displayAccounts.observe(viewLifecycleOwner, Observer {
-            if (it.isEmpty() && recyclerView.isVisible) {
-                recyclerView.isVisible = false
-                emptyListNotification.isVisible = true
-            } else {
-                recyclerView.isVisible = true
-                emptyListNotification.isVisible = false
-            }
-            accountsListAdapter.updateDataList(it.toList())
+            accountsListAdapter.updateDataList(it)
+            invalidateList(it)
         })
         viewModel.selectedCategoryId.observe(viewLifecycleOwner, Observer {
             updateViewBasedOnSelectedCategory()
@@ -220,6 +214,29 @@ class AccountsListFragment: Fragment(), AccountsListAdapter.OnAccountsListClickL
             Categories.ALL_CATEGORIES.id -> getString(R.string.all_accounts)
             Categories.WITHOUT_CATEGORY.id -> getString(R.string.accounts_without_category)
             else -> viewModel.allCategories.value?.find { it.id == categoryId }?.name
+        }
+    }
+
+    private fun invalidateList(accountsList: List<Account>) {
+        if (accountsList.isEmpty() && recyclerView.isVisible) {
+            emptyListNotification.text = getString(
+                when {
+                    !viewModel.searchQuery.value.isNullOrBlank() -> {
+                        R.string.empty_search_result_notification
+                    }
+                    viewModel.selectedCategoryId.value != Categories.ALL_CATEGORIES.id -> {
+                        R.string.empty_category_notification
+                    }
+                    else -> {
+                        R.string.empty_accounts_list_notification
+                    }
+                }
+            )
+            recyclerView.isVisible = false
+            emptyListNotification.isVisible = true
+        } else {
+            recyclerView.isVisible = true
+            emptyListNotification.isVisible = false
         }
     }
 

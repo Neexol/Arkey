@@ -52,9 +52,11 @@
     <string name="reset_app_warning">Для большей безопасности мастер-пароль нигде не хранится и его нельзя восстановить. Вы можете удалить текущее хранилище и создать новое, с новым матер-паролем.\nПри создании нового хранилища все ваши данные будут безвозвратно удалены.</string>
     <string name="reset_app_btn">Удалить все данные</string>
     <string name="reset_db_confirmation">Вы действительно хотите удалить все данные?</string>
-    <string name="empty_accounts_list">У вас пока нет аккаунтов</string>
+    <string name="empty_accounts_list_notification">У вас пока нет аккаунтов</string>
     <string name="about_app">О приложении</string>
     <string name="source_code">Исходный код</string>
     <string name="arkey_desc">Arkey - это бесплатный менеджер паролей с открытым исходным кодом. Arkey является полностью автономным и хранит данные только на пользовательском устройстве. Arkey работает абсолютно без Интернета.</string>
     <string name="arkey_cource_work_desc">Arkey был создан в качестве курсовой работы Алексеевым Никитой, студентом РТУ МИРЭА, ИКБО-12-18.</string>
+    <string name="empty_search_result_notification">Ничего не найдено</string>
+    <string name="empty_category_notification">В этой категории нет аккаунтов</string>
 </resources>

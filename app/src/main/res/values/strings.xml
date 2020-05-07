@@ -57,7 +57,7 @@
     <string name="reset_app_btn">Delete all data</string>
     <string name="reset_db_confirmation">Are you really want to delete all data?</string>
     <string name="database_name" translatable="false">accounts_db</string>
-    <string name="empty_accounts_list">You don\'t have an account yet</string>
+    <string name="empty_accounts_list_notification">You don\'t have an account yet</string>
     <string name="about_app">About</string>
     <string name="vk_id" translatable="false">neexol</string>
     <string name="author_email_address" translatable="false">almostroll@yandex.ru</string>
@@ -66,4 +66,6 @@
     <string name="vk_url" translatable="false">https://vk.com/neexol</string>
     <string name="arkey_desc">Arkey it`s a free open-source password manager. Arkey is a full autonomous and store data only on user device. Arkey work absolutely without the Internet.</string>
     <string name="arkey_cource_work_desc">Arkey was created as a course work by Alexeev Nikita, student of RTU MIREA, IKBO-12-18.</string>
+    <string name="empty_search_result_notification">Nothing found</string>
+    <string name="empty_category_notification">There are no accounts in this category</string>
 </resources>
